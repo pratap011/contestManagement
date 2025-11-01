@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
 const userRoute = require('./route/userRoute');
 const contestRoute  = require('./route/contestRoute'); 
 const prizeRoute = require('./route/prizeRoute');
@@ -15,6 +16,18 @@ dotenv.config();
 app.use(express.json());
 //Connect to database
 connectDB();
+
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute window
+    max: 15, // Limit each IP to 15 requests per windowMs
+    message: {
+      success: false,
+      message: "Too many requests from this IP, please try again after one minute."
+    }
+  });
+
+  
+  app.use(limiter);
 
 app.get("/",(req,res)=>{
     res.send("Greetings, you have reached the home page of ContestManagement");

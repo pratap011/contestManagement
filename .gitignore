@@ -1,0 +1,96 @@
+# =========================
+# Node.js dependencies
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Environment and config
+# =========================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# =========================
+# Logs and runtime data
+# =========================
+logs/
+*.log
+*.out
+*.pid
+*.seed
+*.gz
+coverage/
+.report/
+.vscode/
+.idea/
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Build and dist artifacts
+# =========================
+dist/
+build/
+out/
+tmp/
+temp/
+.cache/
+*.bak
+
+# =========================
+# Test-related
+# =========================
+coverage/
+jest-cache/
+jest-output/
+test-results/
+.nyc_output/
+
+# =========================
+# TypeScript (if used)
+# =========================
+*.tsbuildinfo
+
+# =========================
+# PM2 and process managers
+# =========================
+.pids
+.pm2
+ecosystem.config.js
+
+# =========================
+# Optional: if using Docker
+# =========================
+docker-compose.override.yml
+Dockerfile
+*.tar
+
+# =========================
+# Optional: if using Postman
+# =========================
+*.postman_collection.json
+*.postman_environment.json
+
+# =========================
+# Optional: if using Strapi (they mentioned it)
+# =========================
+.cache/
+build/
+public/uploads/
+
+# =========================
+# Misc
+# =========================
+*.swp
+*.swo
+*.orig

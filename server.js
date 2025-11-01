@@ -15,6 +15,9 @@ app.use(express.json());
 //Connect to database
 connectDB();
 
+app.get("/",(req,res)=>{
+    res.send("Greetings, you have reached the home page of ContestManagement");
+})
 app.use("/user",userRoute);
 app.use("/contest",contestRoute);
 app.use("/prize",prizeRoute);

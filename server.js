@@ -5,6 +5,7 @@ const contestRoute  = require('./route/contestRoute');
 const prizeRoute = require('./route/prizeRoute');
 const questionRoute = require('./route/questionRoute');
 const submissionRoute = require('./route/submissionRoute');
+const contestWinnerJob=require('./cron/contestWinnerJob');
 const connectDB=require('./config/db');
 
 
@@ -30,6 +31,7 @@ app.listen(process.env.PORT,(error)=>{
     }
     else{
         console.log(`Server started succesfully in port ${process.env.PORT}`);
+        contestWinnerJob();
     }
 });
 

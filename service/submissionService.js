@@ -2,14 +2,15 @@ const Submission = require("../model/Submission");
 const Contest = require("../model/Contest");
 const Question = require("../model/Question");
 
-exports.startContest = async (userId, contestId) => {
+exports.startContest = async (userId, userType,contestId) => {
   const contest = await Contest.findById(contestId);
   if (!contest) throw new Error("Contest not found");
 
   // prevent duplicate participation
   const existing = await Submission.findOne({ userId, contestId });
   if (existing) throw new Error("User already started this contest");
-
+  
+  if(contest.contestType==="VIP" && userType=="NORMAL") throw new Error("You do not have the privileges to enter this contest!"); 
   const submission = await Submission.create({
     userId,
     contestId,

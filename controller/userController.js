@@ -28,3 +28,13 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+exports.getUserContestHistory = async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const history = await userService.getUserContestHistory(userId);
+  
+      return success(res, "User contest history fetched successfully", history);
+    } catch (err) {
+      return error(res, err.message);
+    }
+  };

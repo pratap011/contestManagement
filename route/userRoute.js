@@ -23,5 +23,6 @@ const loginSchema = Joi.object({
 router.post("/register", validate(registerSchema), userController.register);
 router.post("/login", validate(loginSchema), userController.login);
 router.get("/profile", protect, userController.getProfile);
+router.get("/history", protect, userController.getUserContestHistory);
 
 module.exports = router;

@@ -68,6 +68,7 @@ JWT_KEY=<your-secret-jwt-key>
 4️⃣ Start the Server
 npm start
 ```
+### This project uses MongoDB as primary database hence mongoDB is a prerequisite to run the code. 
 ## Live link
 https://contestmanagement.onrender.com/
 
@@ -76,6 +77,5 @@ https://contestmanagement.onrender.com/
 
 ## Improvements
 - In current implementation, frontend is not available and that can be added.
-- Does not support user prize fetching API as of now (upcoming)
 - Write operations can be faster with PostgreSQL
-- Caching operations for fetching popular contests is not implemented. 
+- Caching operations for fettching popular contests is not implemented. 

@@ -39,14 +39,36 @@ and optional accounts.
 | Map | OpenFreeMap vector tiles + committed OSM-derived JSON |
 | Routing | Pure TypeScript A* with access and step-free filters |
 | API | Node 24 + Express 5 |
-| Database | PostgreSQL in production; embedded PGlite for local development |
+| Database | PostgreSQL in production and Docker Compose; embedded PGlite for plain local development |
 | Auth | Email/password, scrypt hashing, HTTP-only SameSite cookie |
 | Flight data | BLR public live board server proxy; optional AeroDataBox |
 | Live context | BLR queue displays, Open-Meteo, OpenSky ADS-B |
 | Notifications | Web Push (VAPID) + service worker |
 | Tests | Vitest across the web app and API |
 
-## Run locally
+## Quick start with Docker
+
+Requires Docker with Compose v2. No `.env`, database install or secret generation is needed.
+
+```bash
+docker compose up --build
+```
+
+Open <http://localhost:8787>. Compose starts PostgreSQL 16 and one app container that builds the Vue
+app and serves it with the API. Tables are created on first boot, and a session secret plus Web Push
+keys are generated once and kept in Docker volumes, so accounts and notification subscriptions
+survive restarts.
+
+```bash
+docker compose down       # stop; keep the database and generated secrets
+docker compose down -v    # stop and delete all local data
+```
+
+Optional settings (`AERODATABOX_API_KEY`, stable VAPID keys, a custom database password) can be put in
+a local `.env`; see [`.env.example`](.env.example). `docker compose up` rebuilds nothing by itself, so
+use `--build` after pulling changes.
+
+## Run locally without Docker
 
 ```bash
 npm install
@@ -125,9 +147,10 @@ subscriptions survive redeploys. See [`apps/web/docs/live-data.md`](apps/web/doc
 
 ## Deployment
 
-The repository includes a multi-stage `Dockerfile`, `docker-compose.yml` (app + PostgreSQL) and a
-`render.yaml` blueprint. See [`DEPLOYMENT.md`](DEPLOYMENT.md). The app is static-first and portable;
-the API is required for live flight/queue/aircraft data, notifications and optional accounts.
+The repository includes a multi-stage `Dockerfile`, a zero-config `docker-compose.yml` (app +
+PostgreSQL) and a `render.yaml` blueprint. See [`DEPLOYMENT.md`](DEPLOYMENT.md). The app is
+static-first and portable; the API is required for live flight/queue/aircraft data, notifications and
+optional accounts.
 
 ## Repository layout
 
@@ -137,6 +160,7 @@ server/                 Express API, auth, PostgreSQL/PGlite, flight proxy
 scripts/build-osm-data.mjs  OSM + OSRM dataset generator
 apps/web/docs/          data sources, live data, transfers, map verification, attribution
 Dockerfile              production image
-docker-compose.yml      app + PostgreSQL
+docker/                 container entrypoint (generates a local session secret)
+docker-compose.yml      zero-config app + PostgreSQL stack
 render.yaml             one-click Render blueprint
 ```

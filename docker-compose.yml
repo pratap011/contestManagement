@@ -1,3 +1,8 @@
+# One-command local stack: PostgreSQL, the Node API and the built Vue app.
+# `docker compose up --build` works without a .env file. Values below can still
+# be overridden from the environment or a local .env.
+name: blr-navigator
+
 services:
   db:
     image: postgres:16-alpine
@@ -5,7 +10,9 @@ services:
     environment:
       POSTGRES_DB: blr_navigator
       POSTGRES_USER: blr
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      # Local-only database; it is not published on the host. Override this for
+      # any shared environment and reset the volume when changing it.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blr_local_dev}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -16,26 +23,39 @@ services:
 
   app:
     build: .
+    image: blr-navigator:local
     restart: unless-stopped
+    init: true
     ports:
       - "8787:8787"
     environment:
       NODE_ENV: production
       PORT: "8787"
-      DATABASE_URL: postgres://blr:${POSTGRES_PASSWORD}@db:5432/blr_navigator
+      # The password travels separately via PGPASSWORD, which node-postgres
+      # reads, so it does not need URL encoding in DATABASE_URL.
+      DATABASE_URL: postgres://blr@db:5432/blr_navigator
+      PGPASSWORD: ${POSTGRES_PASSWORD:-blr_local_dev}
       DATABASE_SSL: "false"
       COOKIE_SECURE: "false"
-      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
       APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8787}
+      # When omitted, the entrypoint generates a secret and keeps it in the
+      # appdata volume so accounts survive container restarts.
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_SECRET_FILE: /app/.data/jwt-secret
+      PGLITE_DATA_DIR: /app/.data/pglite
+      VAPID_KEYS_FILE: /app/.data/vapid.json
       AERODATABOX_API_KEY: ${AERODATABOX_API_KEY:-}
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:blr-navigator@example.com}
       OPENSKY_CLIENT_ID: ${OPENSKY_CLIENT_ID:-}
       OPENSKY_CLIENT_SECRET: ${OPENSKY_CLIENT_SECRET:-}
+    volumes:
+      - appdata:/app/.data
     depends_on:
       db:
         condition: service_healthy
 
 volumes:
   pgdata:
+  appdata:

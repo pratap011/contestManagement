@@ -1,0 +1,22 @@
+[
+  {
+    "id": "t1-l0",
+    "terminalId": "t1",
+    "label": "Arrivals, kerbside & ground transport",
+    "shortLabel": "T1 · Ground",
+    "levelIndex": 0,
+    "level": 0,
+    "mapAsset": "osm",
+    "areas": []
+  },
+  {
+    "id": "t1-l1",
+    "terminalId": "t1",
+    "label": "Departures, security & gates",
+    "shortLabel": "T1 · Departures",
+    "levelIndex": 1,
+    "level": 1,
+    "mapAsset": "osm",
+    "areas": []
+  }
+]

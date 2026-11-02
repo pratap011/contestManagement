@@ -1,0 +1,35 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "extractionUrl": "https://api.openstreetmap.org/api/0.6/map?bbox=77.695,13.185,77.720,13.212",
+  "extractedAt": "2026-11-02T13:57:29.583Z",
+  "bbox": "77.695,13.185,77.720,13.212",
+  "terminalWayIds": {
+    "t1": "60046909",
+    "t2Relation": "13779616",
+    "t2OuterWay": "1029667204"
+  },
+  "counts": {
+    "nodes": 711,
+    "edges": 696,
+    "pois": 222,
+    "floors": 5,
+    "unconnectedPois": 0,
+    "unconnectedPoiIds": []
+  },
+  "inferred": {
+    "gateSpines": true,
+    "terminalEntrances": true,
+    "verticalConnectors": true,
+    "poiAccessConnectors": true,
+    "shuttleRide": true
+  },
+  "notes": [
+    "OpenStreetMap is the source of footprints, mapped walkways, gates and facilities.",
+    "Terminal and floor assignments are cross-checked against the BLR live gate directory where a gate reference matches.",
+    "Connectors that are not mapped as walkways are marked verificationStatus \"inferred\" and are drawn as inferred segments.",
+    "The shuttle geometry is a road route from the OSRM demo server and is used only to draw the transfer; it is not a live vehicle position."
+  ]
+}

@@ -1,3 +1,4 @@
+import { searchAeroDataBox } from './aerodatabox.ts'
 import { config } from './config.ts'
 
 export type FlightDirection = 'departure' | 'arrival'
@@ -16,7 +17,7 @@ export interface ProviderFlight {
   gateFloor?: number
   status?: string
   source: 'provider'
-  provider: 'blr-airport-board' | 'aviationstack'
+  provider: 'blr-airport-board' | 'aerodatabox'
   direction: FlightDirection
   fetchedAt: string
 }
@@ -77,6 +78,12 @@ export function todayInAirportTimeZone(now = new Date()): string {
     month: '2-digit',
     day: '2-digit',
   }).format(now)
+}
+
+/** Test helper: clears the process-local board and gate caches. */
+export function clearFlightCache(): void {
+  boardCache = null
+  gateDirectoryCache = null
 }
 
 /** Converts a BLR local wall-clock value to ISO. India has a fixed +05:30 offset. */
@@ -213,7 +220,6 @@ interface CacheEntry<T> {
 
 let boardCache: CacheEntry<BlrBoardResponse> | null = null
 let gateDirectoryCache: CacheEntry<Map<string, GateInfo>> | null = null
-const aviationstackCache = new Map<string, CacheEntry<ProviderFlight[]>>()
 
 async function fetchJson(url: string, headers: Record<string, string>): Promise<unknown> {
   let response: Response
@@ -343,117 +349,6 @@ async function searchBlrBoard(
     .filter((flight): flight is ProviderFlight => flight !== null)
 }
 
-interface AviationstackRow {
-  flight_date?: string
-  flight_status?: string
-  departure?: {
-    airport?: string
-    iata?: string
-    scheduled?: string
-    estimated?: string
-    terminal?: string
-    gate?: string
-  }
-  arrival?: {
-    airport?: string
-    iata?: string
-    scheduled?: string
-    estimated?: string
-    terminal?: string
-    gate?: string
-  }
-  airline?: { name?: string }
-  flight?: { iata?: string }
-}
-
-interface AviationstackResponse {
-  data?: AviationstackRow[]
-  error?: { code?: string; message?: string }
-}
-
-function aviationstackLocalToIso(value: string | undefined, isBlr: boolean): string | undefined {
-  if (!value) return undefined
-  const withoutOffset = value.replace(/(?:Z|[+-]\d{2}:?\d{2})$/i, '')
-  if (isBlr) return blrLocalToIso(withoutOffset)
-  const parsed = new Date(value)
-  return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString()
-}
-
-async function searchAviationstack(
-  flightNumber: string,
-  date: string,
-  direction: FlightDirection | undefined,
-  fetchedAt: string,
-): Promise<ProviderFlight[]> {
-  if (!config.aviationstackKey) return []
-  const cacheKey = `${compactFlightNumber(flightNumber)}|${date}|${direction ?? 'both'}`
-  const cached = aviationstackCache.get(cacheKey)
-  if (cached && cached.expiresAt > Date.now()) return cached.value
-
-  const url = new URL(`${config.aviationstackBaseUrl.replace(/\/$/, '')}/flights`)
-  url.searchParams.set('access_key', config.aviationstackKey)
-  url.searchParams.set('flight_iata', compactFlightNumber(flightNumber))
-  url.searchParams.set('flight_date', date)
-  const body = await fetchJson(url.toString(), { Accept: 'application/json' })
-  const parsed = body as AviationstackResponse
-  if (parsed.error) {
-    if (parsed.error.code === 'usage_limit_reached' || parsed.error.code === 'rate_limit_reached') {
-      throw new FlightProviderError('quota', 'The Aviationstack quota has been reached.')
-    }
-    if (parsed.error.code === 'invalid_access_key' || parsed.error.code === 'missing_access_key') {
-      throw new FlightProviderError('unauthorized', 'Aviationstack credentials are not valid.')
-    }
-    throw new FlightProviderError('unavailable', 'Aviationstack is unavailable.')
-  }
-  if (!Array.isArray(parsed.data)) {
-    throw new FlightProviderError('malformed', 'Aviationstack returned an unexpected shape.')
-  }
-
-  const results = parsed.data
-    .map((row): ProviderFlight | null => {
-      const rawNumber = row.flight?.iata
-      if (!rawNumber || !isValidFlightNumber(rawNumber)) return null
-      const depIsBlr = row.departure?.iata?.toUpperCase() === 'BLR'
-      const arrIsBlr = row.arrival?.iata?.toUpperCase() === 'BLR'
-      const rowDirection: FlightDirection | null = depIsBlr
-        ? 'departure'
-        : arrIsBlr
-          ? 'arrival'
-          : null
-      if (!rowDirection || !flightMatchesDirection(direction, rowDirection)) return null
-      const flight: ProviderFlight = {
-        flightNumber: normaliseFlightNumber(rawNumber),
-        airline: row.airline?.name,
-        origin: row.departure?.iata?.toUpperCase(),
-        destination: row.arrival?.iata?.toUpperCase(),
-        terminal: normaliseTerminal(
-          rowDirection === 'departure' ? row.departure?.terminal : row.arrival?.terminal,
-        ),
-        gate: (rowDirection === 'departure' ? row.departure?.gate : row.arrival?.gate)?.toUpperCase(),
-        status: formatStatus(row.flight_status),
-        source: 'provider',
-        provider: 'aviationstack',
-        direction: rowDirection,
-        fetchedAt,
-      }
-      if (rowDirection === 'departure') {
-        flight.scheduledDeparture = aviationstackLocalToIso(row.departure?.scheduled, true)
-        flight.estimatedDeparture = aviationstackLocalToIso(row.departure?.estimated, true)
-      } else {
-        flight.scheduledArrival = aviationstackLocalToIso(row.arrival?.scheduled, true)
-        flight.estimatedArrival = aviationstackLocalToIso(row.arrival?.estimated, true)
-      }
-      return flight
-    })
-    .filter((flight): flight is ProviderFlight => flight !== null)
-
-  aviationstackCache.set(cacheKey, {
-    expiresAt: Date.now() + config.flightCacheTtlMs * 5,
-    value: results,
-  })
-  return results
-}
-
 export interface FlightSearchResult {
   results: ProviderFlight[]
   provider: string
@@ -462,7 +357,7 @@ export interface FlightSearchResult {
 
 /**
  * Tries the airport's public live board first. If it has no match (or the
- * requested date is not today), an optional Aviationstack key widens coverage.
+ * requested date is not today), an optional AeroDataBox key widens coverage.
  */
 export async function searchLiveFlights(
   flightNumber: string,
@@ -487,17 +382,17 @@ export async function searchLiveFlights(
   }
 
   let fallbackError: FlightProviderError | null = null
-  if (config.aviationstackKey) {
+  if (config.aerodataboxKey) {
     try {
-      const fallback = await searchAviationstack(flightNumber, date, direction, fetchedAt)
+      const fallback = await searchAeroDataBox(flightNumber, date, direction, fetchedAt)
       if (fallback.length) {
-        return { results: fallback, provider: 'aviationstack', fetchedAt }
+        return { results: fallback, provider: 'aerodatabox', fetchedAt }
       }
     } catch (error) {
       fallbackError =
         error instanceof FlightProviderError
           ? error
-          : new FlightProviderError('unavailable', 'The Aviationstack fallback is unavailable.')
+          : new FlightProviderError('unavailable', 'The AeroDataBox fallback is unavailable.')
     }
   }
 

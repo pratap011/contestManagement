@@ -44,7 +44,7 @@ function readDirection(value: unknown): FlightDirection | undefined {
 }
 
 function readProvider(value: unknown): FlightResult['provider'] {
-  return value === 'blr-airport-board' || value === 'aviationstack' ? value : undefined
+  return value === 'blr-airport-board' || value === 'aerodatabox' ? value : undefined
 }
 
 function mapProviderResult(value: unknown): FlightResult | null {

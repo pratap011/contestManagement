@@ -35,13 +35,13 @@
       "T2 inter-terminal shuttle stop"
     ],
     "notes": [
-      "Complimentary inter-terminal shuttle between T1 and T2.",
-      "Allow about 10 minutes for the ride and about 5 minutes for the wait.",
-      "If you are connecting, confirm with your airline or airport staff whether you need to clear security or immigration again.",
-      "Public stop locations are mapped from OpenStreetMap; follow airport signage on the day."
+      "Complimentary inter-terminal shuttle between T1 and T2, confirmed by the airport’s Connections by BLR transfer guidance.",
+      "T1 stop: departure kerb, inner lane next to the Relay outlet. T2 stop: arrival kerb, inner lane at pick-up points P16 and P17.",
+      "Allow about 10 minutes for the ride and about 5 minutes for the wait. Follow airport signage on the day.",
+      "If you are connecting, confirm transfer eligibility, security and baggage steps with your airline or a Connections by BLR transfer desk."
     ],
-    "source": "BLR Airport public transfer guidance, OpenStreetMap stops, OSRM road geometry",
-    "retrievedAt": "2026-11-02T13:57:29.583Z",
+    "source": "BLR Airport Connections by BLR transfer guidance (bengaluruairport.com), OpenStreetMap stops, OSRM road geometry",
+    "retrievedAt": "2026-11-02T18:29:57.417Z",
     "geometrySource": "OSRM demo server / OpenStreetMap roads"
   },
   "terminals": [

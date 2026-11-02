@@ -3330,6 +3330,15 @@
       "lon": 77.7088246,
       "nodeType": "entrance",
       "name": "T1 terminal entrance (approx.)"
+    },
+    {
+      "id": "anchor:t1:transfer-desk",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 13.2009173,
+      "lon": 77.7106856,
+      "nodeType": "facility",
+      "name": "T1 Connections by BLR transfer desk (approx.)"
     }
   ],
   "edges": [
@@ -8019,6 +8028,23 @@
     },
     {
       "id": "edge-521",
+      "from": "anchor:t1:transfer-desk",
+      "to": "osm:t1-l0:11069650925",
+      "distanceMeters": 100.6,
+      "estimatedWalkingSeconds": 80,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to T1 Connections by BLR transfer desk (approx.)"
+    },
+    {
+      "id": "edge-523",
       "from": "anchor:t1:entrance",
       "to": "anchor:t1:t1-l1:gates",
       "distanceMeters": 189.8,
@@ -8035,7 +8061,7 @@
       "instruction": "Take the lift or escalator between the kerbside and the Departures gate area (inferred connector)"
     },
     {
-      "id": "edge-524",
+      "id": "edge-526",
       "from": "poi:osm-node-1069245424",
       "to": "osm:t1-l0:7837871943",
       "distanceMeters": 5.2,
@@ -8052,7 +8078,7 @@
       "instruction": "Estimated access path to Kempegowda International Airport Bus Station"
     },
     {
-      "id": "edge-525",
+      "id": "edge-527",
       "from": "poi:osm-node-1464792390",
       "to": "poi:osm-node-9722895590",
       "distanceMeters": 73.8,
@@ -8069,7 +8095,7 @@
       "instruction": "Estimated access path to Relay"
     },
     {
-      "id": "edge-526",
+      "id": "edge-528",
       "from": "poi:osm-node-1464792560",
       "to": "poi:osm-node-11069650942",
       "distanceMeters": 12.7,
@@ -8086,7 +8112,7 @@
       "instruction": "Estimated access path to Alta Vita"
     },
     {
-      "id": "edge-527",
+      "id": "edge-529",
       "from": "poi:osm-node-1512583613",
       "to": "osm:t1-l0:7837871900",
       "distanceMeters": 25.3,
@@ -8103,7 +8129,7 @@
       "instruction": "Estimated access path to Cafe Coffee Day"
     },
     {
-      "id": "edge-528",
+      "id": "edge-530",
       "from": "poi:osm-node-2587794442",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 102.2,
@@ -8120,7 +8146,7 @@
       "instruction": "Estimated access path to Limousine Service"
     },
     {
-      "id": "edge-529",
+      "id": "edge-531",
       "from": "poi:osm-node-2917556710",
       "to": "osm:t1-l0:9717263535",
       "distanceMeters": 8.3,
@@ -8137,7 +8163,7 @@
       "instruction": "Estimated access path to Cafe Noir"
     },
     {
-      "id": "edge-530",
+      "id": "edge-532",
       "from": "poi:osm-node-2917556712",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 115,
@@ -8154,7 +8180,7 @@
       "instruction": "Estimated access path to Chai Point"
     },
     {
-      "id": "edge-531",
+      "id": "edge-533",
       "from": "poi:osm-node-2917556713",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 120.6,
@@ -8171,7 +8197,7 @@
       "instruction": "Estimated access path to Hatti Coffee"
     },
     {
-      "id": "edge-532",
+      "id": "edge-534",
       "from": "poi:osm-node-2917556715",
       "to": "osm:t1-l0:2587778346",
       "distanceMeters": 18.6,
@@ -8188,7 +8214,7 @@
       "instruction": "Estimated access path to Subway"
     },
     {
-      "id": "edge-533",
+      "id": "edge-535",
       "from": "poi:osm-node-3196581632",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 125.1,
@@ -8205,7 +8231,7 @@
       "instruction": "Estimated access path to Carzonrent"
     },
     {
-      "id": "edge-534",
+      "id": "edge-536",
       "from": "poi:osm-node-3196581638",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 132.1,
@@ -8222,7 +8248,7 @@
       "instruction": "Estimated access path to Myles"
     },
     {
-      "id": "edge-535",
+      "id": "edge-537",
       "from": "poi:osm-node-3196581640",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 118,
@@ -8239,7 +8265,7 @@
       "instruction": "Estimated access path to Akbar Travels"
     },
     {
-      "id": "edge-536",
+      "id": "edge-538",
       "from": "poi:osm-node-3901539894",
       "to": "osm:t1-l0:11069650925",
       "distanceMeters": 131.8,
@@ -8256,7 +8282,7 @@
       "instruction": "Estimated access path to Cafe Coffee Day"
     },
     {
-      "id": "edge-537",
+      "id": "edge-539",
       "from": "poi:osm-node-3996911502",
       "to": "poi:osm-node-11531669572",
       "distanceMeters": 87,
@@ -8273,7 +8299,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-538",
+      "id": "edge-540",
       "from": "poi:osm-node-4445812293",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 6.1,
@@ -8290,7 +8316,7 @@
       "instruction": "Estimated access path to Ola Pickup Zone"
     },
     {
-      "id": "edge-539",
+      "id": "edge-541",
       "from": "poi:osm-node-5326623622",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 46.7,
@@ -8307,7 +8333,7 @@
       "instruction": "Estimated access path to Uber Pickup Zone"
     },
     {
-      "id": "edge-540",
+      "id": "edge-542",
       "from": "poi:osm-node-5631135850",
       "to": "osm:t1-l0:7837871943",
       "distanceMeters": 4.7,
@@ -8324,7 +8350,7 @@
       "instruction": "Estimated access path to Kempegowda International Airport Bus Station"
     },
     {
-      "id": "edge-541",
+      "id": "edge-543",
       "from": "poi:osm-node-6536076515",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 69.2,
@@ -8341,7 +8367,7 @@
       "instruction": "Estimated access path to Nandi Upachara"
     },
     {
-      "id": "edge-542",
+      "id": "edge-544",
       "from": "poi:osm-node-9722887370",
       "to": "osm:t1-l0:2587778346",
       "distanceMeters": 55.8,
@@ -8358,7 +8384,7 @@
       "instruction": "Estimated access path to Starbucks"
     },
     {
-      "id": "edge-543",
+      "id": "edge-545",
       "from": "poi:osm-node-9722896605",
       "to": "osm:t1-l0:9717263532",
       "distanceMeters": 58,
@@ -8375,7 +8401,7 @@
       "instruction": "Estimated access path to The Gourmet Food"
     },
     {
-      "id": "edge-544",
+      "id": "edge-546",
       "from": "poi:osm-node-10719514105",
       "to": "osm:t1-l0:9717263535",
       "distanceMeters": 14.1,
@@ -8392,7 +8418,7 @@
       "instruction": "Estimated access path to Inter Terminal Shuttle"
     },
     {
-      "id": "edge-546",
+      "id": "edge-548",
       "from": "poi:osm-node-11069650916",
       "to": "poi:osm-node-11069650917",
       "distanceMeters": 5.8,
@@ -8409,7 +8435,7 @@
       "instruction": "Estimated access path to Cafe Espresso"
     },
     {
-      "id": "edge-547",
+      "id": "edge-549",
       "from": "poi:osm-node-11069650918",
       "to": "poi:osm-node-11069650919",
       "distanceMeters": 4.9,
@@ -8426,7 +8452,7 @@
       "instruction": "Estimated access path to Service"
     },
     {
-      "id": "edge-548",
+      "id": "edge-550",
       "from": "poi:osm-node-11069650920",
       "to": "poi:osm-node-11069650927",
       "distanceMeters": 5.3,
@@ -8443,7 +8469,7 @@
       "instruction": "Estimated access path to KFC"
     },
     {
-      "id": "edge-549",
+      "id": "edge-551",
       "from": "poi:osm-node-11069650921",
       "to": "poi:osm-node-13092337627",
       "distanceMeters": 5.7,
@@ -8460,7 +8486,7 @@
       "instruction": "Estimated access path to Brewd Bar and Cafe"
     },
     {
-      "id": "edge-550",
+      "id": "edge-552",
       "from": "poi:osm-node-11069650922",
       "to": "poi:osm-node-11069650924",
       "distanceMeters": 13.1,
@@ -8477,7 +8503,7 @@
       "instruction": "Estimated access path to Gute Reise"
     },
     {
-      "id": "edge-551",
+      "id": "edge-553",
       "from": "poi:osm-node-11069650923",
       "to": "poi:osm-node-11069650930",
       "distanceMeters": 12.4,
@@ -8494,7 +8520,7 @@
       "instruction": "Estimated access path to Sling"
     },
     {
-      "id": "edge-552",
+      "id": "edge-554",
       "from": "poi:osm-node-11069650928",
       "to": "poi:osm-node-11069650927",
       "distanceMeters": 6.1,
@@ -8511,7 +8537,7 @@
       "instruction": "Estimated access path to Cocoaart"
     },
     {
-      "id": "edge-553",
+      "id": "edge-555",
       "from": "poi:osm-node-11069650929",
       "to": "poi:osm-node-13034200321",
       "distanceMeters": 6,
@@ -8528,7 +8554,7 @@
       "instruction": "Estimated access path to Service"
     },
     {
-      "id": "edge-554",
+      "id": "edge-556",
       "from": "poi:osm-node-11069650931",
       "to": "poi:osm-node-11069650930",
       "distanceMeters": 6,
@@ -8545,7 +8571,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-555",
+      "id": "edge-557",
       "from": "poi:osm-node-11069650932",
       "to": "poi:osm-node-11069650933",
       "distanceMeters": 10.2,
@@ -8562,7 +8588,7 @@
       "instruction": "Estimated access path to Caratlane"
     },
     {
-      "id": "edge-556",
+      "id": "edge-558",
       "from": "poi:osm-node-11069650934",
       "to": "poi:osm-node-11069650933",
       "distanceMeters": 12.6,
@@ -8579,7 +8605,7 @@
       "instruction": "Estimated access path to Hamleys"
     },
     {
-      "id": "edge-557",
+      "id": "edge-559",
       "from": "poi:osm-node-11069650935",
       "to": "poi:osm-node-13034200323",
       "distanceMeters": 4.1,
@@ -8596,7 +8622,7 @@
       "instruction": "Estimated access path to Just in Vogue"
     },
     {
-      "id": "edge-558",
+      "id": "edge-560",
       "from": "poi:osm-node-11069650936",
       "to": "poi:osm-node-13034200323",
       "distanceMeters": 9.8,
@@ -8613,7 +8639,7 @@
       "instruction": "Estimated access path to Smoor"
     },
     {
-      "id": "edge-559",
+      "id": "edge-561",
       "from": "poi:osm-node-11069650937",
       "to": "poi:osm-node-13034200325",
       "distanceMeters": 6.6,
@@ -8630,7 +8656,7 @@
       "instruction": "Estimated access path to Starbucks"
     },
     {
-      "id": "edge-560",
+      "id": "edge-562",
       "from": "poi:osm-node-11069650938",
       "to": "poi:osm-node-11069650939",
       "distanceMeters": 8.4,
@@ -8647,7 +8673,7 @@
       "instruction": "Estimated access path to Service"
     },
     {
-      "id": "edge-561",
+      "id": "edge-563",
       "from": "poi:osm-node-11069650940",
       "to": "poi:osm-node-11069650942",
       "distanceMeters": 8.1,
@@ -8664,7 +8690,7 @@
       "instruction": "Estimated access path to 080 Domestic lounge"
     },
     {
-      "id": "edge-562",
+      "id": "edge-564",
       "from": "poi:osm-node-11069650941",
       "to": "poi:osm-node-11069650939",
       "distanceMeters": 7.8,
@@ -8681,7 +8707,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-563",
+      "id": "edge-565",
       "from": "poi:osm-node-11069650943",
       "to": "poi:osm-node-11069650939",
       "distanceMeters": 15.2,
@@ -8698,7 +8724,7 @@
       "instruction": "Estimated access path to Tiffin Center"
     },
     {
-      "id": "edge-564",
+      "id": "edge-566",
       "from": "poi:osm-node-11069650944",
       "to": "poi:osm-node-11069650940",
       "distanceMeters": 13.4,
@@ -8715,7 +8741,7 @@
       "instruction": "Estimated access path to MAC Cosmetics"
     },
     {
-      "id": "edge-565",
+      "id": "edge-567",
       "from": "poi:osm-node-11069650945",
       "to": "poi:osm-node-11069650946",
       "distanceMeters": 6.7,
@@ -8732,7 +8758,7 @@
       "instruction": "Estimated access path to Sunglass Hut"
     },
     {
-      "id": "edge-566",
+      "id": "edge-568",
       "from": "poi:osm-node-11069650947",
       "to": "poi:osm-node-11069650946",
       "distanceMeters": 5.7,
@@ -8749,7 +8775,7 @@
       "instruction": "Estimated access path to Fabindia"
     },
     {
-      "id": "edge-569",
+      "id": "edge-571",
       "from": "poi:osm-node-11418975710",
       "to": "osm:t1-l0:9991129429",
       "distanceMeters": 97.7,
@@ -8766,7 +8792,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-570",
+      "id": "edge-572",
       "from": "poi:osm-node-11418976777",
       "to": "osm:t1-l0:9991129429",
       "distanceMeters": 100.7,
@@ -8783,7 +8809,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-571",
+      "id": "edge-573",
       "from": "poi:osm-node-11531669571",
       "to": "poi:osm-node-11531669572",
       "distanceMeters": 16.1,
@@ -8800,7 +8826,7 @@
       "instruction": "Estimated access path to Service"
     },
     {
-      "id": "edge-572",
+      "id": "edge-574",
       "from": "poi:osm-node-11545500290",
       "to": "poi:osm-node-11069650944",
       "distanceMeters": 27.2,
@@ -8817,7 +8843,7 @@
       "instruction": "Estimated access path to SBI ATM"
     },
     {
-      "id": "edge-573",
+      "id": "edge-575",
       "from": "poi:osm-node-11545500291",
       "to": "osm:t1-l0:2587778346",
       "distanceMeters": 74.5,
@@ -8834,7 +8860,7 @@
       "instruction": "Estimated access path to Kotak bank ATM"
     },
     {
-      "id": "edge-574",
+      "id": "edge-576",
       "from": "poi:osm-node-11545500292",
       "to": "poi:osm-node-11069650935",
       "distanceMeters": 7.1,
@@ -8851,7 +8877,7 @@
       "instruction": "Estimated access path to Kotak bank ATM"
     },
     {
-      "id": "edge-575",
+      "id": "edge-577",
       "from": "poi:osm-node-11551855749",
       "to": "osm:t1-l0:7837871900",
       "distanceMeters": 39,
@@ -8868,7 +8894,7 @@
       "instruction": "Estimated access path to Windmills"
     },
     {
-      "id": "edge-576",
+      "id": "edge-578",
       "from": "poi:osm-node-11551855750",
       "to": "osm:t1-l0:7837871915",
       "distanceMeters": 14.9,
@@ -8885,7 +8911,7 @@
       "instruction": "Estimated access path to Bhartiya Jalpan"
     },
     {
-      "id": "edge-583",
+      "id": "edge-585",
       "from": "poi:osm-node-12159824246",
       "to": "osm:t1-l0:13020806665",
       "distanceMeters": 154.7,
@@ -8902,7 +8928,7 @@
       "instruction": "Estimated access path to Dunkin'"
     },
     {
-      "id": "edge-597",
+      "id": "edge-599",
       "from": "poi:osm-node-12531970253",
       "to": "osm:t1-l0:7837871915",
       "distanceMeters": 19.3,
@@ -8919,7 +8945,7 @@
       "instruction": "Estimated access path to Dalkomi"
     },
     {
-      "id": "edge-602",
+      "id": "edge-604",
       "from": "poi:osm-node-12753677788",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 35,
@@ -8936,7 +8962,7 @@
       "instruction": "Estimated access path to KIA8C Chandapura"
     },
     {
-      "id": "edge-603",
+      "id": "edge-605",
       "from": "poi:osm-node-12753677789",
       "to": "osm:t1-l0:2587794404",
       "distanceMeters": 35.3,
@@ -8953,7 +8979,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-604",
+      "id": "edge-606",
       "from": "poi:osm-node-12753677791",
       "to": "osm:t1-l0:2587794400",
       "distanceMeters": 24.9,
@@ -8970,7 +8996,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-605",
+      "id": "edge-607",
       "from": "poi:osm-node-12753677793",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 26.9,
@@ -8987,7 +9013,7 @@
       "instruction": "Estimated access path to KIA7A: HSR BDA Shopping Complex => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-606",
+      "id": "edge-608",
       "from": "poi:osm-node-12753677796",
       "to": "osm:t1-l0:9492860417",
       "distanceMeters": 11,
@@ -9004,7 +9030,7 @@
       "instruction": "Estimated access path to Mitti Cafe"
     },
     {
-      "id": "edge-607",
+      "id": "edge-609",
       "from": "poi:osm-node-12753716701",
       "to": "osm:t1-l0:7837871943",
       "distanceMeters": 12.2,
@@ -9021,7 +9047,7 @@
       "instruction": "Estimated access path to Mysore Flybus"
     },
     {
-      "id": "edge-608",
+      "id": "edge-610",
       "from": "poi:osm-node-12753716704",
       "to": "osm:t1-l0:2587794404",
       "distanceMeters": 18.8,
@@ -9038,7 +9064,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-609",
+      "id": "edge-611",
       "from": "poi:osm-node-12753716705",
       "to": "osm:t1-l0:1728388757",
       "distanceMeters": 21.6,
@@ -9055,7 +9081,7 @@
       "instruction": "Estimated access path to KIA9"
     },
     {
-      "id": "edge-610",
+      "id": "edge-612",
       "from": "poi:osm-node-12753716706",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 44.7,
@@ -9072,7 +9098,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-611",
+      "id": "edge-613",
       "from": "poi:osm-node-12753716707",
       "to": "osm:t1-l0:1728388751",
       "distanceMeters": 27,
@@ -9089,7 +9115,7 @@
       "instruction": "Estimated access path to KIA8: Electronic City => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-650",
+      "id": "edge-652",
       "from": "poi:osm-node-13034200314",
       "to": "poi:osm-node-13034200315",
       "distanceMeters": 9.8,
@@ -9106,7 +9132,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-651",
+      "id": "edge-653",
       "from": "poi:osm-node-13034200316",
       "to": "poi:osm-node-13034200318",
       "distanceMeters": 13.3,
@@ -9123,7 +9149,7 @@
       "instruction": "Estimated access path to Chai Point"
     },
     {
-      "id": "edge-652",
+      "id": "edge-654",
       "from": "poi:osm-node-13034200319",
       "to": "poi:osm-node-13034200318",
       "distanceMeters": 10,
@@ -9140,7 +9166,7 @@
       "instruction": "Estimated access path to Tiffin Express"
     },
     {
-      "id": "edge-653",
+      "id": "edge-655",
       "from": "poi:osm-node-13034200338",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 27.5,
@@ -9157,7 +9183,7 @@
       "instruction": "Estimated access path to KIA8C Chandapura"
     },
     {
-      "id": "edge-654",
+      "id": "edge-656",
       "from": "poi:osm-node-13034200339",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 20.2,
@@ -9174,7 +9200,7 @@
       "instruction": "Estimated access path to KIA7A: HSR BDA Shopping Complex => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-655",
+      "id": "edge-657",
       "from": "poi:osm-node-13034200340",
       "to": "osm:t1-l0:1728388751",
       "distanceMeters": 18.8,
@@ -9191,7 +9217,7 @@
       "instruction": "Estimated access path to KIA8: Electronic City => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-656",
+      "id": "edge-658",
       "from": "poi:osm-node-13034200341",
       "to": "osm:t1-l0:1728388757",
       "distanceMeters": 15.3,
@@ -9208,7 +9234,7 @@
       "instruction": "Estimated access path to KIA9"
     },
     {
-      "id": "edge-657",
+      "id": "edge-659",
       "from": "poi:osm-node-13034200342",
       "to": "osm:t1-l0:7837871943",
       "distanceMeters": 10.9,
@@ -9225,7 +9251,7 @@
       "instruction": "Estimated access path to Mysore Flybus"
     },
     {
-      "id": "edge-658",
+      "id": "edge-660",
       "from": "poi:osm-node-13034200343",
       "to": "osm:t1-l0:7837871943",
       "distanceMeters": 24.5,
@@ -9242,7 +9268,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-659",
+      "id": "edge-661",
       "from": "poi:osm-node-13034200344",
       "to": "osm:t1-l0:2587794404",
       "distanceMeters": 23.8,
@@ -9259,7 +9285,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-660",
+      "id": "edge-662",
       "from": "poi:osm-node-13034200345",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 33.7,
@@ -9276,7 +9302,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-661",
+      "id": "edge-663",
       "from": "poi:osm-node-13034200346",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 40.2,
@@ -9293,7 +9319,7 @@
       "instruction": "Estimated access path to KIA15: Whitefield TTMC => Kempegowda International Airport Limited"
     },
     {
-      "id": "edge-662",
+      "id": "edge-664",
       "from": "poi:osm-node-13034200347",
       "to": "poi:osm-node-11545500290",
       "distanceMeters": 74.2,
@@ -9310,7 +9336,7 @@
       "instruction": "Estimated access path to Nandini"
     },
     {
-      "id": "edge-663",
+      "id": "edge-665",
       "from": "poi:osm-node-13034200348",
       "to": "osm:t1-l0:7837871932",
       "distanceMeters": 38.5,
@@ -9327,7 +9353,7 @@
       "instruction": "Estimated access path to Cafe Coffee Day"
     },
     {
-      "id": "edge-664",
+      "id": "edge-666",
       "from": "poi:osm-node-13034200349",
       "to": "osm:t1-l0:7837871932",
       "distanceMeters": 13.5,
@@ -9344,7 +9370,7 @@
       "instruction": "Estimated access path to Ooru Canteen"
     },
     {
-      "id": "edge-665",
+      "id": "edge-667",
       "from": "poi:osm-node-13034200350",
       "to": "osm:t1-l0:7837871932",
       "distanceMeters": 24,
@@ -9361,7 +9387,7 @@
       "instruction": "Estimated access path to Third Wave Coffee Roasters"
     },
     {
-      "id": "edge-666",
+      "id": "edge-668",
       "from": "poi:osm-node-13511758963",
       "to": "poi:osm-node-13511758964",
       "distanceMeters": 5.3,
@@ -9378,7 +9404,7 @@
       "instruction": "Estimated access path to Rameshwaram Cafe"
     },
     {
-      "id": "edge-669",
+      "id": "edge-671",
       "from": "poi:osm-way-393790443",
       "to": "osm:t1-l0:1728388771",
       "distanceMeters": 31,

@@ -1169,18 +1169,6 @@ details > summary:hover {
   box-shadow: var(--shadow-soft);
 }
 
-.map-canvas {
-  width: 100%;
-  height: auto;
-  display: block;
-  touch-action: none;
-  user-select: none;
-}
-
-.map-canvas.panning {
-  cursor: grabbing;
-}
-
 .map-controls {
   position: absolute;
   top: 0.7rem;
@@ -1881,7 +1869,7 @@ tr:last-child td {
   position: relative;
 }
 
-.leaflet-map {
+.map-canvas {
   width: 100%;
   height: clamp(380px, 60vh, 620px);
   border-radius: 14px;
@@ -1889,20 +1877,6 @@ tr:last-child td {
   background: #e9f0f6;
   overflow: hidden;
   z-index: 0;
-}
-
-.leaflet-container {
-  font-family: var(--font);
-  font-size: 0.8rem;
-}
-
-.leaflet-control-attribution {
-  font-size: 0.62rem !important;
-  background: rgba(255, 255, 255, 0.88) !important;
-}
-
-.leaflet-control-zoom a {
-  color: var(--ink) !important;
 }
 
 .map-credit {
@@ -2268,7 +2242,7 @@ tr:last-child td {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .leaflet-map {
+  .map-canvas {
     height: clamp(340px, 56vh, 520px);
   }
 
@@ -2297,7 +2271,7 @@ tr:last-child td {
     display: flex;
   }
 
-  .leaflet-map {
+  .map-canvas {
     height: 52vh;
     min-height: 320px;
   }
@@ -2339,4 +2313,136 @@ tr:last-child td {
 
 .place-name strong {
   overflow-wrap: anywhere;
+}
+
+/* Live conditions, transfer guidance and notification cards. */
+.weather-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 0.8rem;
+  background: #eef6f8;
+  margin-bottom: 0.9rem;
+}
+
+.weather-row strong {
+  display: block;
+  margin: 0.15rem 0;
+}
+
+.queue-block {
+  border-top: 1px solid #dbe3ec;
+  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+.queue-block h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.queue-list {
+  margin: 0.6rem 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.queue-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: 0.3rem;
+}
+
+.queue-list dt {
+  color: #475569;
+}
+
+.queue-list dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.transfer-scenarios {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.9rem 0;
+}
+
+.transfer-scenario {
+  border: 1px solid #dbe3ec;
+  border-radius: 0.8rem;
+  padding: 0.75rem 0.9rem;
+  background: #fbfdff;
+}
+
+.transfer-scenario summary {
+  cursor: pointer;
+}
+
+.transfer-scenario summary strong {
+  color: #10233f;
+}
+
+.transfer-steps {
+  margin: 0.7rem 0 0.6rem 1.2rem;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.transfer-steps li {
+  padding-left: 0.2rem;
+}
+
+.transfer-scenario .checks {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .weather-row {
+    flex-direction: column;
+  }
+
+  .queue-list > div {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .queue-list dd {
+    text-align: left;
+  }
+}
+
+/* MapLibre/OpenFreeMap controls and marker buttons. */
+.poi-marker-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.poi-marker-button:focus-visible .poi-pin {
+  outline: 3px solid #10233f;
+  outline-offset: 2px;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 0.62rem !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.maplibregl-ctrl-group button {
+  width: 30px;
+  height: 30px;
+}
+
+.maplibregl-canvas:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }

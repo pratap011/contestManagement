@@ -449,16 +449,16 @@
   },
   {
     "id": "osm-node-10719514105",
-    "name": "Inter Terminal Shuttle",
+    "name": "T1 inter-terminal shuttle stop (departure kerb)",
     "category": "transport",
     "terminalId": "t1",
     "floorId": "t1-l0",
     "lat": 13.1996643,
     "lon": 77.70883,
     "nodeId": "poi:osm-node-10719514105",
-    "source": "osm",
-    "verificationStatus": "unverified",
-    "description": "Mapped transport stop or pick-up point.",
+    "source": "airport",
+    "verificationStatus": "verified",
+    "description": "Complimentary T1↔T2 shuttle stop. Airport guidance places it on the T1 departure kerb, inner lane next to the Relay outlet. OSM node used for the mapped position; confirm the bay with signage.",
     "osmId": "10719514105"
   },
   {
@@ -1563,5 +1563,18 @@
     "source": "derived",
     "verificationStatus": "inferred",
     "description": "Approximate kerbside entrance derived from the mapped footprint and the nearby shuttle stop. Confirm the door with airport signage."
+  },
+  {
+    "id": "anchor-poi-t1:transfer-desk",
+    "name": "T1 Connections by BLR transfer desk (approx.)",
+    "category": "info",
+    "terminalId": "t1",
+    "floorId": "t1-l0",
+    "lat": 13.2009173,
+    "lon": 77.7106856,
+    "nodeId": "anchor:t1:transfer-desk",
+    "source": "derived",
+    "verificationStatus": "inferred",
+    "description": "Approximate location of the airport transfer assistance area. Official guidance confirms dedicated transfer desks in T1; the exact desk position is not mapped. Ask staff or follow the blue and yellow Connections by BLR signs."
   }
 ]

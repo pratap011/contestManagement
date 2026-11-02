@@ -12,7 +12,8 @@
 | T2 C1–C6, D1–D7 gates | OSM gate nodes + airport gate floor directory | Unverified positions | Connected to the Level 1 corridor through inferred spines. |
 | T2 D2/D3, D8–D13 gates | OSM gate nodes, Level 3 | Unverified positions | No mapped Level 3 corridor; route ends at the domestic gate area. |
 | T2 Level 0/3 facilities | Sparse OSM coverage | Unverified | Routes may end at a mapped gate area rather than an exact facility. |
-| T1↔T2 shuttle | OSM stops + OSRM road route + public service guidance | Inferred | Ride ~10 min, wait allowance 5 min. Eligibility/security not verified. |
+| T1↔T2 shuttle | OSM stops + OSRM road route + airport Connections by BLR guidance | Verified service / inferred geometry | Ride ~10 min, wait allowance 5 min. The airport confirms the shuttle and kerbside stops; eligibility/security are still not verified. |
+| Transfer desks | Approximate terminal-centre anchors | Inferred | Airport confirms desks exist; exact indoor coordinates are not published. |
 | Step-free access | OSM `wheelchair`, stairs/escalator tags | Unverified | Not a real accessibility audit. |
 
 All POIs and edges are approximations. No claim is made that a real gate, counter, restroom or
@@ -35,7 +36,10 @@ corridor is exactly at the mapped location.
 - The graph carries `allowedPassengerTypes` and `accessible` flags.
 - Security/immigration boundaries are **not** modelled as directional access rules. The T1↔T2 route
   may use the landside shuttle; the UI warns that a terminal change can require leaving the secure
-  area, re-clearing formalities and re-checking baggage.
+  area, re-clearing formalities and re-checking baggage. The layover assistant also renders the
+  airport's three international/domestic transfer scenarios and points to a Connections by BLR desk.
+- Public Mapillary imagery links are provided from each POI so entrances, lifts and corridors can be
+  checked visually. They are evidence aids, not an automatic verification step.
 - For a reliable airside product, the graph must model:
   1. Directional landside/airside access.
   2. Verified security, immigration and domestic/international boundaries.
@@ -67,6 +71,9 @@ corridor is exactly at the mapped location.
 - GPS at the start, mid-route and destination updates remaining time and current step.
 - GPS far from the mapped network shows no route instead of snapping to a dead end.
 - Small-screen map controls, search and route summary remain usable.
+
+Basemap: OpenFreeMap `liberty` vector style rendered with MapLibre GL. Attribution covers
+OpenFreeMap, OpenMapTiles and OpenStreetMap/ODbL.
 
 Automated coverage lives in `src/modules/navigation/astar.spec.ts`,
 `src/modules/navigation/directions.spec.ts`, `src/modules/airport-directory/dataset.spec.ts` and

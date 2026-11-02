@@ -26,6 +26,20 @@ services:
       # web app and API on the same origin; no CORS is configured.
       - key: APP_ORIGIN
         sync: false
-      # Optional: the BLR public board works without a key.
-      - key: AVIATIONSTACK_API_KEY
+      # Optional: AeroDataBox widens schedule coverage beyond the current-day
+      # BLR board. Free plan is non-commercial with attribution.
+      - key: AERODATABOX_API_KEY
+        sync: false
+      # Stable Web Push keys. Generate once and keep them secret; without these
+      # the service creates ephemeral keys that break subscriptions on redeploy.
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        sync: false
+      # Optional OpenSky account for a higher ADS-B allowance.
+      - key: OPENSKY_CLIENT_ID
+        sync: false
+      - key: OPENSKY_CLIENT_SECRET
         sync: false

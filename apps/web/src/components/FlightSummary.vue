@@ -105,8 +105,8 @@ const missingTime = computed(() => {
           ? 'not a real schedule'
           : flight.provider === 'blr-airport-board'
             ? 'BLR airport live board'
-            : flight.provider === 'aviationstack'
-              ? 'Aviationstack'
+            : flight.provider === 'aerodatabox'
+              ? 'AeroDataBox (free plan, attribution required)'
               : 'provider proxy'
       }}
     </p>

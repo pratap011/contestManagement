@@ -41,13 +41,20 @@ describe('BLR OpenStreetMap dataset', () => {
     expect(airportDataset.airport.source).toBe('osm')
     expect(airportDataset.edges.some((edge) => edge.verificationStatus === 'unverified')).toBe(true)
     expect(airportDataset.edges.some((edge) => edge.verificationStatus === 'inferred')).toBe(true)
-    expect(airportDataset.edges.some((edge) => edge.verificationStatus === 'verified')).toBe(false)
+    // Only the airport-confirmed inter-terminal shuttle is verified; walking
+    // geometry and connectors remain unverified or inferred.
+    const verified = airportDataset.edges.filter((edge) => edge.verificationStatus === 'verified')
+    expect(verified.length).toBeGreaterThan(0)
+    expect(
+      verified.every((edge) => edge.transitionType === 'shuttle' && edge.source === 'airport'),
+    ).toBe(true)
   })
 
   it('includes the inter-terminal shuttle edge with mapped road geometry', () => {
     const shuttle = airportDataset.edges.find((edge) => edge.transitionType === 'shuttle')
     expect(shuttle).toBeDefined()
     expect(shuttle?.source).toBe('airport')
+    expect(shuttle?.verificationStatus).toBe('verified')
     expect(shuttle?.geometry?.length).toBeGreaterThan(2)
     expect(shuttle?.estimatedWalkingSeconds).toBeGreaterThanOrEqual(600)
   })

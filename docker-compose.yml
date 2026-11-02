@@ -27,7 +27,12 @@ services:
       COOKIE_SECURE: "false"
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
       APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8787}
-      AVIATIONSTACK_API_KEY: ${AVIATIONSTACK_API_KEY:-}
+      AERODATABOX_API_KEY: ${AERODATABOX_API_KEY:-}
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:blr-navigator@example.com}
+      OPENSKY_CLIENT_ID: ${OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${OPENSKY_CLIENT_SECRET:-}
     depends_on:
       db:
         condition: service_healthy

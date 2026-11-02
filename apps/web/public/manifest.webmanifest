@@ -1,0 +1,18 @@
+{
+  "name": "BLR Navigator · Kempegowda Airport",
+  "short_name": "BLR Navigator",
+  "description": "Live BLR flight board, terminal transfer guidance, OpenStreetMap walking routes and day-of flight notifications.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f6f9",
+  "theme_color": "#10233f",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

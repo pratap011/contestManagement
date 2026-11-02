@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import FlightSummary from '@/components/FlightSummary.vue'
+import LiveConditions from '@/components/LiveConditions.vue'
+import TransferGuidance from '@/components/TransferGuidance.vue'
+import WatchFlightCard from '@/components/WatchFlightCard.vue'
 import { appConfig } from '@/config'
 import {
   formatCountdown,
@@ -32,6 +35,14 @@ import {
   recommendFacilities,
   type FacilityCandidate,
 } from '@/modules/journeys/recommendations'
+import { fetchAircraft, fetchQueues, fetchWeather } from '@/modules/live/api'
+import type {
+  AircraftPosition,
+  BlrWeather,
+  QueueDirection,
+  QueueTerminal,
+  TerminalQueues,
+} from '@/modules/live/types'
 import { useJourneyStore } from '@/stores/journey'
 
 const router = useRouter()
@@ -59,6 +70,43 @@ const terminal = computed(() => (terminalId.value ? getTerminal(terminalId.value
 const now = ref(Date.now())
 const paceId = ref('normal')
 const stepFree = ref(false)
+const liveQueues = ref<TerminalQueues[]>([])
+const liveWeather = ref<BlrWeather | null>(null)
+const queuesError = ref('')
+const weatherError = ref('')
+const liveLoading = ref(false)
+const aircraft = ref<AircraftPosition | null>(null)
+const aircraftLoading = ref(false)
+const aircraftError = ref('')
+
+const queueRequests = computed<Array<{ terminal: QueueTerminal; direction: QueueDirection }>>(() => {
+  const requests: Array<{ terminal: QueueTerminal; direction: QueueDirection }> = []
+  const add = (terminalId: string | null, direction: QueueDirection) => {
+    if (!terminalId) return
+    const terminal: QueueTerminal = terminalId.toLowerCase() === 't2' ? 'T2' : 'T1'
+    if (!requests.some((item) => item.terminal === terminal && item.direction === direction)) {
+      requests.push({ terminal, direction })
+    }
+  }
+  if (journey.value?.kind === 'departing') {
+    add(departureTerminalId.value ?? 't1', 'departure')
+  } else {
+    add(arrivalTerminalId.value, 'arrival')
+    add(departureTerminalId.value, 'departure')
+  }
+  return requests
+})
+
+const securityWaitText = computed(() => {
+  const queue = liveQueues.value.find((item) => item.direction === 'departure')
+  if (!queue) return ''
+  const rows = queue.checkpoints.filter(
+    (checkpoint) => /security/i.test(checkpoint.milestone) && checkpoint.waitMinutes !== null,
+  )
+  if (!rows.length) return ''
+  const parts = rows.map((row) => `${row.label.toLowerCase()} about ${Math.round(row.waitMinutes ?? 0)} min`)
+  return ` The airport currently reports ${parts.join(' and ')}.`
+})
 
 const paceFactor = computed(
   () =>
@@ -103,6 +151,17 @@ const connectionGateResolution = computed(() => {
   )
 })
 const connectionGatePoi = computed(() => connectionGateResolution.value?.poi)
+
+const layoverWatch = computed(() => {
+  if (journey.value?.kind !== 'layover') return null
+  if (connection.value?.source === 'provider') {
+    return { flight: connection.value, role: 'connection' as const }
+  }
+  if (arrival.value?.source === 'provider') {
+    return { flight: arrival.value, role: 'arrival' as const }
+  }
+  return null
+})
 
 const timingBasisText = computed(() => {
   if (!assessment.value) return 'Not available'
@@ -292,12 +351,54 @@ function gateStatusText() {
   )
 }
 
+async function loadLiveData() {
+  liveLoading.value = true
+  queuesError.value = ''
+  weatherError.value = ''
+  const requests = queueRequests.value
+  const [weatherResult, ...queueResults] = await Promise.allSettled([
+    fetchWeather(),
+    ...requests.map((request) => fetchQueues(request.terminal, request.direction)),
+  ])
+  if (weatherResult.status === 'fulfilled') liveWeather.value = weatherResult.value
+  else weatherError.value = weatherResult.reason instanceof Error ? weatherResult.reason.message : ''
+  liveQueues.value = queueResults
+    .filter((result): result is PromiseFulfilledResult<TerminalQueues> => result.status === 'fulfilled')
+    .map((result) => result.value)
+  const failed = queueResults.find(
+    (result): result is PromiseRejectedResult => result.status === 'rejected',
+  )
+  queuesError.value =
+    failed?.reason instanceof Error ? failed.reason.message : failed ? 'Queue data is unavailable.' : ''
+  liveLoading.value = false
+
+  if (journey.value?.kind === 'layover' && arrival.value?.source === 'provider') {
+    aircraftLoading.value = true
+    aircraftError.value = ''
+    try {
+      aircraft.value = await fetchAircraft(arrival.value.flightNumber)
+    } catch (error) {
+      aircraft.value = null
+      aircraftError.value = error instanceof Error ? error.message : 'Aircraft position is unavailable.'
+    } finally {
+      aircraftLoading.value = false
+    }
+  }
+}
+
 let timer: ReturnType<typeof setInterval> | undefined
 onMounted(() => {
   timer = setInterval(() => {
     now.value = Date.now()
   }, 30_000)
+  void loadLiveData()
 })
+watch(
+  () => journey.value?.confirmedAt,
+  () => {
+    void loadLiveData()
+  },
+)
 onBeforeUnmount(() => {
   if (timer) clearInterval(timer)
 })
@@ -359,7 +460,7 @@ onBeforeUnmount(() => {
                 <p>
                   Follow airport signs to security. The exact security checkpoint is not mapped in
                   OpenStreetMap, so the route begins at your chosen mapped start and does not model
-                  queues or access rules.
+                  access rules.{{ securityWaitText }}
                 </p>
               </li>
               <li>
@@ -373,6 +474,15 @@ onBeforeUnmount(() => {
               </li>
             </ol>
           </section>
+
+          <LiveConditions
+            :queues="liveQueues"
+            :weather="liveWeather"
+            :weather-error="weatherError"
+            :queues-error="queuesError"
+            :loading="liveLoading"
+            :time-zone="timeZone"
+          />
 
           <section class="card" aria-labelledby="before-heading">
             <h2 id="before-heading">Before you go</h2>
@@ -402,6 +512,12 @@ onBeforeUnmount(() => {
             </p>
           </div>
           <FlightSummary v-if="departure" :flight="departure" role="departure" :time-zone="timeZone" />
+          <WatchFlightCard
+            v-if="departure"
+            :flight="departure"
+            role="departure"
+            :time-zone="timeZone"
+          />
           <section class="card">
             <h2>Terminal status</h2>
             <dl class="meta-list">
@@ -472,6 +588,15 @@ onBeforeUnmount(() => {
             </ul>
           </section>
 
+          <LiveConditions
+            :queues="liveQueues"
+            :weather="liveWeather"
+            :weather-error="weatherError"
+            :queues-error="queuesError"
+            :loading="liveLoading"
+            :time-zone="timeZone"
+          />
+
           <section class="card" aria-labelledby="layover-timeline">
             <h2 id="layover-timeline">Your layover at a glance</h2>
             <ol class="timeline">
@@ -504,6 +629,11 @@ onBeforeUnmount(() => {
               </li>
             </ol>
           </section>
+
+          <TransferGuidance
+            :context="journey.context"
+            :terminals-differ="store.terminalsDiffer"
+          />
 
           <section class="card" aria-labelledby="checks-heading">
             <h2 id="checks-heading">Required checks and next steps</h2>
@@ -594,7 +724,47 @@ onBeforeUnmount(() => {
           </div>
 
           <FlightSummary v-if="arrival" :flight="arrival" role="arrival" :time-zone="timeZone" />
+
+          <section v-if="arrival?.source === 'provider'" class="card" aria-labelledby="aircraft-heading">
+            <div class="between">
+              <h2 id="aircraft-heading">Inbound aircraft</h2>
+              <span class="badge soft">ADS-B</span>
+            </div>
+            <p v-if="aircraftLoading" class="small muted">Checking OpenSky for the aircraft near BLR…</p>
+            <template v-else-if="aircraft?.found">
+              <dl class="meta-list">
+                <dt>Callsign</dt>
+                <dd>{{ aircraft.callsign }}</dd>
+                <dt>Distance from BLR</dt>
+                <dd>{{ aircraft.distanceKm }} km</dd>
+                <dt>Altitude</dt>
+                <dd>
+                  {{
+                    aircraft.altitudeMeters === null
+                      ? 'Not reported'
+                      : `${Math.round(aircraft.altitudeMeters)} m`
+                  }}
+                </dd>
+                <dt>Status</dt>
+                <dd>{{ aircraft.onGround ? 'On the ground' : 'Airborne' }}</dd>
+                <dt>Last contact</dt>
+                <dd>{{ aircraft.lastContact ?? 'Not reported' }}</dd>
+              </dl>
+              <p class="tiny muted no-gap">{{ aircraft.note }}</p>
+            </template>
+            <p v-else class="small muted no-gap">
+              {{ aircraftError || 'The aircraft is not broadcasting inside the BLR approach box right now.' }}
+              This is not a schedule, gate or connection source.
+            </p>
+          </section>
+
           <FlightSummary v-if="connection" :flight="connection" role="connection" :time-zone="timeZone" />
+          <WatchFlightCard
+            v-if="layoverWatch"
+            :flight="layoverWatch.flight"
+            :role="layoverWatch.role"
+            :time-zone="timeZone"
+          />
 
           <section class="card" aria-labelledby="context-summary">
             <div class="between">

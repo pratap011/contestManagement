@@ -3282,6 +3282,15 @@
       "lon": 77.7183706,
       "nodeType": "facility",
       "name": "T2 departures & retail area"
+    },
+    {
+      "id": "anchor:t2:transfer-desk",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 13.1993574,
+      "lon": 77.7185383,
+      "nodeType": "facility",
+      "name": "T2 Connections by BLR transfer desk (approx.)"
     }
   ],
   "edges": [
@@ -7974,6 +7983,23 @@
     },
     {
       "id": "edge-522",
+      "from": "anchor:t2:transfer-desk",
+      "to": "osm:t2-l0:11300040804",
+      "distanceMeters": 25.6,
+      "estimatedWalkingSeconds": 20,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to T2 Connections by BLR transfer desk (approx.)"
+    },
+    {
+      "id": "edge-524",
       "from": "anchor:t2:entrance",
       "to": "anchor:t2:l1-hall",
       "distanceMeters": 347.3,
@@ -7990,7 +8016,7 @@
       "instruction": "Take the lift or escalator between the kerbside and the Level 1 departures and retail area (inferred connector)"
     },
     {
-      "id": "edge-523",
+      "id": "edge-525",
       "from": "anchor:t2:l1-hall",
       "to": "anchor:t2:t2-l3:gates",
       "distanceMeters": 129.3,
@@ -8007,7 +8033,7 @@
       "instruction": "Take the lift or escalator between Level 1 and the Level 3 domestic gate area (inferred connector)"
     },
     {
-      "id": "edge-545",
+      "id": "edge-547",
       "from": "poi:osm-node-10719542105",
       "to": "osm:t2-l0:13341930471",
       "distanceMeters": 65.9,
@@ -8024,7 +8050,7 @@
       "instruction": "Estimated access path to Airport Shuttle for T1"
     },
     {
-      "id": "edge-567",
+      "id": "edge-569",
       "from": "poi:osm-node-11299664521",
       "to": "osm:t2-l1:11299664521",
       "distanceMeters": 1,
@@ -8041,7 +8067,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-568",
+      "id": "edge-570",
       "from": "poi:osm-node-11299664534",
       "to": "osm:t2-l0:13341930470",
       "distanceMeters": 142.4,
@@ -8058,7 +8084,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-577",
+      "id": "edge-579",
       "from": "poi:osm-node-11962610285",
       "to": "osm:t2-l1:12382439858",
       "distanceMeters": 99.5,
@@ -8075,7 +8101,7 @@
       "instruction": "Estimated access path to HMS"
     },
     {
-      "id": "edge-578",
+      "id": "edge-580",
       "from": "poi:osm-node-11962610286",
       "to": "osm:t2-l1:12395043580",
       "distanceMeters": 82.5,
@@ -8092,7 +8118,7 @@
       "instruction": "Estimated access path to La Madeleine"
     },
     {
-      "id": "edge-579",
+      "id": "edge-581",
       "from": "poi:osm-node-11962610287",
       "to": "osm:t2-l1:11299664521",
       "distanceMeters": 100.6,
@@ -8109,7 +8135,7 @@
       "instruction": "Estimated access path to Wolfgang Puck"
     },
     {
-      "id": "edge-580",
+      "id": "edge-582",
       "from": "poi:osm-node-11962610288",
       "to": "osm:t2-l0:11300040772",
       "distanceMeters": 72.2,
@@ -8126,7 +8152,7 @@
       "instruction": "Estimated access path to The Irish House"
     },
     {
-      "id": "edge-581",
+      "id": "edge-583",
       "from": "poi:osm-node-12060269128",
       "to": "osm:t2-l0:11300040773",
       "distanceMeters": 57.3,
@@ -8143,7 +8169,7 @@
       "instruction": "Estimated access path to Grab And Go"
     },
     {
-      "id": "edge-582",
+      "id": "edge-584",
       "from": "poi:osm-node-12060270425",
       "to": "osm:t2-l0:11300040775",
       "distanceMeters": 47.7,
@@ -8160,7 +8186,7 @@
       "instruction": "Estimated access path to Costa Coffee"
     },
     {
-      "id": "edge-584",
+      "id": "edge-586",
       "from": "poi:osm-node-12165946541",
       "to": "osm:t2-l0:11300040811",
       "distanceMeters": 141.3,
@@ -8177,7 +8203,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-585",
+      "id": "edge-587",
       "from": "poi:osm-node-12165946545",
       "to": "osm:t2-l0:11300040811",
       "distanceMeters": 153.3,
@@ -8194,7 +8220,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-586",
+      "id": "edge-588",
       "from": "poi:osm-node-12165946550",
       "to": "osm:t2-l0:11300040809",
       "distanceMeters": 145.9,
@@ -8211,7 +8237,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-587",
+      "id": "edge-589",
       "from": "poi:osm-node-12165946561",
       "to": "osm:t2-l0:11300040811",
       "distanceMeters": 139.9,
@@ -8228,7 +8254,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-588",
+      "id": "edge-590",
       "from": "poi:osm-node-12165946572",
       "to": "osm:t2-l0:11300040772",
       "distanceMeters": 140.2,
@@ -8245,7 +8271,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-589",
+      "id": "edge-591",
       "from": "poi:osm-node-12165946576",
       "to": "osm:t2-l1:12395043569",
       "distanceMeters": 114.2,
@@ -8262,7 +8288,7 @@
       "instruction": "Estimated access path to Service"
     },
     {
-      "id": "edge-590",
+      "id": "edge-592",
       "from": "poi:osm-node-12165946583",
       "to": "osm:t2-l0:11300040809",
       "distanceMeters": 148.8,
@@ -8279,7 +8305,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-591",
+      "id": "edge-593",
       "from": "poi:osm-node-12165946589",
       "to": "osm:t2-l1:12165946589",
       "distanceMeters": 1,
@@ -8296,7 +8322,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-592",
+      "id": "edge-594",
       "from": "poi:osm-node-12375764112",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 14.8,
@@ -8313,7 +8339,7 @@
       "instruction": "Estimated access path to Kempegowda International Airport"
     },
     {
-      "id": "edge-593",
+      "id": "edge-595",
       "from": "poi:osm-node-12382439826",
       "to": "osm:t2-l1:12395043575",
       "distanceMeters": 12.8,
@@ -8330,7 +8356,7 @@
       "instruction": "Estimated access path to La Madeleine Express"
     },
     {
-      "id": "edge-594",
+      "id": "edge-596",
       "from": "poi:osm-node-12382439834",
       "to": "osm:t2-l1:12382439900",
       "distanceMeters": 3.4,
@@ -8347,7 +8373,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-595",
+      "id": "edge-597",
       "from": "poi:osm-node-12382439847",
       "to": "osm:t2-l1:12382439870",
       "distanceMeters": 3.1,
@@ -8364,7 +8390,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-596",
+      "id": "edge-598",
       "from": "poi:osm-node-12382454909",
       "to": "osm:t2-l1:12060269121",
       "distanceMeters": 2.5,
@@ -8381,7 +8407,7 @@
       "instruction": "Estimated access path to Entrance"
     },
     {
-      "id": "edge-598",
+      "id": "edge-600",
       "from": "poi:osm-node-12625811889",
       "to": "osm:t2-l1:12165946589",
       "distanceMeters": 81.7,
@@ -8398,7 +8424,7 @@
       "instruction": "Estimated access path to Relay"
     },
     {
-      "id": "edge-599",
+      "id": "edge-601",
       "from": "poi:osm-node-12625811890",
       "to": "osm:t2-l1:11299664521",
       "distanceMeters": 61.8,
@@ -8415,7 +8441,7 @@
       "instruction": "Estimated access path to Samoor"
     },
     {
-      "id": "edge-600",
+      "id": "edge-602",
       "from": "poi:osm-node-12625811891",
       "to": "osm:t2-l1:11299664521",
       "distanceMeters": 65.1,
@@ -8432,7 +8458,7 @@
       "instruction": "Estimated access path to Anand"
     },
     {
-      "id": "edge-601",
+      "id": "edge-603",
       "from": "poi:osm-node-12657950229",
       "to": "osm:t2-l0:13341930469",
       "distanceMeters": 69.1,
@@ -8449,7 +8475,7 @@
       "instruction": "Estimated access path to Coffee Bean & Tea Leaf"
     },
     {
-      "id": "edge-612",
+      "id": "edge-614",
       "from": "poi:osm-node-12753745164",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 4.6,
@@ -8466,7 +8492,7 @@
       "instruction": "Estimated access path to Mysore Flybus T2 Pickup"
     },
     {
-      "id": "edge-613",
+      "id": "edge-615",
       "from": "poi:osm-node-13034176476",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 2.1,
@@ -8483,7 +8509,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-614",
+      "id": "edge-616",
       "from": "poi:osm-node-13034176477",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 20.2,
@@ -8500,7 +8526,7 @@
       "instruction": "Estimated access path to Platform 18"
     },
     {
-      "id": "edge-615",
+      "id": "edge-617",
       "from": "poi:osm-node-13034176478",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 14.2,
@@ -8517,7 +8543,7 @@
       "instruction": "Estimated access path to Platform 17"
     },
     {
-      "id": "edge-616",
+      "id": "edge-618",
       "from": "poi:osm-node-13034176479",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 16.9,
@@ -8534,7 +8560,7 @@
       "instruction": "Estimated access path to Platform 16"
     },
     {
-      "id": "edge-617",
+      "id": "edge-619",
       "from": "poi:osm-node-13034176480",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 14.7,
@@ -8551,7 +8577,7 @@
       "instruction": "Estimated access path to Platform 15"
     },
     {
-      "id": "edge-618",
+      "id": "edge-620",
       "from": "poi:osm-node-13034176481",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 24.4,
@@ -8568,7 +8594,7 @@
       "instruction": "Estimated access path to Platform 14"
     },
     {
-      "id": "edge-619",
+      "id": "edge-621",
       "from": "poi:osm-node-13034176482",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 37.7,
@@ -8585,7 +8611,7 @@
       "instruction": "Estimated access path to Platform 13"
     },
     {
-      "id": "edge-620",
+      "id": "edge-622",
       "from": "poi:osm-node-13034176483",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 26.4,
@@ -8602,7 +8628,7 @@
       "instruction": "Estimated access path to Platform 18"
     },
     {
-      "id": "edge-621",
+      "id": "edge-623",
       "from": "poi:osm-node-13034176484",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 13.3,
@@ -8619,7 +8645,7 @@
       "instruction": "Estimated access path to Platform 17"
     },
     {
-      "id": "edge-622",
+      "id": "edge-624",
       "from": "poi:osm-node-13034176485",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 16.1,
@@ -8636,7 +8662,7 @@
       "instruction": "Estimated access path to Platform 16"
     },
     {
-      "id": "edge-623",
+      "id": "edge-625",
       "from": "poi:osm-node-13034176486",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 13.7,
@@ -8653,7 +8679,7 @@
       "instruction": "Estimated access path to Platform 15"
     },
     {
-      "id": "edge-624",
+      "id": "edge-626",
       "from": "poi:osm-node-13034176487",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 23.7,
@@ -8670,7 +8696,7 @@
       "instruction": "Estimated access path to Platform 14"
     },
     {
-      "id": "edge-625",
+      "id": "edge-627",
       "from": "poi:osm-node-13034176488",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 37.2,
@@ -8687,7 +8713,7 @@
       "instruction": "Estimated access path to Platform 13"
     },
     {
-      "id": "edge-626",
+      "id": "edge-628",
       "from": "poi:osm-node-13034176489",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 13,
@@ -8704,7 +8730,7 @@
       "instruction": "Estimated access path to Platform 12"
     },
     {
-      "id": "edge-627",
+      "id": "edge-629",
       "from": "poi:osm-node-13034176490",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 8.2,
@@ -8721,7 +8747,7 @@
       "instruction": "Estimated access path to Platform 11"
     },
     {
-      "id": "edge-628",
+      "id": "edge-630",
       "from": "poi:osm-node-13034176491",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 12.4,
@@ -8738,7 +8764,7 @@
       "instruction": "Estimated access path to Platform 10"
     },
     {
-      "id": "edge-629",
+      "id": "edge-631",
       "from": "poi:osm-node-13034176492",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 9.2,
@@ -8755,7 +8781,7 @@
       "instruction": "Estimated access path to Platform 9"
     },
     {
-      "id": "edge-630",
+      "id": "edge-632",
       "from": "poi:osm-node-13034176493",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 21.5,
@@ -8772,7 +8798,7 @@
       "instruction": "Estimated access path to Platform 8"
     },
     {
-      "id": "edge-631",
+      "id": "edge-633",
       "from": "poi:osm-node-13034176494",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 35.9,
@@ -8789,7 +8815,7 @@
       "instruction": "Estimated access path to Platform 7"
     },
     {
-      "id": "edge-632",
+      "id": "edge-634",
       "from": "poi:osm-node-13034176495",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 20.7,
@@ -8806,7 +8832,7 @@
       "instruction": "Estimated access path to Platform 12"
     },
     {
-      "id": "edge-633",
+      "id": "edge-635",
       "from": "poi:osm-node-13034176496",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 6.8,
@@ -8823,7 +8849,7 @@
       "instruction": "Estimated access path to Platform 11"
     },
     {
-      "id": "edge-634",
+      "id": "edge-636",
       "from": "poi:osm-node-13034176497",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 11.6,
@@ -8840,7 +8866,7 @@
       "instruction": "Estimated access path to Platform 10"
     },
     {
-      "id": "edge-635",
+      "id": "edge-637",
       "from": "poi:osm-node-13034176498",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 8,
@@ -8857,7 +8883,7 @@
       "instruction": "Estimated access path to Platform 9"
     },
     {
-      "id": "edge-636",
+      "id": "edge-638",
       "from": "poi:osm-node-13034176499",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 21,
@@ -8874,7 +8900,7 @@
       "instruction": "Estimated access path to Platform 8"
     },
     {
-      "id": "edge-637",
+      "id": "edge-639",
       "from": "poi:osm-node-13034176500",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 35.6,
@@ -8891,7 +8917,7 @@
       "instruction": "Estimated access path to Platform 7"
     },
     {
-      "id": "edge-638",
+      "id": "edge-640",
       "from": "poi:osm-node-13034200301",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 13,
@@ -8908,7 +8934,7 @@
       "instruction": "Estimated access path to Platform 6"
     },
     {
-      "id": "edge-639",
+      "id": "edge-641",
       "from": "poi:osm-node-13034200302",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 1,
@@ -8925,7 +8951,7 @@
       "instruction": "Estimated access path to Platform 5"
     },
     {
-      "id": "edge-640",
+      "id": "edge-642",
       "from": "poi:osm-node-13034200303",
       "to": "osm:t2-l0:13341930474",
       "distanceMeters": 9,
@@ -8942,7 +8968,7 @@
       "instruction": "Estimated access path to Platform 4"
     },
     {
-      "id": "edge-641",
+      "id": "edge-643",
       "from": "poi:osm-node-13034200304",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 5.6,
@@ -8959,7 +8985,7 @@
       "instruction": "Estimated access path to 3 2Platform 3"
     },
     {
-      "id": "edge-642",
+      "id": "edge-644",
       "from": "poi:osm-node-13034200305",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 20.4,
@@ -8976,7 +9002,7 @@
       "instruction": "Estimated access path to Platform 2"
     },
     {
-      "id": "edge-643",
+      "id": "edge-645",
       "from": "poi:osm-node-13034200306",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 22.8,
@@ -8993,7 +9019,7 @@
       "instruction": "Estimated access path to Platform 6"
     },
     {
-      "id": "edge-644",
+      "id": "edge-646",
       "from": "poi:osm-node-13034200307",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 18.9,
@@ -9010,7 +9036,7 @@
       "instruction": "Estimated access path to Platform 5"
     },
     {
-      "id": "edge-645",
+      "id": "edge-647",
       "from": "poi:osm-node-13034200308",
       "to": "osm:t2-l0:13341930474",
       "distanceMeters": 7.9,
@@ -9027,7 +9053,7 @@
       "instruction": "Estimated access path to Platform 4"
     },
     {
-      "id": "edge-646",
+      "id": "edge-648",
       "from": "poi:osm-node-13034200309",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 5.4,
@@ -9044,7 +9070,7 @@
       "instruction": "Estimated access path to 3 2Platform 3"
     },
     {
-      "id": "edge-647",
+      "id": "edge-649",
       "from": "poi:osm-node-13034200310",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 20.3,
@@ -9061,7 +9087,7 @@
       "instruction": "Estimated access path to Platform 2"
     },
     {
-      "id": "edge-648",
+      "id": "edge-650",
       "from": "poi:osm-node-13034200311",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 35.3,
@@ -9078,7 +9104,7 @@
       "instruction": "Estimated access path to Platform 1"
     },
     {
-      "id": "edge-649",
+      "id": "edge-651",
       "from": "poi:osm-node-13034200312",
       "to": "osm:t2-l0:13341930478",
       "distanceMeters": 35.3,
@@ -9095,7 +9121,7 @@
       "instruction": "Estimated access path to Platform 1"
     },
     {
-      "id": "edge-667",
+      "id": "edge-669",
       "from": "poi:osm-node-13523356164",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 7.5,
@@ -9112,7 +9138,7 @@
       "instruction": "Estimated access path to Platform 5"
     },
     {
-      "id": "edge-668",
+      "id": "edge-670",
       "from": "poi:osm-node-13523356165",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 11.8,
@@ -9129,7 +9155,7 @@
       "instruction": "Estimated access path to Platform 5"
     },
     {
-      "id": "edge-670",
+      "id": "edge-672",
       "from": "poi:osm-way-1219495908",
       "to": "osm:t2-l1:11299664551",
       "distanceMeters": 6.4,
@@ -9146,7 +9172,7 @@
       "instruction": "Estimated access path to Wolfgang Puck"
     },
     {
-      "id": "edge-671",
+      "id": "edge-673",
       "from": "poi:osm-way-1219495909",
       "to": "osm:t2-l1:11299664490",
       "distanceMeters": 6.2,
@@ -9163,7 +9189,7 @@
       "instruction": "Estimated access path to Swarovski"
     },
     {
-      "id": "edge-672",
+      "id": "edge-674",
       "from": "poi:osm-way-1219495916",
       "to": "osm:t2-l1:12165946572",
       "distanceMeters": 5.5,
@@ -9180,7 +9206,7 @@
       "instruction": "Estimated access path to Zimson"
     },
     {
-      "id": "edge-673",
+      "id": "edge-675",
       "from": "poi:osm-way-1219495917",
       "to": "osm:t2-l1:12165946545",
       "distanceMeters": 3,
@@ -9197,7 +9223,7 @@
       "instruction": "Estimated access path to Tim Hortons"
     },
     {
-      "id": "edge-674",
+      "id": "edge-676",
       "from": "poi:osm-way-1314418847",
       "to": "osm:t2-l1:12395043568",
       "distanceMeters": 6.2,
@@ -9214,7 +9240,7 @@
       "instruction": "Estimated access path to Farzi Café"
     },
     {
-      "id": "edge-675",
+      "id": "edge-677",
       "from": "poi:osm-way-1314418848",
       "to": "osm:t2-l1:12165946573",
       "distanceMeters": 3.6,
@@ -9231,7 +9257,7 @@
       "instruction": "Estimated access path to Tumi"
     },
     {
-      "id": "edge-676",
+      "id": "edge-678",
       "from": "poi:osm-way-1314418849",
       "to": "osm:t2-l1:12165946557",
       "distanceMeters": 1.5,
@@ -9248,7 +9274,7 @@
       "instruction": "Estimated access path to SS Beauty by Shoppers Stop"
     },
     {
-      "id": "edge-677",
+      "id": "edge-679",
       "from": "poi:osm-way-1314418850",
       "to": "osm:t2-l1:11299664549",
       "distanceMeters": 7.1,
@@ -9265,7 +9291,7 @@
       "instruction": "Estimated access path to Shoppers Stop"
     },
     {
-      "id": "edge-678",
+      "id": "edge-680",
       "from": "poi:osm-way-1314418851",
       "to": "osm:t2-l1:12165946553",
       "distanceMeters": 4.9,
@@ -9282,7 +9308,7 @@
       "instruction": "Estimated access path to Boss"
     },
     {
-      "id": "edge-679",
+      "id": "edge-681",
       "from": "poi:osm-way-1314418859",
       "to": "osm:t2-l1:12165946571",
       "distanceMeters": 6.4,
@@ -9299,7 +9325,7 @@
       "instruction": "Estimated access path to Michael Kors"
     },
     {
-      "id": "edge-680",
+      "id": "edge-682",
       "from": "poi:osm-way-1314418861",
       "to": "osm:t2-l1:12395043569",
       "distanceMeters": 112.2,
@@ -9316,7 +9342,7 @@
       "instruction": "Estimated access path to Restroom"
     },
     {
-      "id": "edge-681",
+      "id": "edge-683",
       "from": "poi:osm-way-1337934281",
       "to": "osm:t2-l0:13034200302",
       "distanceMeters": 13.9,
@@ -9333,7 +9359,7 @@
       "instruction": "Estimated access path to Kempegowda International Airport"
     },
     {
-      "id": "edge-682",
+      "id": "edge-684",
       "from": "poi:osm-way-1338627856",
       "to": "osm:t2-l1:12382439887",
       "distanceMeters": 3.4,
@@ -9350,7 +9376,7 @@
       "instruction": "Estimated access path to Hamleys"
     },
     {
-      "id": "edge-683",
+      "id": "edge-685",
       "from": "poi:osm-way-1338627858",
       "to": "osm:t2-l1:12382439883",
       "distanceMeters": 8,
@@ -9367,7 +9393,7 @@
       "instruction": "Estimated access path to Bon Voyage by Cococart"
     },
     {
-      "id": "edge-684",
+      "id": "edge-686",
       "from": "poi:osm-way-1338627859",
       "to": "osm:t2-l1:12382439843",
       "distanceMeters": 6.3,
@@ -9384,7 +9410,7 @@
       "instruction": "Estimated access path to Starbucks"
     },
     {
-      "id": "edge-685",
+      "id": "edge-687",
       "from": "poi:osm-way-1338627860",
       "to": "osm:t2-l1:12395043580",
       "distanceMeters": 5.1,
@@ -9401,7 +9427,7 @@
       "instruction": "Estimated access path to HIDESIGN"
     },
     {
-      "id": "edge-686",
+      "id": "edge-688",
       "from": "poi:osm-way-1338627861",
       "to": "osm:t2-l1:12382439862",
       "distanceMeters": 5.6,
@@ -9418,7 +9444,7 @@
       "instruction": "Estimated access path to Superdry"
     },
     {
-      "id": "edge-687",
+      "id": "edge-689",
       "from": "poi:osm-way-1338627862",
       "to": "osm:t2-l1:12382439844",
       "distanceMeters": 8.6,
@@ -9435,7 +9461,7 @@
       "instruction": "Estimated access path to Fabindia"
     },
     {
-      "id": "edge-688",
+      "id": "edge-690",
       "from": "poi:osm-way-1338627865",
       "to": "osm:t2-l1:12382439862",
       "distanceMeters": 9.1,
@@ -9452,7 +9478,7 @@
       "instruction": "Estimated access path to GKB Opticals Sunglass Lounge"
     },
     {
-      "id": "edge-689",
+      "id": "edge-691",
       "from": "poi:osm-way-1338627867",
       "to": "osm:t2-l1:12382439844",
       "distanceMeters": 7,
@@ -9469,7 +9495,7 @@
       "instruction": "Estimated access path to Fossil"
     },
     {
-      "id": "edge-690",
+      "id": "edge-692",
       "from": "poi:osm-way-1338627868",
       "to": "osm:t2-l1:11299664495",
       "distanceMeters": 5.4,
@@ -9486,7 +9512,7 @@
       "instruction": "Estimated access path to Forest Essentials"
     },
     {
-      "id": "edge-691",
+      "id": "edge-693",
       "from": "poi:osm-way-1338627869",
       "to": "osm:t2-l1:12382439884",
       "distanceMeters": 5.5,
@@ -9503,7 +9529,7 @@
       "instruction": "Estimated access path to Carluccio's"
     },
     {
-      "id": "edge-692",
+      "id": "edge-694",
       "from": "poi:osm-way-1338627870",
       "to": "osm:t2-l1:12382439864",
       "distanceMeters": 3.1,
@@ -9520,7 +9546,7 @@
       "instruction": "Estimated access path to James Martin Kitchen"
     },
     {
-      "id": "edge-693",
+      "id": "edge-695",
       "from": "poi:osm-way-1338627872",
       "to": "osm:t2-l1:12060269121",
       "distanceMeters": 7,
@@ -9537,7 +9563,7 @@
       "instruction": "Estimated access path to Smoor"
     },
     {
-      "id": "edge-694",
+      "id": "edge-696",
       "from": "poi:osm-way-1338627873",
       "to": "osm:t2-l1:12382454906",
       "distanceMeters": 2.7,
@@ -9554,7 +9580,7 @@
       "instruction": "Estimated access path to Armani Exchange"
     },
     {
-      "id": "edge-695",
+      "id": "edge-697",
       "from": "poi:osm-way-1339973371",
       "to": "osm:t2-l1:12382439838",
       "distanceMeters": 5.8,

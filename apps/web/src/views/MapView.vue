@@ -401,6 +401,10 @@ function onDestinationSelect(event: Event) {
   if (poi) setDestination(poi)
 }
 
+function mapillaryUrl(poi: Poi): string {
+  return `https://www.mapillary.com/app/?lat=${poi.lat}&lng=${poi.lon}&z=18`
+}
+
 function selectPoi(poiId: string) {
   selectedPoiId.value = poiId
   const poi = allPois.value.find((item) => item.id === poiId)
@@ -583,7 +587,7 @@ watch(
   <div>
     <header class="map-page-head">
       <div>
-        <span class="eyebrow">OpenStreetMap navigation · not field-verified</span>
+        <span class="eyebrow">OpenFreeMap + OpenStreetMap navigation · not field-verified</span>
         <h1>Airport map</h1>
         <p class="muted no-gap">
           {{ terminal?.name ?? 'Terminal' }} · {{ activeFloor?.label ?? 'Mapped level' }}. Search
@@ -889,6 +893,15 @@ watch(
                   <button type="button" class="btn small primary" @click="setDestination(poi)">
                     Go here
                   </button>
+                  <a
+                    class="btn small ghost"
+                    :href="mapillaryUrl(poi)"
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Open public street-level imagery near this place to check entrances, lifts or corridors"
+                  >
+                    Check street-level imagery
+                  </a>
                 </div>
               </div>
             </li>

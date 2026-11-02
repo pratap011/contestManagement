@@ -13,10 +13,12 @@ Live lookup is **enabled by default**. The browser never holds a provider key; i
    - Supplies airline, route, scheduled/estimated times, status, terminal, gate and gate floor.
    - Requested server-side with the public website origin/referer headers.
    - Cached for 60 seconds (board) and 10 minutes (gate directory).
-2. **Optional fallback: Aviationstack**
-   - Enabled only when `AVIATIONSTACK_API_KEY` is set on the server.
-   - Useful for dates outside the current airport day.
-   - Normalises schedules touching BLR to `+05:30`; other-airport timestamps are left as supplied.
+2. **Optional fallback: AeroDataBox**
+   - Enabled only when `AERODATABOX_API_KEY` is set on the server.
+   - Useful for dates outside the current airport day; free plan is non-commercial and requires
+     attribution.
+   - Calls `https://aerodatabox.p.rapidapi.com/flights/number/{flight}/{date}` with the key only on
+     the server. Keeps scheduled and revised times separate and normalises terminal labels.
 3. **Manual entry** and **demo flights** always remain available.
 
 ## Request
@@ -78,13 +80,13 @@ substitutes a different flight number. `fetchedAt` drives the freshness label.
 
 ## Security rules
 
-- Never put `AVIATIONSTACK_API_KEY` or any provider secret in a `VITE_` variable or client bundle.
+- Never put `AERODATABOX_API_KEY` or any provider secret in a `VITE_` variable or client bundle.
 - Keep the API server-side and rate-limited.
 - Cache conservatively; do not hammer the airport's public endpoint.
-- Re-check the airport endpoint's terms and Aviationstack's current free-tier/non-commercial terms
-  before a high-traffic public launch.
+- Re-check the airport endpoint's terms and AeroDataBox's current free-tier/non-commercial terms
+  before a high-traffic public launch. Keep the required AeroDataBox attribution visible.
 - Do not imply a gate or terminal is live unless the source supplies it and freshness is known.
 
-The client adapter is `src/modules/flights/providers/http.ts`; API tests mock both the board and gate
-directory in `server/app.test.ts`; client failure-mode tests are in
-`src/modules/flights/flights.spec.ts`.
+The client adapter is `src/modules/flights/providers/http.ts`; API tests mock the board, gate
+directory and AeroDataBox in `server/app.test.ts` and `server/live-data.test.ts`; client failure-mode
+tests are in `src/modules/flights/flights.spec.ts`.

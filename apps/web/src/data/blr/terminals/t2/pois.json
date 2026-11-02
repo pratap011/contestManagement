@@ -197,16 +197,16 @@
   },
   {
     "id": "osm-node-10719542105",
-    "name": "Airport Shuttle for T1",
+    "name": "T2 inter-terminal shuttle stop (arrival kerb, P16/P17)",
     "category": "transport",
     "terminalId": "t2",
     "floorId": "t2-l0",
     "lat": 13.1988104,
     "lon": 77.7153135,
     "nodeId": "poi:osm-node-10719542105",
-    "source": "osm",
-    "verificationStatus": "unverified",
-    "description": "Mapped transport stop or pick-up point.",
+    "source": "airport",
+    "verificationStatus": "verified",
+    "description": "Complimentary T1↔T2 shuttle stop. Airport guidance places it on the T2 arrival kerb, inner lane at pick-up points P16 and P17. OSM node used for the mapped position; confirm the bay with signage.",
     "osmId": "10719542105"
   },
   {
@@ -1534,5 +1534,18 @@
     "source": "derived",
     "verificationStatus": "inferred",
     "description": "Centroid of the mapped T2 indoor corridor on Level 1. The exact security or check-in position is not mapped."
+  },
+  {
+    "id": "anchor-poi-t2:transfer-desk",
+    "name": "T2 Connections by BLR transfer desk (approx.)",
+    "category": "info",
+    "terminalId": "t2",
+    "floorId": "t2-l0",
+    "lat": 13.1993574,
+    "lon": 77.7185383,
+    "nodeId": "anchor:t2:transfer-desk",
+    "source": "derived",
+    "verificationStatus": "inferred",
+    "description": "Approximate location of the airport transfer assistance area. Official guidance confirms dedicated transfer desks in T2; the exact desk position is not mapped. Ask staff or follow the blue and yellow Connections by BLR signs."
   }
 ]

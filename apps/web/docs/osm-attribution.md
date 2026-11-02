@@ -45,10 +45,11 @@ committing. The generator caches the raw extract under `.data/osm-cache/` (gitig
 
 ## Tile usage
 
-The prototype uses `https://tile.openstreetmap.org/{z}/{x}/{y}.png` with attribution at low traffic.
-The OSM Foundation's tile usage policy is not an unlimited free hosting agreement. Before a
-high-traffic public launch, switch to a compliant tile provider or self-host tiles and keep the
-attribution. The OSM-derived geometry remains ODbL regardless of the tile provider.
+The basemap uses OpenFreeMap vector tiles (`https://tiles.openfreemap.org/styles/liberty`) rendered
+with MapLibre GL. OpenFreeMap needs no API key and has no per-request tile limit under its current
+terms. Keep the OpenFreeMap, OpenMapTiles and OpenStreetMap/ODbL attribution visible. The OSM-derived
+geometry remains ODbL regardless of the tile provider. Do not point the app at the public OSM tile
+server for production traffic.
 
 ## What is not OSM
 

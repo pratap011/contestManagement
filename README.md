@@ -5,6 +5,34 @@ Built as part of the **TenTwenty Backend Assignment**, this project emphasizes *
 
 ---
 
+## ✈️ BLR Navigator MVP (`apps/web`)
+
+This repository also contains an independent **BLR Navigator** prototype built from the BLR Navigator
+PRD. It is a separate Vue 3 + TypeScript app and does **not** modify the contest-management backend.
+
+BLR Navigator lets a passenger plan a departing or layover journey without an account, review demo or
+manually entered flight details, search a schematic Terminal 1/2 map, calculate a demo walking route,
+and see connection timing with conservative warnings.
+
+```bash
+cd apps/web
+npm install
+npm run dev       # local development
+npm run test      # Vitest unit tests
+npm run build     # typecheck + production build
+```
+
+> **Important:** the bundled map and flight data is demonstration data. Terminal floors, gates, POIs,
+> walking edges, and access rules are unverified and are not for live airport navigation. Live flight
+> lookup is feature-flagged off by default; manual entry and deterministic demo flights always work.
+> Airline and airport instructions take precedence.
+
+See [`apps/web/README.md`](apps/web/README.md), [`apps/web/docs/data-sources.md`](apps/web/docs/data-sources.md),
+[`apps/web/docs/map-verification.md`](apps/web/docs/map-verification.md), and
+[`apps/web/docs/flight-provider-proxy.md`](apps/web/docs/flight-provider-proxy.md).
+
+---
+
 ## 🚀 Features
 
 - 🧑‍💼 **User Management**

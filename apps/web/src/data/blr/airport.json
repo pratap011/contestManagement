@@ -1,0 +1,31 @@
+{
+  "code": "BLR",
+  "name": "Kempegowda International Airport",
+  "city": "Bengaluru",
+  "timezone": "Asia/Kolkata",
+  "mapVersion": "demo-2026.11",
+  "source": "curated-demo",
+  "verificationStatus": "unverified",
+  "lastUpdated": "2026-11-02",
+  "disclaimer": "Schematic demonstration dataset. It is not derived from OpenStreetMap and has not been validated against the real airport. Do not use it for live navigation.",
+  "terminals": [
+    {
+      "id": "t1",
+      "airportCode": "BLR",
+      "name": "Terminal 1",
+      "supportedFloors": [
+        "t1-l1",
+        "t1-l2"
+      ]
+    },
+    {
+      "id": "t2",
+      "airportCode": "BLR",
+      "name": "Terminal 2",
+      "supportedFloors": [
+        "t2-l1",
+        "t2-l2"
+      ]
+    }
+  ]
+}

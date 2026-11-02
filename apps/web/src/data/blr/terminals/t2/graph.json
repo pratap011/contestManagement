@@ -1,0 +1,778 @@
+{
+  "nodes": [
+    {
+      "id": "t2-l1-entrance",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 500,
+      "y": 545,
+      "nodeType": "entrance"
+    },
+    {
+      "id": "t2-l1-bottom-left",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 250,
+      "y": 470,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-bottom-center",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 500,
+      "y": 470,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-bottom-right",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 750,
+      "y": 470,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-checkin-a",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 300,
+      "y": 352,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-checkin-b",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 700,
+      "y": 352,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-mid-left",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 250,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-mid-center",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 500,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-mid-right",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 750,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l1-cafe",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 300,
+      "y": 170,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 280,
+      "y": 277,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-info",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 730,
+      "y": 260,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-restroom",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 730,
+      "y": 165,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l1-elevator",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 500,
+      "y": 160,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l1-stairs",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 445,
+      "y": 160,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l1-escalator",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "x": 555,
+      "y": 160,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l2-elevator",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 500,
+      "y": 535,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l2-stairs",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 445,
+      "y": 535,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l2-escalator",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 555,
+      "y": 535,
+      "nodeType": "vertical"
+    },
+    {
+      "id": "t2-l2-security",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 500,
+      "y": 460,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l2-hub",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 575,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l2-corr-b1",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 195,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l2-corr-b2",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 385,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l2-corr-b4",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 765,
+      "y": 265,
+      "nodeType": "junction"
+    },
+    {
+      "id": "t2-l2-gate-b1",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 195,
+      "y": 165,
+      "nodeType": "gate"
+    },
+    {
+      "id": "t2-l2-gate-b2",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 385,
+      "y": 165,
+      "nodeType": "gate"
+    },
+    {
+      "id": "t2-l2-gate-b3",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 575,
+      "y": 165,
+      "nodeType": "gate"
+    },
+    {
+      "id": "t2-l2-gate-b4",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 765,
+      "y": 165,
+      "nodeType": "gate"
+    },
+    {
+      "id": "t2-l2-food",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 220,
+      "y": 370,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l2-lounge",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 790,
+      "y": 370,
+      "nodeType": "facility"
+    },
+    {
+      "id": "t2-l2-restroom",
+      "terminalId": "t2",
+      "floorId": "t2-l2",
+      "x": 790,
+      "y": 475,
+      "nodeType": "facility"
+    }
+  ],
+  "edges": [
+    {
+      "id": "t2-l1-e-entrance-bottom",
+      "from": "t2-l1-entrance",
+      "to": "t2-l1-bottom-center",
+      "distanceMeters": 22.5,
+      "estimatedWalkingSeconds": 18.8,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-bottom-left-center",
+      "from": "t2-l1-bottom-left",
+      "to": "t2-l1-bottom-center",
+      "distanceMeters": 75,
+      "estimatedWalkingSeconds": 62.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-bottom-center-right",
+      "from": "t2-l1-bottom-center",
+      "to": "t2-l1-bottom-right",
+      "distanceMeters": 75,
+      "estimatedWalkingSeconds": 62.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-bottom-left-checkin",
+      "from": "t2-l1-bottom-left",
+      "to": "t2-l1-checkin-a",
+      "distanceMeters": 38.4,
+      "estimatedWalkingSeconds": 32,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-bottom-right-checkin",
+      "from": "t2-l1-bottom-right",
+      "to": "t2-l1-checkin-b",
+      "distanceMeters": 38.4,
+      "estimatedWalkingSeconds": 32,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-checkin-left-mid",
+      "from": "t2-l1-checkin-a",
+      "to": "t2-l1-mid-left",
+      "distanceMeters": 30.1,
+      "estimatedWalkingSeconds": 25.1,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-checkin-right-mid",
+      "from": "t2-l1-checkin-b",
+      "to": "t2-l1-mid-right",
+      "distanceMeters": 30.1,
+      "estimatedWalkingSeconds": 25.1,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-left-center",
+      "from": "t2-l1-mid-left",
+      "to": "t2-l1-mid-center",
+      "distanceMeters": 75,
+      "estimatedWalkingSeconds": 62.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-center-right",
+      "from": "t2-l1-mid-center",
+      "to": "t2-l1-mid-right",
+      "distanceMeters": 75,
+      "estimatedWalkingSeconds": 62.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-center-elevator",
+      "from": "t2-l1-mid-center",
+      "to": "t2-l1-elevator",
+      "distanceMeters": 31.5,
+      "estimatedWalkingSeconds": 26.3,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-elevator-stairs",
+      "from": "t2-l1-elevator",
+      "to": "t2-l1-stairs",
+      "distanceMeters": 16.5,
+      "estimatedWalkingSeconds": 13.8,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-elevator-escalator",
+      "from": "t2-l1-elevator",
+      "to": "t2-l1-escalator",
+      "distanceMeters": 16.5,
+      "estimatedWalkingSeconds": 13.8,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-left-cafe",
+      "from": "t2-l1-mid-left",
+      "to": "t2-l1-cafe",
+      "distanceMeters": 32.2,
+      "estimatedWalkingSeconds": 26.8,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-left-shop",
+      "from": "t2-l1-mid-left",
+      "to": "t2-l1-shop",
+      "distanceMeters": 9.7,
+      "estimatedWalkingSeconds": 8.1,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-right-info",
+      "from": "t2-l1-mid-right",
+      "to": "t2-l1-info",
+      "distanceMeters": 6.2,
+      "estimatedWalkingSeconds": 5.2,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l1-e-mid-right-restroom",
+      "from": "t2-l1-mid-right",
+      "to": "t2-l1-restroom",
+      "distanceMeters": 30.6,
+      "estimatedWalkingSeconds": 25.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-stairs-security",
+      "from": "t2-l2-stairs",
+      "to": "t2-l2-security",
+      "distanceMeters": 27.9,
+      "estimatedWalkingSeconds": 23.3,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-elevator-security",
+      "from": "t2-l2-elevator",
+      "to": "t2-l2-security",
+      "distanceMeters": 22.5,
+      "estimatedWalkingSeconds": 18.8,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-escalator-security",
+      "from": "t2-l2-escalator",
+      "to": "t2-l2-security",
+      "distanceMeters": 27.9,
+      "estimatedWalkingSeconds": 23.3,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-security-hub",
+      "from": "t2-l2-security",
+      "to": "t2-l2-hub",
+      "distanceMeters": 62.7,
+      "estimatedWalkingSeconds": 52.3,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-hub-b2",
+      "from": "t2-l2-hub",
+      "to": "t2-l2-corr-b2",
+      "distanceMeters": 57,
+      "estimatedWalkingSeconds": 47.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-hub-b4",
+      "from": "t2-l2-hub",
+      "to": "t2-l2-corr-b4",
+      "distanceMeters": 57,
+      "estimatedWalkingSeconds": 47.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b1-b2",
+      "from": "t2-l2-corr-b1",
+      "to": "t2-l2-corr-b2",
+      "distanceMeters": 57,
+      "estimatedWalkingSeconds": 47.5,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b1-gate",
+      "from": "t2-l2-corr-b1",
+      "to": "t2-l2-gate-b1",
+      "distanceMeters": 30,
+      "estimatedWalkingSeconds": 25,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b2-gate",
+      "from": "t2-l2-corr-b2",
+      "to": "t2-l2-gate-b2",
+      "distanceMeters": 30,
+      "estimatedWalkingSeconds": 25,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-hub-gate-b3",
+      "from": "t2-l2-hub",
+      "to": "t2-l2-gate-b3",
+      "distanceMeters": 30,
+      "estimatedWalkingSeconds": 25,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b4-gate",
+      "from": "t2-l2-corr-b4",
+      "to": "t2-l2-gate-b4",
+      "distanceMeters": 30,
+      "estimatedWalkingSeconds": 25,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b1-food",
+      "from": "t2-l2-corr-b1",
+      "to": "t2-l2-food",
+      "distanceMeters": 32.4,
+      "estimatedWalkingSeconds": 27,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-b4-lounge",
+      "from": "t2-l2-corr-b4",
+      "to": "t2-l2-lounge",
+      "distanceMeters": 32.4,
+      "estimatedWalkingSeconds": 27,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-l2-e-lounge-restroom",
+      "from": "t2-l2-lounge",
+      "to": "t2-l2-restroom",
+      "distanceMeters": 31.5,
+      "estimatedWalkingSeconds": 26.3,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-elevator-l1-l2",
+      "from": "t2-l1-elevator",
+      "to": "t2-l2-elevator",
+      "distanceMeters": 9,
+      "estimatedWalkingSeconds": 45,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-stairs-l1-l2",
+      "from": "t2-l1-stairs",
+      "to": "t2-l2-stairs",
+      "distanceMeters": 9,
+      "estimatedWalkingSeconds": 70,
+      "transitionType": "stairs",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": false,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    },
+    {
+      "id": "t2-escalator-l1-l2",
+      "from": "t2-l1-escalator",
+      "to": "t2-l2-escalator",
+      "distanceMeters": 9,
+      "estimatedWalkingSeconds": 40,
+      "transitionType": "escalator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": false,
+      "verificationStatus": "unverified",
+      "source": "curated-demo"
+    }
+  ]
+}

@@ -4,7 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:test": "npm --prefix apps/web run test",
+    "web:typecheck": "npm --prefix apps/web run typecheck"
   },
   "author": "",
   "license": "ISC",

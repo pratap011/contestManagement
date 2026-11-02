@@ -21,7 +21,7 @@ export interface TerminalQueues {
   note: string
 }
 
-export interface BlrWeather {
+export interface AirportWeather {
   temperatureC: number | null
   apparentTemperatureC: number | null
   humidityPercent: number | null

@@ -2,18 +2,20 @@
 import { computed } from 'vue'
 import { formatFetchedAt } from '@/lib/time'
 import { keyCheckpoints, queueWaitText } from '@/modules/live/api'
-import type { BlrWeather, TerminalQueues } from '@/modules/live/types'
+import type { AirportWeather, TerminalQueues } from '@/modules/live/types'
 
 const props = withDefaults(
   defineProps<{
     queues: TerminalQueues[]
-    weather?: BlrWeather | null
+    weather?: AirportWeather | null
     weatherError?: string
     queuesError?: string
     loading?: boolean
+    showQueues?: boolean
+    airportCode?: string
     timeZone: string
   }>(),
-  { weather: null, weatherError: '', queuesError: '', loading: false },
+  { weather: null, weatherError: '', queuesError: '', loading: false, showQueues: true, airportCode: '' },
 )
 
 const terminalNames = computed(() =>
@@ -39,8 +41,11 @@ function temperatureText(value: number | null): string {
       <div>
         <h2 id="live-conditions-heading">Live airport conditions</h2>
         <p class="small muted no-gap">
-          Airport-reported checkpoint waits and weather context. Walking, lift waits and airline
-          cut-offs are not included.
+          {{
+            showQueues
+              ? 'Airport-reported checkpoint waits and weather context. Walking, lift waits and airline cut-offs are not included.'
+              : 'Weather context for this airport. Live checkpoint waits are not published for this airport.'
+          }}
         </p>
       </div>
       <span class="badge soft">Live · cached</span>
@@ -50,7 +55,7 @@ function temperatureText(value: number | null): string {
 
     <div v-if="weather" class="weather-row">
       <div>
-        <span class="eyebrow">Outside at BLR</span>
+        <span class="eyebrow">Outside at {{ props.airportCode || 'the airport' }}</span>
         <strong>{{ weather.condition }} · {{ temperatureText(weather.temperatureC) }}</strong>
         <span class="tiny muted" style="display: block">
           Feels like {{ temperatureText(weather.apparentTemperatureC ?? weather.temperatureC) }} ·
@@ -64,7 +69,11 @@ function temperatureText(value: number | null): string {
     </div>
     <p v-else-if="weatherError" class="small muted">Weather context is unavailable.</p>
 
-    <div v-for="queues in queues" :key="`${queues.terminal}-${queues.direction}`" class="queue-block">
+    <div
+      v-for="queues in showQueues ? queues : []"
+      :key="`${queues.terminal}-${queues.direction}`"
+      class="queue-block"
+    >
       <div class="between">
         <h3>
           {{ queues.terminal }} · {{ directionLabel(queues) }}
@@ -90,10 +99,10 @@ function temperatureText(value: number | null): string {
       </p>
     </div>
 
-    <p v-if="queuesError && !queues.length" class="notice info small no-gap">
+    <p v-if="showQueues && queuesError && !queues.length" class="notice info small no-gap">
       {{ queuesError }} Check airport screens when you arrive.
     </p>
-    <p v-if="!loading && !queues.length && !queuesError" class="small muted">
+    <p v-if="showQueues && !loading && !queues.length && !queuesError" class="small muted">
       Live checkpoint waits are not published for {{ terminalNames.join(' and ') || 'this terminal' }}
       right now. Check airport screens on arrival.
     </p>

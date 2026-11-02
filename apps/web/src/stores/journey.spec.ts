@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSavedJourney } from './journey'
+import { isSavedJourney, normaliseSavedJourney } from './journey'
 
 const context = {
   sameBooking: 'yes',
@@ -26,6 +26,18 @@ describe('saved journey validation', () => {
         confirmedAt: '2026-11-02T00:00:00.000Z',
       }),
     ).toBe(true)
+  })
+
+  it('adds the default airport code to a legacy saved journey', () => {
+    const legacy = {
+      kind: 'departing',
+      departure: flight,
+      arrival: null,
+      connection: null,
+      context,
+      confirmedAt: '2026-11-02T00:00:00.000Z',
+    }
+    expect(normaliseSavedJourney(legacy)?.airportCode).toBe('BLR')
   })
 
   it('accepts a legacy journey without a terminal override', () => {

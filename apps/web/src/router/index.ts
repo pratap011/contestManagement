@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore } from '@/stores/journey'
 
 const router = createRouter({
@@ -45,20 +46,31 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const store = useJourneyStore()
+  const airport = useAirportStore()
+
+  let loaded = true
   if (to.name === 'map' || to.name === 'journey') {
     if (!store.hasConfirmedJourney) return { name: 'home' }
+    loaded = await airport.setAirport(store.journey?.airportCode ?? airport.code)
+  } else if (to.name === 'review') {
+    if (!store.search && !store.hasConfirmedJourney) return { name: 'home' }
+    if (to.query.edit === '1' && store.journey) {
+      loaded = await airport.setAirport(store.journey.airportCode)
+    } else {
+      loaded = await airport.ensureLoaded()
+    }
+  } else {
+    loaded = await airport.ensureLoaded()
   }
-  if (to.name === 'review' && !store.search && !store.hasConfirmedJourney) {
-    return { name: 'home' }
-  }
+  if (!loaded && to.name !== 'home') return { name: 'home' }
   return true
 })
 
 router.afterEach((to) => {
   const title = typeof to.meta.title === 'string' ? to.meta.title : 'Airport journey planner'
-  document.title = `${title} · BLR Navigator`
+  document.title = `${title} · Airport Navigator`
 })
 
 export default router

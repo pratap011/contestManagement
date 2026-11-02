@@ -1,0 +1,40 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "extractionUrl": "https://api.openstreetmap.org/api/0.6/map",
+  "extractedAt": "2026-11-02T20:10:31.802Z",
+  "bbox": "77.08,28.54,77.12,28.58",
+  "counts": {
+    "terminals": 3,
+    "floors": 6,
+    "pois": 90,
+    "nodes": 84,
+    "edges": 109,
+    "unconnectedPois": 0
+  },
+  "inferred": {
+    "hallConnectors": true,
+    "gateSpines": true,
+    "terminalEntrances": true,
+    "verticalConnectors": true,
+    "poiAccessConnectors": true,
+    "shuttleRide": true
+  },
+  "sources": {
+    "terminals": [
+      "way:1429256812",
+      "way:35261858",
+      "relation:8632270"
+    ],
+    "shuttle": "Delhi Airport Inter-Terminal Shuttle Service (newdelhiairport.in), retrieved 2026-11-02",
+    "shuttleUrl": "https://www.newdelhiairport.in/inter-terminal-connectivity/shuttle-service"
+  },
+  "notes": [
+    "OpenStreetMap is the source of terminal footprints, mapped gates and named facilities.",
+    "Each terminal uses an inferred central hall, gate spine, entrance and access connectors because indoor corridors are not mapped consistently.",
+    "All OSM-derived features are unverified. All derived connectors are inferred and drawn as dashed lines.",
+    "Inter-terminal shuttle existence and stop directions come from the airport source; the schematic connector geometry is straight-line, not OSRM."
+  ]
+}

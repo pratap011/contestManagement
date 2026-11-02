@@ -1,0 +1,39 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "extractionUrl": "https://api.openstreetmap.org/api/0.6/map",
+  "extractedAt": "2026-11-02T20:10:31.802Z",
+  "bbox": "72.85,19.07,72.88,19.1",
+  "counts": {
+    "terminals": 2,
+    "floors": 4,
+    "pois": 58,
+    "nodes": 54,
+    "edges": 64,
+    "unconnectedPois": 0
+  },
+  "inferred": {
+    "hallConnectors": true,
+    "gateSpines": true,
+    "terminalEntrances": true,
+    "verticalConnectors": true,
+    "poiAccessConnectors": true,
+    "shuttleRide": true
+  },
+  "sources": {
+    "terminals": [
+      "way:61569813",
+      "way:315613914"
+    ],
+    "shuttle": "CSMIA Inter Terminal Coach Facility (csmia-mumbai.adaniairports.com), retrieved 2026-11-02",
+    "shuttleUrl": "https://csmia-mumbai.adaniairports.com/en/airport-facilities/inter-terminal-coach-facility"
+  },
+  "notes": [
+    "OpenStreetMap is the source of terminal footprints, mapped gates and named facilities.",
+    "Each terminal uses an inferred central hall, gate spine, entrance and access connectors because indoor corridors are not mapped consistently.",
+    "All OSM-derived features are unverified. All derived connectors are inferred and drawn as dashed lines.",
+    "Inter-terminal shuttle existence and stop directions come from the airport source; the schematic connector geometry is straight-line, not OSRM."
+  ]
+}

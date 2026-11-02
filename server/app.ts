@@ -19,6 +19,7 @@ import {
   type SessionUser,
 } from './auth.ts'
 import { fetchAircraftPosition } from './aircraft.ts'
+import { AIRPORTS, airportCodes, resolveAirport } from './airports.ts'
 import { config } from './config.ts'
 import type { Database } from './db.ts'
 import {
@@ -167,6 +168,8 @@ export async function buildApp(db: Database): Promise<Express> {
       ok: true,
       database: db.driver,
       liveFlightSource: config.aerodataboxKey ? 'blr-board+aerodatabox' : 'blr-board',
+      airports: airportCodes(),
+      airportMetadata: AIRPORTS,
       push: Boolean(getVapidPublicKey()),
       liveQueues: true,
       aircraft: true,
@@ -299,6 +302,10 @@ export async function buildApp(db: Database): Promise<Express> {
   })
 
   app.get('/api/queues', liveDataLimiter, async (req: Request, res: Response) => {
+    if (req.query.airport !== undefined && String(req.query.airport).toUpperCase() !== 'BLR') {
+      res.status(400).json({ error: 'Live checkpoint queues are only published for BLR.' })
+      return
+    }
     const terminal = String(req.query.terminal ?? '').toUpperCase()
     const direction = String(req.query.direction ?? '')
     if (
@@ -319,9 +326,14 @@ export async function buildApp(db: Database): Promise<Express> {
     }
   })
 
-  app.get('/api/weather', liveDataLimiter, async (_req: Request, res: Response) => {
+  app.get('/api/weather', liveDataLimiter, async (req: Request, res: Response) => {
+    const airport = resolveAirport(req.query.airport)
+    if (!airport || !airport.weather) {
+      res.status(400).json({ error: 'Weather context is not available for that airport.' })
+      return
+    }
     try {
-      const weather = await fetchWeather()
+      const weather = await fetchWeather(airport.code)
       res.setHeader('Cache-Control', 'public, max-age=600')
       res.json(weather)
     } catch (error) {
@@ -337,8 +349,13 @@ export async function buildApp(db: Database): Promise<Express> {
       res.status(400).json({ error: 'Enter a valid flight number.' })
       return
     }
+    const airport = resolveAirport(req.query.airport)
+    if (!airport || !airport.aircraft) {
+      res.status(400).json({ error: 'Aircraft position is not available for that airport.' })
+      return
+    }
     try {
-      const aircraft = await fetchAircraftPosition(flightNumber)
+      const aircraft = await fetchAircraftPosition(flightNumber, airport.code)
       res.setHeader('Cache-Control', 'public, max-age=45')
       res.json(aircraft)
     } catch (error) {
@@ -415,9 +432,16 @@ export async function buildApp(db: Database): Promise<Express> {
     }
     const direction =
       role === 'arrival' ? 'arrival' : role === 'departure' || role === 'connection' ? 'departure' : undefined
+    const airport = resolveAirport(req.query.airport)
+    if (!airport) {
+      res.status(400).json({
+        error: { code: 'invalid', message: 'Choose a supported airport.' },
+      })
+      return
+    }
 
     try {
-      const result = await searchLiveFlights(flightNumber, date, direction)
+      const result = await searchLiveFlights(flightNumber, date, direction, airport.code)
       res.setHeader('Cache-Control', 'no-store')
       res.json(result)
     } catch (error) {

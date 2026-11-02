@@ -35,10 +35,10 @@ export function isValidTravelDate(value: string): boolean {
   )
 }
 
-/** Maps provider/manual terminal values such as "T1" or "1" to "T1"/"T2". */
+/** Maps provider/manual terminal values such as "T1", "1" or "Terminal 3" to "T1".."T9". */
 export function normaliseTerminalLabel(value: string | undefined): string | undefined {
   if (!value) return undefined
-  const match = value.trim().toUpperCase().match(/^T?([12])$/)
+  const match = value.trim().toUpperCase().match(/^(?:TERMINAL\s*)?T?([1-9])$/)
   return match ? `T${match[1]}` : undefined
 }
 

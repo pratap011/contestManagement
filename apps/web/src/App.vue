@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useTheme } from '@/composables/useTheme'
+import { useAirportStore } from '@/stores/airport'
 import { useAuthStore } from '@/stores/auth'
 import { useJourneyStore } from '@/stores/journey'
 
 const store = useJourneyStore()
 const auth = useAuthStore()
+const airportStore = useAirportStore()
+const { isDark, initTheme, toggleTheme } = useTheme()
 const year = new Date().getFullYear()
+const airportName = computed(() => airportStore.airport?.name ?? airportStore.summary.name)
+const airportCode = computed(() => airportStore.airport?.code ?? airportStore.summary.code)
 
 onMounted(() => {
+  initTheme()
   void auth.fetchMe()
+  void airportStore.ensureLoaded()
 })
 </script>
 
@@ -17,11 +25,11 @@ onMounted(() => {
   <div class="app-shell">
     <header class="site-header">
       <div class="container header-inner">
-        <RouterLink class="brand" to="/" aria-label="BLR Navigator home">
-          <span class="brand-mark" aria-hidden="true">BLR</span>
+        <RouterLink class="brand" to="/" aria-label="Airport Navigator home">
+          <span class="brand-mark" aria-hidden="true">{{ airportCode }}</span>
           <span class="brand-text">
-            <strong>Navigator</strong>
-            <small>Airport journey planner</small>
+            <strong>Airport Navigator</strong>
+            <small>{{ airportStore.summary.city }} · {{ airportName }}</small>
           </span>
         </RouterLink>
 
@@ -30,8 +38,17 @@ onMounted(() => {
           <RouterLink v-if="store.hasConfirmedJourney" to="/map">Map</RouterLink>
           <RouterLink v-if="store.hasConfirmedJourney" to="/journey">Assistant</RouterLink>
           <RouterLink to="/account">{{ auth.user?.email.split('@')[0] ?? 'Account' }}</RouterLink>
-          <RouterLink to="/about">Data &amp; privacy</RouterLink>
-          <span class="demo-pill live" title="Live BLR flight board and OpenStreetMap data">Live board · OSM</span>
+          <RouterLink to="/about">Data</RouterLink>
+          <button
+            type="button"
+            class="theme-toggle"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            @click="toggleTheme"
+          >
+            <span aria-hidden="true">{{ isDark ? '☀' : '☾' }}</span>
+            <span class="theme-toggle-label">{{ isDark ? 'Light' : 'Dark' }}</span>
+          </button>
         </nav>
       </div>
     </header>
@@ -43,14 +60,13 @@ onMounted(() => {
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <p class="footer-title">BLR Navigator</p>
+          <p class="footer-title">Airport Navigator</p>
           <p class="small muted">
-            Live BLR flight board plus OpenStreetMap-derived maps. Not field-verified for indoor
+            {{ airportCode }} · OpenStreetMap-derived maps. Not field-verified for indoor
             positioning. Airport signs and staff instructions take precedence.
           </p>
           <p class="small muted">
-            © {{ year }} BLR Navigator. Not affiliated with BIAL. Map data © OpenStreetMap
-            contributors (ODbL).
+            © {{ year }} Airport Navigator. Map data © OpenStreetMap contributors (ODbL).
           </p>
         </div>
         <div class="footer-links">

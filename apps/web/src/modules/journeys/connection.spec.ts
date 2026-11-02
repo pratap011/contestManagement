@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import type { FlightResult } from '@/modules/flights/types'
 import type { RouteResult } from '@/modules/navigation/astar'
-import { getPoisForTerminal } from '@/modules/airport-directory/search'
+import blrDataset from '@/data/airports/blr'
+import { createAirportDirectory } from '@/modules/airport-directory/search'
 import { assessConnection, DEFAULT_CONNECTION_CONTEXT, type ConnectionContext } from './connection'
 import {
   facilitiesForGateFloor,
   recommendFacilities,
   type FacilityCandidate,
 } from './recommendations'
+
+const directory = createAirportDirectory(blrDataset)
 
 function flight(overrides: Partial<FlightResult>): FlightResult {
   return { flightNumber: 'AI 508', source: 'manual', ...overrides }
@@ -95,7 +98,7 @@ describe('connection duration', () => {
       context,
       { terminalsDiffer: true },
     )
-    expect(assessment.warnings.join(' ')).toMatch(/complimentary T1.*T2 shuttle.*eligibility/)
+    expect(assessment.warnings.join(' ')).toMatch(/inter-terminal transfer.*eligibility/)
   })
 
   it('does not present a negative duration as usable time', () => {
@@ -180,12 +183,12 @@ describe('facility recommendations', () => {
   })
 
   it('keeps connecting-passenger suggestions on the departure gate floor', () => {
-    const facilities = facilitiesForGateFloor(getPoisForTerminal('t1'), 't1-l1')
+    const facilities = facilitiesForGateFloor(directory.getPoisForTerminal('t1'), 't1-l1')
     expect(facilities.length).toBeGreaterThan(0)
     expect(facilities.every((poi) => poi.floorId === 't1-l1')).toBe(true)
     expect(facilities.map((poi) => poi.name)).not.toContain('Café')
     expect(facilities.map((poi) => poi.name)).toContain('KFC')
-    expect(facilitiesForGateFloor(getPoisForTerminal('t1'), undefined)).toEqual([])
+    expect(facilitiesForGateFloor(directory.getPoisForTerminal('t1'), undefined)).toEqual([])
   })
 
 })

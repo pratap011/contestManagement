@@ -1,4 +1,5 @@
 import { searchAeroDataBox } from './aerodatabox.ts'
+import { resolveAirport } from './airports.ts'
 import { config } from './config.ts'
 
 export type FlightDirection = 'departure' | 'arrival'
@@ -363,18 +364,23 @@ export async function searchLiveFlights(
   flightNumber: string,
   date: string,
   direction?: FlightDirection,
+  airportCode = 'BLR',
 ): Promise<FlightSearchResult> {
+  const airport = resolveAirport(airportCode)
+  if (!airport) throw new FlightProviderError('invalid', 'Unknown airport code.')
   const fetchedAt = new Date().toISOString()
   let boardResults: ProviderFlight[] = []
   let boardError: FlightProviderError | null = null
 
-  try {
-    boardResults = await searchBlrBoard(flightNumber, date, direction, fetchedAt)
-  } catch (error) {
-    boardError = error instanceof FlightProviderError ? error : new FlightProviderError(
-      'unavailable',
-      'The airport board is unavailable.',
-    )
+  if (airport.airportBoard) {
+    try {
+      boardResults = await searchBlrBoard(flightNumber, date, direction, fetchedAt)
+    } catch (error) {
+      boardError =
+        error instanceof FlightProviderError
+          ? error
+          : new FlightProviderError('unavailable', 'The airport board is unavailable.')
+    }
   }
 
   if (boardResults.length) {
@@ -384,7 +390,13 @@ export async function searchLiveFlights(
   let fallbackError: FlightProviderError | null = null
   if (config.aerodataboxKey) {
     try {
-      const fallback = await searchAeroDataBox(flightNumber, date, direction, fetchedAt)
+      const fallback = await searchAeroDataBox(
+        flightNumber,
+        date,
+        direction,
+        fetchedAt,
+        airport.code,
+      )
       if (fallback.length) {
         return { results: fallback, provider: 'aerodatabox', fetchedAt }
       }
@@ -398,5 +410,9 @@ export async function searchLiveFlights(
 
   if (boardError) throw boardError
   if (fallbackError) throw fallbackError
-  return { results: [], provider: 'blr-airport-board', fetchedAt }
+  return {
+    results: [],
+    provider: airport.airportBoard ? 'blr-airport-board' : 'provider',
+    fetchedAt,
+  }
 }

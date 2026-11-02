@@ -10,6 +10,7 @@ import {
 export interface HttpFlightProviderOptions {
   endpoint: string
   timeoutMs: number
+  airportCode?: string
   fetchImpl?: typeof fetch
 }
 
@@ -78,14 +79,16 @@ function mapProviderResult(value: unknown): FlightResult | null {
  */
 export class HttpFlightProvider implements FlightProvider {
   readonly id = 'http-proxy'
-  readonly label = 'Live BLR airport board (via server proxy)'
+  readonly label = 'Live airport lookup (via server proxy)'
   private readonly endpoint: string
   private readonly timeoutMs: number
+  private readonly airportCode: string
   private readonly fetchImpl: typeof fetch
 
   constructor(options: HttpFlightProviderOptions) {
     this.endpoint = options.endpoint
     this.timeoutMs = options.timeoutMs
+    this.airportCode = (options.airportCode ?? 'BLR').toUpperCase()
     // Bind the browser's fetch to the global object: calling an unbound
     // window.fetch as an object method throws "Illegal invocation" in Chrome.
     this.fetchImpl = options.fetchImpl ?? fetch.bind(globalThis)
@@ -104,7 +107,9 @@ export class HttpFlightProvider implements FlightProvider {
     const roleParam = role ? `&role=${encodeURIComponent(role)}` : ''
     const url = `${this.endpoint}${separator}flightNumber=${encodeURIComponent(
       normaliseFlightNumber(flightNumber),
-    )}&date=${encodeURIComponent(date)}${roleParam}`
+    )}&date=${encodeURIComponent(date)}&airport=${encodeURIComponent(
+      this.airportCode,
+    )}${roleParam}`
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), this.timeoutMs)
 

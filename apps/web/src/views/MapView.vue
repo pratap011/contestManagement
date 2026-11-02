@@ -4,18 +4,9 @@ import { useRouter } from 'vue-router'
 import MapCanvas from '@/components/MapCanvas.vue'
 import { appConfig } from '@/config'
 import { useGeolocation } from '@/composables/useGeolocation'
-import { airportDataset } from '@/modules/airport-directory/dataset'
 import {
-  filterPois,
-  findGateAreaPoi,
-  getFloor,
-  getFloorsForTerminal,
-  getPoisForTerminal,
+  createAirportDirectory,
   normaliseTerminalCode,
-  recommendedStartingPoi,
-  resolveGatePoi,
-  uniquePois,
-  type GateResolution,
 } from '@/modules/airport-directory/search'
 import {
   POI_CATEGORY_LABELS,
@@ -34,20 +25,28 @@ import {
 } from '@/modules/navigation/progress'
 import { formatDistance, formatWalkingTime } from '@/modules/navigation/route-cost'
 import { floorTransitionLabel } from '@/modules/navigation/route-validator'
+import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore } from '@/stores/journey'
 
 const router = useRouter()
 const store = useJourneyStore()
+const airportStore = useAirportStore()
+const dataset = computed(() => airportStore.dataset!)
+const directory = computed(() => createAirportDirectory(dataset.value))
 const journey = computed(() => store.journey)
 const gps = useGeolocation()
 const mapRef = ref<InstanceType<typeof MapCanvas> | null>(null)
 
+const initialDataset = airportStore.dataset
 const initialTerminal =
-  store.effectiveTerminalId ?? store.arrivalTerminalId ?? 't1'
+  store.effectiveTerminalId ??
+  store.arrivalTerminalId ??
+  initialDataset?.terminals[0]?.id ??
+  't1'
 const initialFloor =
-  getFloorByLevel(initialTerminal, 1)?.id ??
-  getFloorsForTerminal(initialTerminal)[0]?.id ??
-  airportDataset.floors[0]?.id ??
+  initialDataset?.floors.find((floor) => floor.terminalId === initialTerminal && floor.level === 1)?.id ??
+  initialDataset?.floors.find((floor) => floor.terminalId === initialTerminal)?.id ??
+  initialDataset?.floors[0]?.id ??
   ''
 
 const terminalId = ref(initialTerminal)
@@ -67,19 +66,13 @@ const floorOnly = ref(false)
 const defaultNote = ref('')
 const routeMessage = ref('')
 
-function getFloorByLevel(terminal: string, level: number): Floor | undefined {
-  return airportDataset.floors.find(
-    (floor) => floor.terminalId === terminal && floor.level === level,
-  )
-}
-
 const terminal = computed(
-  () => airportDataset.terminals.find((item) => item.id === terminalId.value) ?? null,
+  () => dataset.value.terminals.find((item) => item.id === terminalId.value) ?? null,
 )
-const floors = computed(() => getFloorsForTerminal(terminalId.value))
-const activeFloor = computed(() => getFloor(floorId.value) ?? floors.value[0] ?? null)
-const terminalPois = computed(() => uniquePois(getPoisForTerminal(terminalId.value)))
-const allPois = computed(() => airportDataset.pois)
+const floors = computed(() => directory.value.getFloorsForTerminal(terminalId.value))
+const activeFloor = computed(() => directory.value.getFloor(floorId.value) ?? floors.value[0] ?? null)
+const terminalPois = computed(() => directory.value.uniquePois(directory.value.getPoisForTerminal(terminalId.value)))
+const allPois = computed(() => dataset.value.pois)
 const passengerType = computed(() =>
   journey.value?.kind === 'layover' ? 'connecting' : 'departing',
 )
@@ -90,7 +83,7 @@ const paceFactor = computed(
 )
 
 const filteredPois = computed(() => {
-  const base = filterPois(terminalPois.value, {
+  const base = directory.value.filterPois(terminalPois.value, {
     query: query.value,
     category: category.value,
   })
@@ -145,7 +138,7 @@ const selectedPoi = computed(
 
 const reachableFromDestination = computed(() => {
   if (!destinationPoi.value) return null
-  const edges = airportDataset.edges.filter((edge) => {
+  const edges = dataset.value.edges.filter((edge) => {
     if (!edge.allowedPassengerTypes.includes(passengerType.value)) return false
     if (!includeInferred.value && edge.verificationStatus === 'inferred') return false
     if (accessibleOnly.value) {
@@ -160,7 +153,7 @@ const reachableFromDestination = computed(() => {
 const gpsSnap = computed(() => {
   if (!gps.position.value) return null
   return nearestRouteNode(
-    airportDataset.nodes,
+    dataset.value.nodes,
     [gps.position.value.lat, gps.position.value.lon],
     appConfig.liveNavigation.gpsSnapRadiusMeters,
     reachableFromDestination.value,
@@ -174,7 +167,7 @@ const originNodeId = computed(() =>
 
 const routeOutcome = computed(() => {
   if (!originNodeId.value || !destinationPoi.value) return null
-  return findRoute(airportDataset.nodes, airportDataset.edges, {
+  return findRoute(dataset.value.nodes, dataset.value.edges, {
     fromNodeId: originNodeId.value,
     toNodeId: destinationPoi.value.nodeId,
     passengerType: passengerType.value,
@@ -186,12 +179,12 @@ const routeOutcome = computed(() => {
 })
 const route = computed(() => (routeOutcome.value?.ok ? routeOutcome.value.route : null))
 const routeSteps = computed(() =>
-  route.value ? buildRouteSteps(route.value, airportDataset.nodes, airportDataset.floors) : [],
+  route.value ? buildRouteSteps(route.value, dataset.value.nodes, dataset.value.floors) : [],
 )
 const transitions = computed(() =>
   route.value
     ? route.value.floorTransitions.map((transition) =>
-        floorTransitionLabel(transition, airportDataset.floors),
+        floorTransitionLabel(transition, dataset.value.floors),
       )
     : [],
 )
@@ -262,8 +255,13 @@ const routeWarnings = computed(() => {
   if (!route.value) return []
   const warnings: string[] = []
   if (route.value.hasShuttleSegments) {
+    const shuttleMinutes = Math.round(
+      route.value.edges
+        .filter((edge) => edge.transitionType === 'shuttle')
+        .reduce((total, edge) => total + edge.estimatedWalkingSeconds, 0) / 60,
+    )
     warnings.push(
-      `Includes the complimentary T1↔T2 shuttle (about ${airportDataset.airport.shuttle.travelMinutes} min ride plus up to ${airportDataset.airport.shuttle.waitAllowanceMinutes} min wait).`,
+      `Includes the airport-published inter-terminal shuttle (about ${shuttleMinutes} min including the published wait).`,
     )
     if (journey.value?.kind === 'layover' && store.terminalsDiffer) {
       warnings.push(
@@ -280,9 +278,9 @@ const routeWarnings = computed(() => {
   }
   if (route.value.hasUnverifiedSegments) {
     warnings.push(
-      `${route.value.unverifiedEdgeCount} OpenStreetMap-mapped segment${
-        route.value.unverifiedEdgeCount === 1 ? '' : 's'
-      } are not field-verified. Follow airport signs.`,
+      `${route.value.unverifiedEdgeCount} mapped segment${
+        route.value.unverifiedEdgeCount === 1 ? ' is' : 's are'
+      } not field-verified. Follow airport signs.`,
     )
   }
   return warnings
@@ -297,12 +295,12 @@ const categoryOptions = computed(() =>
 )
 
 const poiOptionGroups = computed(() =>
-  airportDataset.terminals.flatMap((item) =>
-    getFloorsForTerminal(item.id).map((floor) => ({
+  dataset.value.terminals.flatMap((item) =>
+    directory.value.getFloorsForTerminal(item.id).map((floor) => ({
       id: `${item.id}:${floor.id}`,
       label: `${item.name} · ${floor.shortLabel}`,
-      pois: uniquePois(
-        airportDataset.pois.filter(
+      pois: directory.value.uniquePois(
+        dataset.value.pois.filter(
           (poi) => poi.terminalId === item.id && poi.floorId === floor.id,
         ),
       ).sort((a, b) => a.name.localeCompare(b.name)),
@@ -330,9 +328,9 @@ const stepGlyphs: Record<RouteStep['kind'], string> = {
 
 function defaultFloorForTerminal(id: string): string {
   return (
-    getFloorByLevel(id, 1)?.id ??
-    getFloorsForTerminal(id)[0]?.id ??
-    airportDataset.floors[0]?.id ??
+    directory.value.getFloorByLevel(id, 1)?.id ??
+    directory.value.getFloorsForTerminal(id)[0]?.id ??
+    dataset.value.floors[0]?.id ??
     ''
   )
 }
@@ -422,7 +420,7 @@ async function useMyLocation() {
   originPoiId.value = ''
   gps.start()
   const snap = nearestRouteNode(
-    airportDataset.nodes,
+    dataset.value.nodes,
     [position.lat, position.lon],
     appConfig.liveNavigation.gpsSnapRadiusMeters,
     reachableFromDestination.value,
@@ -432,7 +430,7 @@ async function useMyLocation() {
       'Your location is not within 300 m of a mapped walkway. Choose a mapped starting point.'
     return
   }
-  const node = airportDataset.nodes.find((item) => item.id === snap.nodeId)
+  const node = dataset.value.nodes.find((item) => item.id === snap.nodeId)
   if (node) {
     terminalId.value = node.terminalId
     floorId.value = node.floorId
@@ -512,9 +510,9 @@ function applyDefaults() {
   }
 
   if (current?.kind === 'departing' && current.departure) {
-    const start = recommendedStartingPoi(terminalId.value)
+    const start = directory.value.recommendedStartingPoi(terminalId.value)
     if (start) setOrigin(start)
-    const resolution: GateResolution = resolveGatePoi(
+    const resolution = directory.value.resolveGatePoi(
       terminalId.value,
       current.departure.gate,
       current.departure.gateFloor,
@@ -530,26 +528,30 @@ function applyDefaults() {
     const departureTerminal = store.departureTerminalId ?? terminalId.value
     terminalId.value = arrivalTerminal
     floorId.value = defaultFloorForTerminal(arrivalTerminal)
-    const arrivalResolution = resolveGatePoi(
+    const arrivalResolution = directory.value.resolveGatePoi(
       arrivalTerminal,
       current.arrival.gate,
       current.arrival.gateFloor,
     )
-    const departureResolution = resolveGatePoi(
+    const departureResolution = directory.value.resolveGatePoi(
       departureTerminal,
       current.connection.gate,
       current.connection.gateFloor,
     )
-    const start = arrivalResolution.poi ?? recommendedStartingPoi(arrivalTerminal)
+    const start = arrivalResolution.poi ?? directory.value.recommendedStartingPoi(arrivalTerminal)
     const destination =
-      departureResolution.poi ?? findGateAreaPoi(departureTerminal) ?? recommendedStartingPoi(departureTerminal)
+      departureResolution.poi ??
+      directory.value.findGateAreaPoi(departureTerminal) ??
+      directory.value.recommendedStartingPoi(departureTerminal)
     if (start) setOrigin(start)
     if (destination) setDestination(destination)
     defaultNote.value = [
       arrivalResolution.message,
       departureResolution.message,
       store.terminalsDiffer
-        ? 'This connection changes terminals. The route includes the complimentary shuttle; confirm transfer eligibility, security and baggage steps with your airline or airport staff.'
+        ? dataset.value.airport.shuttle.available
+          ? 'This connection changes terminals. The route includes the airport-published inter-terminal shuttle; confirm transfer eligibility, security and baggage steps with your airline or airport staff.'
+          : 'This connection changes terminals. No inter-terminal route is mapped for this airport; follow airport signage and staff instructions.'
         : '',
     ]
       .filter(Boolean)
@@ -557,8 +559,8 @@ function applyDefaults() {
     return
   }
 
-  const start = recommendedStartingPoi(terminalId.value)
-  const destination = findGateAreaPoi(terminalId.value)
+  const start = directory.value.recommendedStartingPoi(terminalId.value)
+  const destination = directory.value.findGateAreaPoi(terminalId.value)
   if (start) setOrigin(start)
   if (destination) setDestination(destination)
 }
@@ -596,16 +598,17 @@ watch(
       </div>
       <div class="btn-row">
         <RouterLink class="btn secondary" to="/journey">Journey assistant</RouterLink>
-        <RouterLink class="btn secondary" to="/account">Account</RouterLink>
       </div>
     </header>
 
-    <div class="notice warn" style="margin-bottom: 1rem">
-      <strong>OSM-derived guidance, not surveyed indoor positioning.</strong>
-      Floors, gates, facilities and walkways come from OpenStreetMap and are not field-verified.
-      Inferred connectors are dashed. Device location is most reliable outdoors; follow airport
-      signs and staff at all times.
-    </div>
+    <details class="notice warn map-disclaimer">
+      <summary><strong>OSM-derived guidance, not surveyed indoor positioning</strong></summary>
+      <p class="small no-gap">
+        Floors, gates, facilities and walkways come from OpenStreetMap and are not field-verified.
+        Inferred connectors are dashed. Device location is most reliable outdoors; follow airport
+        signs and staff at all times.
+      </p>
+    </details>
 
     <div class="map-workspace">
       <section class="card map-panel" aria-labelledby="map-heading">
@@ -613,7 +616,7 @@ watch(
           <div class="toolbar-group" role="group" aria-label="Terminal">
             <span class="toolbar-label">Terminal</span>
             <button
-              v-for="item in airportDataset.terminals"
+              v-for="item in dataset.terminals"
               :key="item.id"
               type="button"
               class="chip"
@@ -653,11 +656,12 @@ watch(
             <input v-model="includeInferred" type="checkbox" />
             <span>Include inferred connectors (dashed)</span>
           </label>
-          <span class="map-scale-note">Map data: {{ airportDataset.airport.mapVersion }}</span>
+          <span class="map-scale-note">Map data: {{ dataset.airport.mapVersion }}</span>
         </div>
 
         <MapCanvas
           ref="mapRef"
+          :dataset="dataset"
           :active-terminal-id="terminalId"
           :floor="activeFloor"
           :pois="mapPois"
@@ -872,7 +876,7 @@ watch(
                   <strong>{{ poi.name }}</strong>
                   <span class="tiny muted">
                     {{ POI_CATEGORY_LABELS[poi.category] }} ·
-                    {{ getFloor(poi.floorId)?.shortLabel ?? poi.floorId }}
+                    {{ directory.getFloor(poi.floorId)?.shortLabel ?? poi.floorId }}
                     <template v-if="poi.verificationStatus === 'inferred'"> · inferred</template>
                   </span>
                 </span>

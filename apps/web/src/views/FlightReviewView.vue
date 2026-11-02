@@ -5,12 +5,7 @@ import FlightSummary from '@/components/FlightSummary.vue'
 import ManualFlightForm from '@/components/ManualFlightForm.vue'
 import ProvenanceBadge from '@/components/ProvenanceBadge.vue'
 import { appConfig } from '@/config'
-import {
-  BLR_TIMEZONE,
-  formatDateTime,
-  formatFetchedAt,
-  isoToLocalInput,
-} from '@/lib/time'
+import { formatDateTime, formatFetchedAt, isoToLocalInput } from '@/lib/time'
 import { normaliseTerminalCode } from '@/modules/airport-directory/terminal-code'
 import { findDemoFlights } from '@/modules/flights/providers/demo'
 import { createManualFlight } from '@/modules/flights/providers/manual'
@@ -33,6 +28,7 @@ import {
   DEFAULT_CONNECTION_CONTEXT,
   type ConnectionContext,
 } from '@/modules/journeys/connection'
+import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore, type JourneyKind } from '@/stores/journey'
 
 type SegmentKey = 'departure' | 'arrival' | 'connection'
@@ -55,8 +51,11 @@ interface SegmentState {
 const route = useRoute()
 const router = useRouter()
 const store = useJourneyStore()
-const timeZone = BLR_TIMEZONE
-const provider = createConfiguredFlightProvider()
+const airportStore = useAirportStore()
+const dataset = computed(() => airportStore.dataset!)
+const airportCode = computed(() => dataset.value.airport.code)
+const timeZone = dataset.value.airport.timezone
+const provider = createConfiguredFlightProvider(airportCode.value)
 const search = store.search
 const editing = route.query.edit === '1' && Boolean(store.journey)
 const initialKind: JourneyKind = search?.kind ?? store.journey?.kind ?? 'departing'
@@ -118,8 +117,8 @@ function makeSegment(
     manualValues: {
       flightNumber,
       airline: '',
-      origin: role === 'arrival' ? '' : 'BLR',
-      destination: role === 'arrival' ? 'BLR' : '',
+      origin: role === 'arrival' ? '' : airportCode.value,
+      destination: role === 'arrival' ? airportCode.value : '',
       terminal: '',
       gate: '',
       localDateTime: `${safeDate}T${defaultTime}`,
@@ -148,8 +147,8 @@ if (editing && store.journey) {
       makeSegment(
         'arrival',
         'arrival',
-        'Arrival flight at BLR',
-        'The flight that brings you to Bengaluru.',
+        `Arrival flight at ${airportCode.value}`,
+        `The flight that brings you to ${dataset.value.airport.city}.`,
         journey.arrival.flightNumber,
         dateOnly(journey.arrival.scheduledArrival),
         journey.arrival,
@@ -157,7 +156,7 @@ if (editing && store.journey) {
       makeSegment(
         'connection',
         'connection',
-        'Connecting flight from BLR',
+        `Connecting flight from ${airportCode.value}`,
         'The onward flight you need to catch.',
         journey.connection.flightNumber,
         dateOnly(journey.connection.scheduledDeparture),
@@ -182,15 +181,15 @@ if (editing && store.journey) {
       makeSegment(
         'arrival',
         'arrival',
-        'Arrival flight at BLR',
-        'The flight that brings you to Bengaluru.',
+        `Arrival flight at ${airportCode.value}`,
+        `The flight that brings you to ${dataset.value.airport.city}.`,
         search.arrivalFlightNumber,
         search.arrivalDate,
       ),
       makeSegment(
         'connection',
         'connection',
-        'Connecting flight from BLR',
+        `Connecting flight from ${airportCode.value}`,
         'The onward flight you need to catch.',
         search.connectingFlightNumber,
         search.connectingDate,
@@ -211,7 +210,12 @@ async function resolveSegment(segment: SegmentState) {
       }
       segment.showManual = true
     } else {
-      const results = findDemoFlights(segment.flightNumber, segment.date, segment.role)
+      const results = findDemoFlights(
+        segment.flightNumber,
+        segment.date,
+        segment.role,
+        airportCode.value,
+      )
       segment.outcome =
         results.length > 0
           ? { status: 'success', results }
@@ -236,6 +240,9 @@ async function resolveSegment(segment: SegmentState) {
 }
 
 onMounted(() => {
+  if (editing && store.journey) {
+    void airportStore.setAirport(store.journey.airportCode)
+  }
   if (editing) return
   if (!search) {
     void router.replace({ name: 'home' })
@@ -487,7 +494,9 @@ function backToFlights() {
                         ? 'demo data'
                         : result.source === 'manual'
                           ? 'user-entered'
-                          : 'BLR airport live board'
+                          : result.provider === 'aerodatabox'
+                            ? 'AeroDataBox (free plan, attribution required)'
+                            : `${airportCode} airport live board`
                     }}
                   </p>
                 </div>
@@ -511,6 +520,8 @@ function backToFlights() {
               :errors="segment.manualErrors"
               :role="segment.role"
               :time-zone="timeZone"
+              :airport-code="airportCode"
+              :terminals="dataset.terminals"
               @submit="useManual(segment)"
             />
           </div>
@@ -521,6 +532,8 @@ function backToFlights() {
               :errors="segment.manualErrors"
               :role="segment.role"
               :time-zone="timeZone"
+              :airport-code="airportCode"
+              :terminals="dataset.terminals"
               @submit="useManual(segment)"
             />
           </details>
@@ -603,7 +616,7 @@ function backToFlights() {
 
         <fieldset class="fieldset context-question">
           <legend>
-            <h3>Will you need to clear immigration, customs, or security at BLR?</h3>
+            <h3>Will you need to clear immigration, customs, or security at {{ airportCode }}?</h3>
           </legend>
           <p class="small muted">
             The prototype cannot determine this from a flight number. Confirm it with your airline.
@@ -623,9 +636,9 @@ function backToFlights() {
 
         <div v-if="selectedTerminalsDiffer" class="notice danger" style="margin-top: 1.1rem">
           <strong>Terminal change detected in your entries.</strong>
-          The map can include the complimentary T1↔T2 shuttle, but transfer eligibility, security,
-          immigration and baggage steps depend on your airline and ticket. Confirm them with airline
-          or airport staff and allow extra time.
+          The map includes the airport-published inter-terminal transfer where available, but
+          transfer eligibility, security, immigration and baggage steps depend on your airline and
+          ticket. Confirm them with airline or airport staff and allow extra time.
         </div>
 
         <div class="context-actions">

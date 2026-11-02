@@ -162,6 +162,31 @@ describe('live flight proxy', () => {
     vi.unstubAllGlobals()
   })
 
+  it('rejects an unknown airport and returns an empty provider result for non-BLR', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () =>
+        new Response(JSON.stringify([]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    )
+    const invalid = await request(app).get(
+      '/api/flights?flightNumber=6E%205082&date=2026-11-03&airport=XXX',
+    )
+    expect(invalid.status).toBe(400)
+    expect(invalid.body.error.code).toBe('invalid')
+
+    const delhi = await request(app).get(
+      '/api/flights?flightNumber=6E%205082&date=2026-11-03&airport=DEL',
+    )
+    expect(delhi.status).toBe(200)
+    expect(delhi.body.results).toEqual([])
+    expect(delhi.body.provider).toBe('provider')
+    vi.unstubAllGlobals()
+  })
+
   it('normalises the airport board into BLR-local ISO timestamps', async () => {
     const today = todayInAirportTimeZone()
     const fetchMock = vi.fn(async (input: string | URL | Request) => {

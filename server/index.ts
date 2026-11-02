@@ -12,7 +12,7 @@ const app = await buildApp(db)
 const stopPushScheduler = startPushScheduler(db)
 
 const server = app.listen(config.port, () => {
-  console.log(`BLR Navigator API listening on http://localhost:${config.port} (${db.driver})`)
+  console.log(`Airport Navigator API listening on http://localhost:${config.port} (${db.driver})`)
 })
 
 async function shutdown(signal: string): Promise<void> {

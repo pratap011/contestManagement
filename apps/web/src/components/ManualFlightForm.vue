@@ -11,6 +11,8 @@ const props = defineProps<{
   errors: ManualFlightErrors
   role: FlightRole
   timeZone: string
+  airportCode: string
+  terminals: Array<{ id: string; name: string }>
 }>()
 
 const emit = defineEmits<{
@@ -129,7 +131,7 @@ function setMinute(event: Event) {
           :id="`${role}-destination`"
           class="input"
           :value="modelValue.destination"
-          placeholder="BLR"
+          :placeholder="airportCode"
           maxlength="3"
           autocapitalize="characters"
           :aria-invalid="Boolean(errors.destination)"
@@ -150,8 +152,9 @@ function setMinute(event: Event) {
           @change="setValue('terminal', $event)"
         >
           <option value="">Not sure / not supplied</option>
-          <option value="T1">Terminal 1</option>
-          <option value="T2">Terminal 2</option>
+          <option v-for="terminal in terminals" :key="terminal.id" :value="terminal.id.toUpperCase()">
+            {{ terminal.name }}
+          </option>
         </select>
         <span class="field-hint">A gate cannot be inferred from the terminal.</span>
       </div>

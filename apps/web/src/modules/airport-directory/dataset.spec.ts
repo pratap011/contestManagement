@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { airportDataset, validateDataset } from './dataset'
-import {
-  filterPois,
-  findGateAreaPoi,
-  findGatePoi,
-  getPoisForTerminal,
-  normaliseTerminalCode,
-  resolveGatePoi,
-} from './search'
+import blrDataset from '@/data/airports/blr'
+import { validateDataset } from './dataset'
+import { createAirportDirectory, normaliseTerminalCode } from './search'
+
+const airportDataset = blrDataset
+const directory = createAirportDirectory(airportDataset)
 
 describe('BLR OpenStreetMap dataset', () => {
   it('is internally consistent', () => {
@@ -60,33 +57,40 @@ describe('BLR OpenStreetMap dataset', () => {
   })
 
   it('finds mapped gates and handles live gate labels', () => {
-    expect(findGatePoi('t2', 'C6')?.name).toBe('Gate C6')
-    expect(findGatePoi('t2', 'D5')?.name).toMatch(/D4|D5/)
-    expect(findGatePoi('t1', 'A2')?.name).toBe('Gate 2')
-    expect(findGatePoi('t1', '33')).toBeUndefined()
-    expect(findGateAreaPoi('t1', 't1-l1')?.name).toBe('T1 gate area')
+    expect(directory.findGatePoi('t2', 'C6')?.name).toBe('Gate C6')
+    expect(directory.findGatePoi('t2', 'D5')?.name).toMatch(/D4|D5/)
+    expect(directory.findGatePoi('t1', 'A2')?.name).toBe('Gate 2')
+    expect(directory.findGatePoi('t1', '33')).toBeUndefined()
+    expect(directory.findGateAreaPoi('t1', 't1-l1')?.name).toBe('T1 gate area')
   })
 
   it('falls back to a gate area without inventing a gate position', () => {
-    const resolution = resolveGatePoi('t1', '33', 1)
+    const resolution = directory.resolveGatePoi('t1', '33', 1)
     expect(resolution.exact).toBe(false)
     expect(resolution.poi?.name).toBe('T1 gate area')
     expect(resolution.message).toMatch(/no individual mapped position/i)
 
-    const t2 = resolveGatePoi('t2', 'D18', 0)
+    const t2 = directory.resolveGatePoi('t2', 'D18', 0)
     expect(t2.exact).toBe(false)
     expect(t2.poi?.name).toBe('T2 C/D gate area')
   })
 
   it('filters mapped places by category and search text', () => {
-    expect(filterPois(getPoisForTerminal('t1'), { query: 'restroom' }).length).toBeGreaterThan(0)
-    expect(filterPois(getPoisForTerminal('t1'), { category: 'gate' }).length).toBeGreaterThan(8)
-    expect(filterPois(getPoisForTerminal('t2'), { query: 'Starbucks' }).length).toBeGreaterThan(0)
+    expect(
+      directory.filterPois(directory.getPoisForTerminal('t1'), { query: 'restroom' }).length,
+    ).toBeGreaterThan(0)
+    expect(
+      directory.filterPois(directory.getPoisForTerminal('t1'), { category: 'gate' }).length,
+    ).toBeGreaterThan(8)
+    expect(
+      directory.filterPois(directory.getPoisForTerminal('t2'), { query: 'Starbucks' }).length,
+    ).toBeGreaterThan(0)
   })
 
   it('normalises terminal labels from live flight data', () => {
     expect(normaliseTerminalCode('T1')).toBe('t1')
     expect(normaliseTerminalCode('2')).toBe('t2')
     expect(normaliseTerminalCode('Terminal 2')).toBe('t2')
+    expect(normaliseTerminalCode('T3')).toBe('t3')
   })
 })

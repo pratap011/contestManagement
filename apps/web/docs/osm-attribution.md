@@ -1,6 +1,6 @@
 # OpenStreetMap attribution and ODbL
 
-The airport dataset in `apps/web/src/data/blr/` is derived from OpenStreetMap.
+The airport datasets in `apps/web/src/data/airports/` are derived from OpenStreetMap.
 
 ## Required attribution
 
@@ -25,7 +25,7 @@ produced-work guidance before distribution.
 
 ## Extraction metadata
 
-`apps/web/src/data/blr/osm-meta.json` records:
+`apps/web/src/data/airports/blr/osm-meta.json` (and each other airport's `meta.json`) records:
 
 - extraction URL and date,
 - bounding box,

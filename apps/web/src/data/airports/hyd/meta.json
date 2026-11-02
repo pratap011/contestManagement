@@ -1,0 +1,38 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "extractionUrl": "https://api.openstreetmap.org/api/0.6/map",
+  "extractedAt": "2026-11-02T20:10:31.802Z",
+  "bbox": "78.39,17.2,78.47,17.28",
+  "counts": {
+    "terminals": 1,
+    "floors": 2,
+    "pois": 48,
+    "nodes": 46,
+    "edges": 74,
+    "unconnectedPois": 0
+  },
+  "inferred": {
+    "hallConnectors": true,
+    "gateSpines": true,
+    "terminalEntrances": true,
+    "verticalConnectors": true,
+    "poiAccessConnectors": true,
+    "shuttleRide": false
+  },
+  "sources": {
+    "terminals": [
+      "relation:13609059"
+    ],
+    "shuttle": "Hyderabad Airport passenger information, retrieved 2026-11-02",
+    "shuttleUrl": "https://www.hyderabad.aero/rgia"
+  },
+  "notes": [
+    "OpenStreetMap is the source of terminal footprints, mapped gates and named facilities.",
+    "Each terminal uses an inferred central hall, gate spine, entrance and access connectors because indoor corridors are not mapped consistently.",
+    "All OSM-derived features are unverified. All derived connectors are inferred and drawn as dashed lines.",
+    "Inter-terminal shuttle existence and stop directions come from the airport source; the schematic connector geometry is straight-line, not OSRM."
+  ]
+}

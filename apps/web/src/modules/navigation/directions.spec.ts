@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { airportDataset } from '@/modules/airport-directory/dataset'
+import airportDataset from '@/data/airports/blr'
 import { findRoute } from './astar'
 import { buildRouteSteps } from './directions'
 import { computeRouteProgress, nearestRouteNode } from './progress'

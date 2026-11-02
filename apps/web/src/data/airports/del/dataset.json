@@ -1,0 +1,5156 @@
+{
+  "airport": {
+    "code": "DEL",
+    "name": "Indira Gandhi International Airport",
+    "city": "New Delhi",
+    "timezone": "Asia/Kolkata",
+    "mapVersion": "osm-2026-11-02",
+    "source": "osm",
+    "verificationStatus": "unverified",
+    "lastUpdated": "2026-11-02",
+    "center": {
+      "lat": 28.5562,
+      "lon": 77.1
+    },
+    "bounds": {
+      "south": 28.5449623,
+      "west": 77.076215,
+      "north": 28.5700638,
+      "east": 77.1252126
+    },
+    "disclaimer": "Terminal footprints, gates, facilities and levels are derived from OpenStreetMap and are not field-verified. Hall, entrance, security and gate connectors are inferred schematic links, not surveyed corridors. Follow airport signs and staff instructions.",
+    "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "liveFlightSource": "Live provider lookup when configured; manual entry and demo flights always work. The BLR airport board is used only for BLR.",
+    "shuttle": {
+      "available": true,
+      "terminals": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "travelMinutes": 22,
+      "frequencyMinutes": 20,
+      "waitAllowanceMinutes": 12,
+      "stopNames": [],
+      "notes": [
+        "A complimentary shuttle connects T1, T2 and T3 for passengers with a connecting flight; other passengers pay a small fee.",
+        "Shuttles are published as running every 20 minutes, 24x7. T3 stop: arrival forecourt near Pillar 10. T2 stop: arrivals near VIP parking. T1 stop: Lane 1 arrivals.",
+        "Allow extra time for the coupon desk, security and baggage steps. Transfer eligibility remains an airline/airport decision."
+      ],
+      "source": "Delhi Airport Inter-Terminal Shuttle Service (newdelhiairport.in), retrieved 2026-11-02",
+      "retrievedAt": "2026-11-02T20:10:31.802Z",
+      "geometrySource": "Straight-line schematic connector between mapped terminal halls",
+      "sourceUrl": "https://www.newdelhiairport.in/inter-terminal-connectivity/shuttle-service"
+    },
+    "terminals": [
+      {
+        "id": "t1",
+        "airportCode": "DEL",
+        "name": "Terminal 1",
+        "center": {
+          "lat": 28.5645282,
+          "lon": 77.1179783
+        },
+        "polygon": [
+          [
+            28.5649774,
+            77.1197388
+          ],
+          [
+            28.5649222,
+            77.1197473
+          ],
+          [
+            28.5649271,
+            77.1198045
+          ],
+          [
+            28.5659523,
+            77.1196674
+          ],
+          [
+            28.5660357,
+            77.1205609
+          ],
+          [
+            28.5660574,
+            77.1208022
+          ],
+          [
+            28.5660638,
+            77.1208729
+          ],
+          [
+            28.5640841,
+            77.1211266
+          ],
+          [
+            28.563413,
+            77.1212126
+          ],
+          [
+            28.5618799,
+            77.120018
+          ],
+          [
+            28.5621084,
+            77.1196696
+          ],
+          [
+            28.5620688,
+            77.1196394
+          ],
+          [
+            28.5625924,
+            77.1187765
+          ],
+          [
+            28.5626609,
+            77.1186676
+          ],
+          [
+            28.5627023,
+            77.1186995
+          ],
+          [
+            28.5636165,
+            77.1194037
+          ],
+          [
+            28.5636913,
+            77.1192828
+          ],
+          [
+            28.5636709,
+            77.1192674
+          ],
+          [
+            28.5636946,
+            77.1192298
+          ],
+          [
+            28.5637631,
+            77.1191179
+          ],
+          [
+            28.563714,
+            77.1190819
+          ],
+          [
+            28.5639387,
+            77.1187088
+          ],
+          [
+            28.564008,
+            77.1187638
+          ],
+          [
+            28.5643325,
+            77.1182416
+          ],
+          [
+            28.5643649,
+            77.1181852
+          ],
+          [
+            28.5644417,
+            77.1178415
+          ],
+          [
+            28.5645315,
+            77.1174398
+          ],
+          [
+            28.5646212,
+            77.1170382
+          ],
+          [
+            28.5647107,
+            77.116638
+          ],
+          [
+            28.5648374,
+            77.1160708
+          ],
+          [
+            28.5649277,
+            77.1156668
+          ],
+          [
+            28.5650159,
+            77.1152723
+          ],
+          [
+            28.565107,
+            77.1148647
+          ],
+          [
+            28.5651958,
+            77.1144673
+          ],
+          [
+            28.5652783,
+            77.1140978
+          ],
+          [
+            28.5652971,
+            77.1140139
+          ],
+          [
+            28.5657366,
+            77.1141385
+          ],
+          [
+            28.5656387,
+            77.1145912
+          ],
+          [
+            28.5655518,
+            77.1149932
+          ],
+          [
+            28.5654653,
+            77.115393
+          ],
+          [
+            28.5653786,
+            77.1157942
+          ],
+          [
+            28.5652917,
+            77.116196
+          ],
+          [
+            28.565204,
+            77.1166014
+          ],
+          [
+            28.5650811,
+            77.1171698
+          ],
+          [
+            28.564995,
+            77.1175683
+          ],
+          [
+            28.5649081,
+            77.1179701
+          ],
+          [
+            28.5648315,
+            77.1183164
+          ],
+          [
+            28.564838,
+            77.1183875
+          ],
+          [
+            28.5648766,
+            77.1187612
+          ],
+          [
+            28.5649604,
+            77.1195736
+          ],
+          [
+            28.5649774,
+            77.1197388
+          ]
+        ],
+        "supportedFloors": [
+          "t1-l0",
+          "t1-l1"
+        ]
+      },
+      {
+        "id": "t2",
+        "airportCode": "DEL",
+        "name": "Terminal 2",
+        "center": {
+          "lat": 28.5589034,
+          "lon": 77.087483
+        },
+        "polygon": [
+          [
+            28.5591702,
+            77.0867303
+          ],
+          [
+            28.5591385,
+            77.08665
+          ],
+          [
+            28.5591115,
+            77.0865816
+          ],
+          [
+            28.5592056,
+            77.0864356
+          ],
+          [
+            28.5592532,
+            77.0863619
+          ],
+          [
+            28.5593092,
+            77.086275
+          ],
+          [
+            28.5594315,
+            77.0865743
+          ],
+          [
+            28.5596272,
+            77.087053
+          ],
+          [
+            28.5598837,
+            77.0876807
+          ],
+          [
+            28.5600612,
+            77.0881336
+          ],
+          [
+            28.5597186,
+            77.0886195
+          ],
+          [
+            28.5593046,
+            77.08855
+          ],
+          [
+            28.5590429,
+            77.0885007
+          ],
+          [
+            28.5584962,
+            77.0883966
+          ],
+          [
+            28.5582097,
+            77.0883434
+          ],
+          [
+            28.5579629,
+            77.0882995
+          ],
+          [
+            28.5580245,
+            77.0882075
+          ],
+          [
+            28.5581584,
+            77.087996
+          ],
+          [
+            28.5582886,
+            77.08802
+          ],
+          [
+            28.5583567,
+            77.0879163
+          ],
+          [
+            28.5584404,
+            77.0877953
+          ],
+          [
+            28.5584556,
+            77.0878081
+          ],
+          [
+            28.5584988,
+            77.0877483
+          ],
+          [
+            28.5585645,
+            77.0876487
+          ],
+          [
+            28.5586403,
+            77.087534
+          ],
+          [
+            28.5587456,
+            77.0873746
+          ],
+          [
+            28.5588435,
+            77.0872265
+          ],
+          [
+            28.5588914,
+            77.087154
+          ],
+          [
+            28.558928,
+            77.087098
+          ],
+          [
+            28.5589599,
+            77.0870492
+          ],
+          [
+            28.5590169,
+            77.0869628
+          ],
+          [
+            28.5591702,
+            77.0867303
+          ]
+        ],
+        "supportedFloors": [
+          "t2-l0",
+          "t2-l1"
+        ]
+      },
+      {
+        "id": "t3",
+        "airportCode": "DEL",
+        "name": "Terminal 3",
+        "center": {
+          "lat": 28.5513915,
+          "lon": 77.0862586
+        },
+        "polygon": [
+          [
+            28.5511762,
+            77.0806378
+          ],
+          [
+            28.5510392,
+            77.0812431
+          ],
+          [
+            28.5512964,
+            77.0817237
+          ],
+          [
+            28.5516229,
+            77.0823544
+          ],
+          [
+            28.5520423,
+            77.0831646
+          ],
+          [
+            28.5524592,
+            77.0839701
+          ],
+          [
+            28.553048,
+            77.0851076
+          ],
+          [
+            28.5529631,
+            77.0854944
+          ],
+          [
+            28.5527454,
+            77.0863881
+          ],
+          [
+            28.5526072,
+            77.0870052
+          ],
+          [
+            28.552501,
+            77.0874377
+          ],
+          [
+            28.5520712,
+            77.0877199
+          ],
+          [
+            28.5517239,
+            77.0879507
+          ],
+          [
+            28.5513776,
+            77.0881855
+          ],
+          [
+            28.5510268,
+            77.0884164
+          ],
+          [
+            28.5506755,
+            77.0886459
+          ],
+          [
+            28.5503044,
+            77.0888922
+          ],
+          [
+            28.5499686,
+            77.089115
+          ],
+          [
+            28.5490917,
+            77.0897076
+          ],
+          [
+            28.5489623,
+            77.0902536
+          ],
+          [
+            28.549008,
+            77.0902292
+          ],
+          [
+            28.5492399,
+            77.0900697
+          ],
+          [
+            28.5495628,
+            77.0898551
+          ],
+          [
+            28.5499036,
+            77.0896157
+          ],
+          [
+            28.550257,
+            77.0893815
+          ],
+          [
+            28.5505794,
+            77.0891677
+          ],
+          [
+            28.5509486,
+            77.0889229
+          ],
+          [
+            28.5512864,
+            77.088699
+          ],
+          [
+            28.5516572,
+            77.0884531
+          ],
+          [
+            28.5527421,
+            77.0877526
+          ],
+          [
+            28.5528258,
+            77.0877022
+          ],
+          [
+            28.553449,
+            77.0850252
+          ],
+          [
+            28.5530123,
+            77.0841884
+          ],
+          [
+            28.5527579,
+            77.083696
+          ],
+          [
+            28.5523455,
+            77.0828988
+          ],
+          [
+            28.5519452,
+            77.0821127
+          ],
+          [
+            28.5516041,
+            77.0814585
+          ],
+          [
+            28.5512634,
+            77.080805
+          ],
+          [
+            28.5511762,
+            77.0806378
+          ]
+        ],
+        "supportedFloors": [
+          "t3-l0",
+          "t3-l1"
+        ]
+      }
+    ]
+  },
+  "terminals": [
+    {
+      "id": "t1",
+      "airportCode": "DEL",
+      "name": "Terminal 1",
+      "center": {
+        "lat": 28.5645282,
+        "lon": 77.1179783
+      },
+      "polygon": [
+        [
+          28.5649774,
+          77.1197388
+        ],
+        [
+          28.5649222,
+          77.1197473
+        ],
+        [
+          28.5649271,
+          77.1198045
+        ],
+        [
+          28.5659523,
+          77.1196674
+        ],
+        [
+          28.5660357,
+          77.1205609
+        ],
+        [
+          28.5660574,
+          77.1208022
+        ],
+        [
+          28.5660638,
+          77.1208729
+        ],
+        [
+          28.5640841,
+          77.1211266
+        ],
+        [
+          28.563413,
+          77.1212126
+        ],
+        [
+          28.5618799,
+          77.120018
+        ],
+        [
+          28.5621084,
+          77.1196696
+        ],
+        [
+          28.5620688,
+          77.1196394
+        ],
+        [
+          28.5625924,
+          77.1187765
+        ],
+        [
+          28.5626609,
+          77.1186676
+        ],
+        [
+          28.5627023,
+          77.1186995
+        ],
+        [
+          28.5636165,
+          77.1194037
+        ],
+        [
+          28.5636913,
+          77.1192828
+        ],
+        [
+          28.5636709,
+          77.1192674
+        ],
+        [
+          28.5636946,
+          77.1192298
+        ],
+        [
+          28.5637631,
+          77.1191179
+        ],
+        [
+          28.563714,
+          77.1190819
+        ],
+        [
+          28.5639387,
+          77.1187088
+        ],
+        [
+          28.564008,
+          77.1187638
+        ],
+        [
+          28.5643325,
+          77.1182416
+        ],
+        [
+          28.5643649,
+          77.1181852
+        ],
+        [
+          28.5644417,
+          77.1178415
+        ],
+        [
+          28.5645315,
+          77.1174398
+        ],
+        [
+          28.5646212,
+          77.1170382
+        ],
+        [
+          28.5647107,
+          77.116638
+        ],
+        [
+          28.5648374,
+          77.1160708
+        ],
+        [
+          28.5649277,
+          77.1156668
+        ],
+        [
+          28.5650159,
+          77.1152723
+        ],
+        [
+          28.565107,
+          77.1148647
+        ],
+        [
+          28.5651958,
+          77.1144673
+        ],
+        [
+          28.5652783,
+          77.1140978
+        ],
+        [
+          28.5652971,
+          77.1140139
+        ],
+        [
+          28.5657366,
+          77.1141385
+        ],
+        [
+          28.5656387,
+          77.1145912
+        ],
+        [
+          28.5655518,
+          77.1149932
+        ],
+        [
+          28.5654653,
+          77.115393
+        ],
+        [
+          28.5653786,
+          77.1157942
+        ],
+        [
+          28.5652917,
+          77.116196
+        ],
+        [
+          28.565204,
+          77.1166014
+        ],
+        [
+          28.5650811,
+          77.1171698
+        ],
+        [
+          28.564995,
+          77.1175683
+        ],
+        [
+          28.5649081,
+          77.1179701
+        ],
+        [
+          28.5648315,
+          77.1183164
+        ],
+        [
+          28.564838,
+          77.1183875
+        ],
+        [
+          28.5648766,
+          77.1187612
+        ],
+        [
+          28.5649604,
+          77.1195736
+        ],
+        [
+          28.5649774,
+          77.1197388
+        ]
+      ],
+      "supportedFloors": [
+        "t1-l0",
+        "t1-l1"
+      ]
+    },
+    {
+      "id": "t2",
+      "airportCode": "DEL",
+      "name": "Terminal 2",
+      "center": {
+        "lat": 28.5589034,
+        "lon": 77.087483
+      },
+      "polygon": [
+        [
+          28.5591702,
+          77.0867303
+        ],
+        [
+          28.5591385,
+          77.08665
+        ],
+        [
+          28.5591115,
+          77.0865816
+        ],
+        [
+          28.5592056,
+          77.0864356
+        ],
+        [
+          28.5592532,
+          77.0863619
+        ],
+        [
+          28.5593092,
+          77.086275
+        ],
+        [
+          28.5594315,
+          77.0865743
+        ],
+        [
+          28.5596272,
+          77.087053
+        ],
+        [
+          28.5598837,
+          77.0876807
+        ],
+        [
+          28.5600612,
+          77.0881336
+        ],
+        [
+          28.5597186,
+          77.0886195
+        ],
+        [
+          28.5593046,
+          77.08855
+        ],
+        [
+          28.5590429,
+          77.0885007
+        ],
+        [
+          28.5584962,
+          77.0883966
+        ],
+        [
+          28.5582097,
+          77.0883434
+        ],
+        [
+          28.5579629,
+          77.0882995
+        ],
+        [
+          28.5580245,
+          77.0882075
+        ],
+        [
+          28.5581584,
+          77.087996
+        ],
+        [
+          28.5582886,
+          77.08802
+        ],
+        [
+          28.5583567,
+          77.0879163
+        ],
+        [
+          28.5584404,
+          77.0877953
+        ],
+        [
+          28.5584556,
+          77.0878081
+        ],
+        [
+          28.5584988,
+          77.0877483
+        ],
+        [
+          28.5585645,
+          77.0876487
+        ],
+        [
+          28.5586403,
+          77.087534
+        ],
+        [
+          28.5587456,
+          77.0873746
+        ],
+        [
+          28.5588435,
+          77.0872265
+        ],
+        [
+          28.5588914,
+          77.087154
+        ],
+        [
+          28.558928,
+          77.087098
+        ],
+        [
+          28.5589599,
+          77.0870492
+        ],
+        [
+          28.5590169,
+          77.0869628
+        ],
+        [
+          28.5591702,
+          77.0867303
+        ]
+      ],
+      "supportedFloors": [
+        "t2-l0",
+        "t2-l1"
+      ]
+    },
+    {
+      "id": "t3",
+      "airportCode": "DEL",
+      "name": "Terminal 3",
+      "center": {
+        "lat": 28.5513915,
+        "lon": 77.0862586
+      },
+      "polygon": [
+        [
+          28.5511762,
+          77.0806378
+        ],
+        [
+          28.5510392,
+          77.0812431
+        ],
+        [
+          28.5512964,
+          77.0817237
+        ],
+        [
+          28.5516229,
+          77.0823544
+        ],
+        [
+          28.5520423,
+          77.0831646
+        ],
+        [
+          28.5524592,
+          77.0839701
+        ],
+        [
+          28.553048,
+          77.0851076
+        ],
+        [
+          28.5529631,
+          77.0854944
+        ],
+        [
+          28.5527454,
+          77.0863881
+        ],
+        [
+          28.5526072,
+          77.0870052
+        ],
+        [
+          28.552501,
+          77.0874377
+        ],
+        [
+          28.5520712,
+          77.0877199
+        ],
+        [
+          28.5517239,
+          77.0879507
+        ],
+        [
+          28.5513776,
+          77.0881855
+        ],
+        [
+          28.5510268,
+          77.0884164
+        ],
+        [
+          28.5506755,
+          77.0886459
+        ],
+        [
+          28.5503044,
+          77.0888922
+        ],
+        [
+          28.5499686,
+          77.089115
+        ],
+        [
+          28.5490917,
+          77.0897076
+        ],
+        [
+          28.5489623,
+          77.0902536
+        ],
+        [
+          28.549008,
+          77.0902292
+        ],
+        [
+          28.5492399,
+          77.0900697
+        ],
+        [
+          28.5495628,
+          77.0898551
+        ],
+        [
+          28.5499036,
+          77.0896157
+        ],
+        [
+          28.550257,
+          77.0893815
+        ],
+        [
+          28.5505794,
+          77.0891677
+        ],
+        [
+          28.5509486,
+          77.0889229
+        ],
+        [
+          28.5512864,
+          77.088699
+        ],
+        [
+          28.5516572,
+          77.0884531
+        ],
+        [
+          28.5527421,
+          77.0877526
+        ],
+        [
+          28.5528258,
+          77.0877022
+        ],
+        [
+          28.553449,
+          77.0850252
+        ],
+        [
+          28.5530123,
+          77.0841884
+        ],
+        [
+          28.5527579,
+          77.083696
+        ],
+        [
+          28.5523455,
+          77.0828988
+        ],
+        [
+          28.5519452,
+          77.0821127
+        ],
+        [
+          28.5516041,
+          77.0814585
+        ],
+        [
+          28.5512634,
+          77.080805
+        ],
+        [
+          28.5511762,
+          77.0806378
+        ]
+      ],
+      "supportedFloors": [
+        "t3-l0",
+        "t3-l1"
+      ]
+    }
+  ],
+  "floors": [
+    {
+      "id": "t1-l0",
+      "terminalId": "t1",
+      "label": "Arrivals, kerb & ground transport",
+      "shortLabel": "Terminal 1 · Ground",
+      "levelIndex": 0,
+      "level": 0,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t1-l1",
+      "terminalId": "t1",
+      "label": "Departures, security & gates",
+      "shortLabel": "Terminal 1 · Departures",
+      "levelIndex": 1,
+      "level": 1,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t2-l0",
+      "terminalId": "t2",
+      "label": "Arrivals, kerb & ground transport",
+      "shortLabel": "Terminal 2 · Ground",
+      "levelIndex": 0,
+      "level": 0,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t2-l1",
+      "terminalId": "t2",
+      "label": "Departures, security & gates",
+      "shortLabel": "Terminal 2 · Departures",
+      "levelIndex": 1,
+      "level": 1,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t3-l0",
+      "terminalId": "t3",
+      "label": "Arrivals, kerb & ground transport",
+      "shortLabel": "Terminal 3 · Ground",
+      "levelIndex": 0,
+      "level": 0,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t3-l1",
+      "terminalId": "t3",
+      "label": "Departures, security & gates",
+      "shortLabel": "Terminal 3 · Departures",
+      "levelIndex": 1,
+      "level": 1,
+      "mapAsset": "osm",
+      "areas": []
+    }
+  ],
+  "pois": [
+    {
+      "id": "gate-t3-62",
+      "name": "Gate 62",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5491141,
+      "lon": 77.0903028,
+      "nodeId": "poi:gate-t3-62",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989636"
+    },
+    {
+      "id": "gate-t3-60",
+      "name": "Gate 60",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5494562,
+      "lon": 77.0900409,
+      "nodeId": "poi:gate-t3-60",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989638"
+    },
+    {
+      "id": "gate-t3-55",
+      "name": "Gate 55",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5497022,
+      "lon": 77.0890865,
+      "nodeId": "poi:gate-t3-55",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989639"
+    },
+    {
+      "id": "gate-t3-58",
+      "name": "Gate 58",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5498147,
+      "lon": 77.089813,
+      "nodeId": "poi:gate-t3-58",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989640"
+    },
+    {
+      "id": "gate-t3-56",
+      "name": "Gate 56",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5501627,
+      "lon": 77.0895966,
+      "nodeId": "poi:gate-t3-56",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989642"
+    },
+    {
+      "id": "gate-t3-51",
+      "name": "Gate 51",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5501613,
+      "lon": 77.0902168,
+      "nodeId": "poi:gate-t3-51",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989653"
+    },
+    {
+      "id": "gate-t3-54",
+      "name": "Gate 54",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5505192,
+      "lon": 77.0893577,
+      "nodeId": "poi:gate-t3-54",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989655"
+    },
+    {
+      "id": "gate-t3-49",
+      "name": "Gate 49",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5508177,
+      "lon": 77.088353,
+      "nodeId": "poi:gate-t3-49",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989665"
+    },
+    {
+      "id": "gate-t3-52",
+      "name": "Gate 52",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5508689,
+      "lon": 77.0891087,
+      "nodeId": "poi:gate-t3-52",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989677"
+    },
+    {
+      "id": "gate-t3-47",
+      "name": "Gate 47",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5511797,
+      "lon": 77.0880835,
+      "nodeId": "poi:gate-t3-47",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989684"
+    },
+    {
+      "id": "gate-t3-50",
+      "name": "Gate 50",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5511908,
+      "lon": 77.0888985,
+      "nodeId": "poi:gate-t3-50",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989686"
+    },
+    {
+      "id": "gate-t3-36",
+      "name": "Gate 36",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5512921,
+      "lon": 77.080799,
+      "nodeId": "poi:gate-t3-36",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989709"
+    },
+    {
+      "id": "gate-t3-45",
+      "name": "Gate 45",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515166,
+      "lon": 77.0878658,
+      "nodeId": "poi:gate-t3-45",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989717"
+    },
+    {
+      "id": "gate-t3-48",
+      "name": "Gate 48",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515657,
+      "lon": 77.0886633,
+      "nodeId": "poi:gate-t3-48",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989724"
+    },
+    {
+      "id": "gate-t3-31",
+      "name": "Gate 31",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515838,
+      "lon": 77.0824157,
+      "nodeId": "poi:gate-t3-31",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989727"
+    },
+    {
+      "id": "gate-t3-43",
+      "name": "Gate 43",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518763,
+      "lon": 77.0876247,
+      "nodeId": "poi:gate-t3-43",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989758"
+    },
+    {
+      "id": "gate-t3-46",
+      "name": "Gate 46",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.551917,
+      "lon": 77.0884355,
+      "nodeId": "poi:gate-t3-46",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989764"
+    },
+    {
+      "id": "gate-t3-29",
+      "name": "Gate 29",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.552004,
+      "lon": 77.0832889,
+      "nodeId": "poi:gate-t3-29",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989767"
+    },
+    {
+      "id": "gate-t3-27",
+      "name": "Gate 27",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5524259,
+      "lon": 77.0840759,
+      "nodeId": "poi:gate-t3-27",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989792"
+    },
+    {
+      "id": "gate-t3-22",
+      "name": "Gate 22",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5544776,
+      "lon": 77.080215,
+      "nodeId": "poi:gate-t3-22",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989839"
+    },
+    {
+      "id": "gate-t3-20",
+      "name": "Gate 20",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.554835,
+      "lon": 77.0809277,
+      "nodeId": "poi:gate-t3-20",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989840"
+    },
+    {
+      "id": "gate-t3-18",
+      "name": "Gate 18",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5551788,
+      "lon": 77.0816171,
+      "nodeId": "poi:gate-t3-18",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989842"
+    },
+    {
+      "id": "gate-t3-19",
+      "name": "Gate 19",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5554527,
+      "lon": 77.0806602,
+      "nodeId": "poi:gate-t3-19",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989845"
+    },
+    {
+      "id": "gate-t3-17",
+      "name": "Gate 17",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5558938,
+      "lon": 77.0815216,
+      "nodeId": "poi:gate-t3-17",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989846"
+    },
+    {
+      "id": "gate-t3-15",
+      "name": "Gate 15",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5562833,
+      "lon": 77.0823206,
+      "nodeId": "poi:gate-t3-15",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "1919989858"
+    },
+    {
+      "id": "gate-t3-53",
+      "name": "Gate 53",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5500544,
+      "lon": 77.0888314,
+      "nodeId": "poi:gate-t3-53",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "13907186595"
+    },
+    {
+      "id": "osm-node-4497803089",
+      "name": "ICICI Bank",
+      "category": "service",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5533046,
+      "lon": 77.0851809,
+      "nodeId": "poi:osm-node-4497803089",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "4497803089"
+    },
+    {
+      "id": "osm-node-11143430248",
+      "name": "Lift",
+      "category": "elevator",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5533567,
+      "lon": 77.0838278,
+      "nodeId": "poi:osm-node-11143430248",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11143430248"
+    },
+    {
+      "id": "osm-node-11209891343",
+      "name": "Krispy Kreme",
+      "category": "food",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5527532,
+      "lon": 77.0875738,
+      "nodeId": "poi:osm-node-11209891343",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11209891343"
+    },
+    {
+      "id": "osm-node-11536431602",
+      "name": "Terminal 2",
+      "category": "transport",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5580043,
+      "lon": 77.0877135,
+      "nodeId": "poi:osm-node-11536431602",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped transport stop or pick-up point.",
+      "osmId": "11536431602"
+    },
+    {
+      "id": "osm-node-11545414516",
+      "name": "SBI ATM State Bank of India",
+      "category": "service",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5542223,
+      "lon": 77.085136,
+      "nodeId": "poi:osm-node-11545414516",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545414516"
+    },
+    {
+      "id": "osm-node-11545414517",
+      "name": "Citibank ATM",
+      "category": "service",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5542898,
+      "lon": 77.0850778,
+      "nodeId": "poi:osm-node-11545414517",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545414517"
+    },
+    {
+      "id": "osm-node-11545414522",
+      "name": "SBI ATM State bank of india",
+      "category": "service",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5626421,
+      "lon": 77.1193546,
+      "nodeId": "poi:osm-node-11545414522",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545414522"
+    },
+    {
+      "id": "osm-node-11545414523",
+      "name": "Indusind bank ATM",
+      "category": "service",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5624984,
+      "lon": 77.1195719,
+      "nodeId": "poi:osm-node-11545414523",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545414523"
+    },
+    {
+      "id": "osm-node-11545414524",
+      "name": "Vijaya bank ATM",
+      "category": "service",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5627128,
+      "lon": 77.1198937,
+      "nodeId": "poi:osm-node-11545414524",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545414524"
+    },
+    {
+      "id": "osm-node-11664566940",
+      "name": "Encalm Lounge",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5590925,
+      "lon": 77.0879478,
+      "nodeId": "poi:osm-node-11664566940",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11664566940"
+    },
+    {
+      "id": "osm-node-11881372212",
+      "name": "Kotak Mahindra Bank",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585422,
+      "lon": 77.0864623,
+      "nodeId": "poi:osm-node-11881372212",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11881372212"
+    },
+    {
+      "id": "osm-node-11881372214",
+      "name": "Taste of India Express",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585251,
+      "lon": 77.0865716,
+      "nodeId": "poi:osm-node-11881372214",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11881372214"
+    },
+    {
+      "id": "osm-node-11881372216",
+      "name": "IDFC First Bank",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585431,
+      "lon": 77.0864759,
+      "nodeId": "poi:osm-node-11881372216",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11881372216"
+    },
+    {
+      "id": "osm-node-12236483127",
+      "name": "Lift",
+      "category": "elevator",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 28.5637899,
+      "lon": 77.1210175,
+      "nodeId": "poi:osm-node-12236483127",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "12236483127"
+    },
+    {
+      "id": "osm-node-12717370701",
+      "name": "KFC",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593181,
+      "lon": 77.0876845,
+      "nodeId": "poi:osm-node-12717370701",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "12717370701"
+    },
+    {
+      "id": "osm-node-12717370801",
+      "name": "Taste of India",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599327,
+      "lon": 77.0882053,
+      "nodeId": "poi:osm-node-12717370801",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "12717370801"
+    },
+    {
+      "id": "osm-node-12717371101",
+      "name": "Dosa Factory",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559734,
+      "lon": 77.0874762,
+      "nodeId": "poi:osm-node-12717371101",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "12717371101"
+    },
+    {
+      "id": "osm-node-12717371201",
+      "name": "Costa Coffee",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5598425,
+      "lon": 77.0883431,
+      "nodeId": "poi:osm-node-12717371201",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "12717371201"
+    },
+    {
+      "id": "osm-node-13814644435",
+      "name": "Carnatic Café",
+      "category": "food",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646699,
+      "lon": 77.1197967,
+      "nodeId": "poi:osm-node-13814644435",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "13814644435"
+    },
+    {
+      "id": "osm-node-13814644436",
+      "name": "Dilli Streat",
+      "category": "food",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646511,
+      "lon": 77.1196014,
+      "nodeId": "poi:osm-node-13814644436",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "13814644436"
+    },
+    {
+      "id": "osm-node-13814644437",
+      "name": "Theobroma",
+      "category": "shop",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646497,
+      "lon": 77.1194613,
+      "nodeId": "poi:osm-node-13814644437",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "13814644437"
+    },
+    {
+      "id": "osm-node-14318533435",
+      "name": "Haldiram's",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5587458,
+      "lon": 77.0874469,
+      "nodeId": "poi:osm-node-14318533435",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533435"
+    },
+    {
+      "id": "osm-node-14318533442",
+      "name": "Samsonite",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594294,
+      "lon": 77.0881796,
+      "nodeId": "poi:osm-node-14318533442",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533442"
+    },
+    {
+      "id": "osm-node-14318533449",
+      "name": "Idli.com",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559418,
+      "lon": 77.0877244,
+      "nodeId": "poi:osm-node-14318533449",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533449"
+    },
+    {
+      "id": "osm-node-14318533450",
+      "name": "Toycraft",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594466,
+      "lon": 77.0880756,
+      "nodeId": "poi:osm-node-14318533450",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533450"
+    },
+    {
+      "id": "osm-node-14318533452",
+      "name": "Art Port",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593237,
+      "lon": 77.0882007,
+      "nodeId": "poi:osm-node-14318533452",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533452"
+    },
+    {
+      "id": "osm-node-14318533453",
+      "name": "Pizza Hut",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5597239,
+      "lon": 77.0884895,
+      "nodeId": "poi:osm-node-14318533453",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533453"
+    },
+    {
+      "id": "osm-node-14318533458",
+      "name": "W",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5596373,
+      "lon": 77.0877904,
+      "nodeId": "poi:osm-node-14318533458",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533458"
+    },
+    {
+      "id": "osm-node-14318533465",
+      "name": "Tiffin Express",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599083,
+      "lon": 77.0882558,
+      "nodeId": "poi:osm-node-14318533465",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533465"
+    },
+    {
+      "id": "osm-node-14318533473",
+      "name": "Hush Puppies",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599079,
+      "lon": 77.087934,
+      "nodeId": "poi:osm-node-14318533473",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533473"
+    },
+    {
+      "id": "osm-node-14318533476",
+      "name": "Thomas Cook Money Exchange",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5588219,
+      "lon": 77.0873279,
+      "nodeId": "poi:osm-node-14318533476",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533476"
+    },
+    {
+      "id": "osm-node-14318533479",
+      "name": "The Olfactory",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559393,
+      "lon": 77.088151,
+      "nodeId": "poi:osm-node-14318533479",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533479"
+    },
+    {
+      "id": "osm-node-14318533484",
+      "name": "Authentic Lucknow Chilankari",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594106,
+      "lon": 77.0885006,
+      "nodeId": "poi:osm-node-14318533484",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533484"
+    },
+    {
+      "id": "osm-node-14318533493",
+      "name": "Hidesign",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595182,
+      "lon": 77.0879579,
+      "nodeId": "poi:osm-node-14318533493",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533493"
+    },
+    {
+      "id": "osm-node-14318533496",
+      "name": "Lift",
+      "category": "elevator",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5595518,
+      "lon": 77.0882002,
+      "nodeId": "poi:osm-node-14318533496",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533496"
+    },
+    {
+      "id": "osm-node-14318533516",
+      "name": "Lift",
+      "category": "elevator",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5592563,
+      "lon": 77.0880234,
+      "nodeId": "poi:osm-node-14318533516",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533516"
+    },
+    {
+      "id": "osm-node-14318533525",
+      "name": "Ethos",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595535,
+      "lon": 77.0878016,
+      "nodeId": "poi:osm-node-14318533525",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533525"
+    },
+    {
+      "id": "osm-node-14318533544",
+      "name": "Forest Essentials",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5591518,
+      "lon": 77.0881702,
+      "nodeId": "poi:osm-node-14318533544",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533544"
+    },
+    {
+      "id": "osm-node-14318533555",
+      "name": "State Bank of India",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.558738,
+      "lon": 77.0874936,
+      "nodeId": "poi:osm-node-14318533555",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533555"
+    },
+    {
+      "id": "osm-node-14318533559",
+      "name": "Noodle",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.55987,
+      "lon": 77.0882998,
+      "nodeId": "poi:osm-node-14318533559",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533559"
+    },
+    {
+      "id": "osm-node-14318533561",
+      "name": "Miniso",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595176,
+      "lon": 77.0885113,
+      "nodeId": "poi:osm-node-14318533561",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533561"
+    },
+    {
+      "id": "osm-node-14318533566",
+      "name": "Giva",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595827,
+      "lon": 77.0876793,
+      "nodeId": "poi:osm-node-14318533566",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533566"
+    },
+    {
+      "id": "osm-node-14318533572",
+      "name": "Cafeccino",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593853,
+      "lon": 77.0876881,
+      "nodeId": "poi:osm-node-14318533572",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533572"
+    },
+    {
+      "id": "osm-node-14318533573",
+      "name": "Subway",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599599,
+      "lon": 77.0881605,
+      "nodeId": "poi:osm-node-14318533573",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533573"
+    },
+    {
+      "id": "osm-node-14318533574",
+      "name": "Dhaba@T2",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594641,
+      "lon": 77.0877728,
+      "nodeId": "poi:osm-node-14318533574",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533574"
+    },
+    {
+      "id": "osm-node-14318533581",
+      "name": "Neo Travel",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5592572,
+      "lon": 77.0881917,
+      "nodeId": "poi:osm-node-14318533581",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533581"
+    },
+    {
+      "id": "osm-node-14318533590",
+      "name": "Lumiere",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595832,
+      "lon": 77.0877413,
+      "nodeId": "poi:osm-node-14318533590",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533590"
+    },
+    {
+      "id": "osm-node-14318533602",
+      "name": "Renee",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595178,
+      "lon": 77.0876178,
+      "nodeId": "poi:osm-node-14318533602",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533602"
+    },
+    {
+      "id": "osm-node-14318533604",
+      "name": "Gujarati Svado",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5598106,
+      "lon": 77.0883844,
+      "nodeId": "poi:osm-node-14318533604",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533604"
+    },
+    {
+      "id": "osm-node-14318533616",
+      "name": "United Colors of Benetton",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5596007,
+      "lon": 77.0878562,
+      "nodeId": "poi:osm-node-14318533616",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533616"
+    },
+    {
+      "id": "osm-node-14318533620",
+      "name": "Swarovski",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595519,
+      "lon": 77.0876582,
+      "nodeId": "poi:osm-node-14318533620",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533620"
+    },
+    {
+      "id": "osm-node-14318533656",
+      "name": "Chaayos",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5597723,
+      "lon": 77.0884462,
+      "nodeId": "poi:osm-node-14318533656",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "14318533656"
+    },
+    {
+      "id": "anchor-poi-t1-hall",
+      "name": "Terminal 1 hall (approx.)",
+      "category": "info",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5645282,
+      "lon": 77.1179783,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate central hall used as the schematic connection point for this terminal. The exact indoor position is not mapped."
+    },
+    {
+      "id": "anchor-poi-t1-security",
+      "name": "Terminal 1 security (approx.)",
+      "category": "security",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5645282,
+      "lon": 77.1179783,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "The terminal hall is used as an approximate security area because the checkpoint itself is not mapped. Follow airport signs."
+    },
+    {
+      "id": "area-t1-gates",
+      "name": "Terminal 1 gate area",
+      "category": "gate",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5645282,
+      "lon": 77.1179783,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "No individual gate positions are mapped for this terminal. This is an approximate gate-area destination; confirm the exact gate on airport screens."
+    },
+    {
+      "id": "anchor-poi-t1-entrance",
+      "name": "Terminal 1 entrance (approx.)",
+      "category": "entrance",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 28.5644167,
+      "lon": 77.1179533,
+      "nodeId": "anchor:t1:entrance",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate kerbside entrance derived from the terminal footprint. Confirm the door with airport signage."
+    },
+    {
+      "id": "anchor-poi-t2-hall",
+      "name": "Terminal 2 hall (approx.)",
+      "category": "info",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5589034,
+      "lon": 77.087483,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate central hall used as the schematic connection point for this terminal. The exact indoor position is not mapped."
+    },
+    {
+      "id": "anchor-poi-t2-security",
+      "name": "Terminal 2 security (approx.)",
+      "category": "security",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5589034,
+      "lon": 77.087483,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "The terminal hall is used as an approximate security area because the checkpoint itself is not mapped. Follow airport signs."
+    },
+    {
+      "id": "area-t2-gates",
+      "name": "Terminal 2 gate area",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5589034,
+      "lon": 77.087483,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "No individual gate positions are mapped for this terminal. This is an approximate gate-area destination; confirm the exact gate on airport screens."
+    },
+    {
+      "id": "anchor-poi-t2-entrance",
+      "name": "Terminal 2 entrance (approx.)",
+      "category": "entrance",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5587456,
+      "lon": 77.0873746,
+      "nodeId": "anchor:t2:entrance",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate kerbside entrance derived from the terminal footprint. Confirm the door with airport signage."
+    },
+    {
+      "id": "anchor-poi-t3-hall",
+      "name": "Terminal 3 hall (approx.)",
+      "category": "info",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518979,
+      "lon": 77.0862354,
+      "nodeId": "anchor:t3:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate central hall used as the schematic connection point for this terminal. The exact indoor position is not mapped."
+    },
+    {
+      "id": "anchor-poi-t3-security",
+      "name": "Terminal 3 security (approx.)",
+      "category": "security",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518979,
+      "lon": 77.0862354,
+      "nodeId": "anchor:t3:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "The terminal hall is used as an approximate security area because the checkpoint itself is not mapped. Follow airport signs."
+    },
+    {
+      "id": "area-t3-gates",
+      "name": "Terminal 3 gate area",
+      "category": "gate",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518979,
+      "lon": 77.0862354,
+      "nodeId": "anchor:t3:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate centroid of the mapped gates in this terminal. Use it when a live gate has no individual mapped position."
+    },
+    {
+      "id": "anchor-poi-t3-entrance",
+      "name": "Terminal 3 entrance (approx.)",
+      "category": "entrance",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5527375,
+      "lon": 77.0864234,
+      "nodeId": "anchor:t3:entrance",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate kerbside entrance derived from the terminal footprint. Confirm the door with airport signage."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "poi:gate-t3-62",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5491141,
+      "lon": 77.0903028,
+      "nodeType": "gate",
+      "osmId": "1919989636",
+      "name": "Gate 62"
+    },
+    {
+      "id": "poi:gate-t3-60",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5494562,
+      "lon": 77.0900409,
+      "nodeType": "gate",
+      "osmId": "1919989638",
+      "name": "Gate 60"
+    },
+    {
+      "id": "poi:gate-t3-55",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5497022,
+      "lon": 77.0890865,
+      "nodeType": "gate",
+      "osmId": "1919989639",
+      "name": "Gate 55"
+    },
+    {
+      "id": "poi:gate-t3-58",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5498147,
+      "lon": 77.089813,
+      "nodeType": "gate",
+      "osmId": "1919989640",
+      "name": "Gate 58"
+    },
+    {
+      "id": "poi:gate-t3-56",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5501627,
+      "lon": 77.0895966,
+      "nodeType": "gate",
+      "osmId": "1919989642",
+      "name": "Gate 56"
+    },
+    {
+      "id": "poi:gate-t3-51",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5501613,
+      "lon": 77.0902168,
+      "nodeType": "gate",
+      "osmId": "1919989653",
+      "name": "Gate 51"
+    },
+    {
+      "id": "poi:gate-t3-54",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5505192,
+      "lon": 77.0893577,
+      "nodeType": "gate",
+      "osmId": "1919989655",
+      "name": "Gate 54"
+    },
+    {
+      "id": "poi:gate-t3-49",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5508177,
+      "lon": 77.088353,
+      "nodeType": "gate",
+      "osmId": "1919989665",
+      "name": "Gate 49"
+    },
+    {
+      "id": "poi:gate-t3-52",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5508689,
+      "lon": 77.0891087,
+      "nodeType": "gate",
+      "osmId": "1919989677",
+      "name": "Gate 52"
+    },
+    {
+      "id": "poi:gate-t3-47",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5511797,
+      "lon": 77.0880835,
+      "nodeType": "gate",
+      "osmId": "1919989684",
+      "name": "Gate 47"
+    },
+    {
+      "id": "poi:gate-t3-50",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5511908,
+      "lon": 77.0888985,
+      "nodeType": "gate",
+      "osmId": "1919989686",
+      "name": "Gate 50"
+    },
+    {
+      "id": "poi:gate-t3-36",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5512921,
+      "lon": 77.080799,
+      "nodeType": "gate",
+      "osmId": "1919989709",
+      "name": "Gate 36"
+    },
+    {
+      "id": "poi:gate-t3-45",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515166,
+      "lon": 77.0878658,
+      "nodeType": "gate",
+      "osmId": "1919989717",
+      "name": "Gate 45"
+    },
+    {
+      "id": "poi:gate-t3-48",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515657,
+      "lon": 77.0886633,
+      "nodeType": "gate",
+      "osmId": "1919989724",
+      "name": "Gate 48"
+    },
+    {
+      "id": "poi:gate-t3-31",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5515838,
+      "lon": 77.0824157,
+      "nodeType": "gate",
+      "osmId": "1919989727",
+      "name": "Gate 31"
+    },
+    {
+      "id": "poi:gate-t3-43",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518763,
+      "lon": 77.0876247,
+      "nodeType": "gate",
+      "osmId": "1919989758",
+      "name": "Gate 43"
+    },
+    {
+      "id": "poi:gate-t3-46",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.551917,
+      "lon": 77.0884355,
+      "nodeType": "gate",
+      "osmId": "1919989764",
+      "name": "Gate 46"
+    },
+    {
+      "id": "poi:gate-t3-29",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.552004,
+      "lon": 77.0832889,
+      "nodeType": "gate",
+      "osmId": "1919989767",
+      "name": "Gate 29"
+    },
+    {
+      "id": "poi:gate-t3-27",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5524259,
+      "lon": 77.0840759,
+      "nodeType": "gate",
+      "osmId": "1919989792",
+      "name": "Gate 27"
+    },
+    {
+      "id": "poi:gate-t3-22",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5544776,
+      "lon": 77.080215,
+      "nodeType": "gate",
+      "osmId": "1919989839",
+      "name": "Gate 22"
+    },
+    {
+      "id": "poi:gate-t3-20",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.554835,
+      "lon": 77.0809277,
+      "nodeType": "gate",
+      "osmId": "1919989840",
+      "name": "Gate 20"
+    },
+    {
+      "id": "poi:gate-t3-18",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5551788,
+      "lon": 77.0816171,
+      "nodeType": "gate",
+      "osmId": "1919989842",
+      "name": "Gate 18"
+    },
+    {
+      "id": "poi:gate-t3-19",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5554527,
+      "lon": 77.0806602,
+      "nodeType": "gate",
+      "osmId": "1919989845",
+      "name": "Gate 19"
+    },
+    {
+      "id": "poi:gate-t3-17",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5558938,
+      "lon": 77.0815216,
+      "nodeType": "gate",
+      "osmId": "1919989846",
+      "name": "Gate 17"
+    },
+    {
+      "id": "poi:gate-t3-15",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5562833,
+      "lon": 77.0823206,
+      "nodeType": "gate",
+      "osmId": "1919989858",
+      "name": "Gate 15"
+    },
+    {
+      "id": "poi:gate-t3-53",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5500544,
+      "lon": 77.0888314,
+      "nodeType": "gate",
+      "osmId": "13907186595",
+      "name": "Gate 53"
+    },
+    {
+      "id": "poi:osm-node-4497803089",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5533046,
+      "lon": 77.0851809,
+      "nodeType": "facility",
+      "osmId": "4497803089",
+      "name": "ICICI Bank"
+    },
+    {
+      "id": "poi:osm-node-11143430248",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5533567,
+      "lon": 77.0838278,
+      "nodeType": "facility",
+      "osmId": "11143430248",
+      "name": "Lift"
+    },
+    {
+      "id": "poi:osm-node-11209891343",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5527532,
+      "lon": 77.0875738,
+      "nodeType": "facility",
+      "osmId": "11209891343",
+      "name": "Krispy Kreme"
+    },
+    {
+      "id": "poi:osm-node-11536431602",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5580043,
+      "lon": 77.0877135,
+      "nodeType": "entrance",
+      "osmId": "11536431602",
+      "name": "Terminal 2"
+    },
+    {
+      "id": "poi:osm-node-11545414516",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5542223,
+      "lon": 77.085136,
+      "nodeType": "facility",
+      "osmId": "11545414516",
+      "name": "SBI ATM State Bank of India"
+    },
+    {
+      "id": "poi:osm-node-11545414517",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5542898,
+      "lon": 77.0850778,
+      "nodeType": "facility",
+      "osmId": "11545414517",
+      "name": "Citibank ATM"
+    },
+    {
+      "id": "poi:osm-node-11545414522",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5626421,
+      "lon": 77.1193546,
+      "nodeType": "facility",
+      "osmId": "11545414522",
+      "name": "SBI ATM State bank of india"
+    },
+    {
+      "id": "poi:osm-node-11545414523",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5624984,
+      "lon": 77.1195719,
+      "nodeType": "facility",
+      "osmId": "11545414523",
+      "name": "Indusind bank ATM"
+    },
+    {
+      "id": "poi:osm-node-11545414524",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5627128,
+      "lon": 77.1198937,
+      "nodeType": "facility",
+      "osmId": "11545414524",
+      "name": "Vijaya bank ATM"
+    },
+    {
+      "id": "poi:osm-node-11664566940",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5590925,
+      "lon": 77.0879478,
+      "nodeType": "facility",
+      "osmId": "11664566940",
+      "name": "Encalm Lounge"
+    },
+    {
+      "id": "poi:osm-node-11881372212",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585422,
+      "lon": 77.0864623,
+      "nodeType": "facility",
+      "osmId": "11881372212",
+      "name": "Kotak Mahindra Bank"
+    },
+    {
+      "id": "poi:osm-node-11881372214",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585251,
+      "lon": 77.0865716,
+      "nodeType": "facility",
+      "osmId": "11881372214",
+      "name": "Taste of India Express"
+    },
+    {
+      "id": "poi:osm-node-11881372216",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5585431,
+      "lon": 77.0864759,
+      "nodeType": "facility",
+      "osmId": "11881372216",
+      "name": "IDFC First Bank"
+    },
+    {
+      "id": "poi:osm-node-12236483127",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 28.5637899,
+      "lon": 77.1210175,
+      "nodeType": "facility",
+      "osmId": "12236483127",
+      "name": "Lift"
+    },
+    {
+      "id": "poi:osm-node-12717370701",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593181,
+      "lon": 77.0876845,
+      "nodeType": "facility",
+      "osmId": "12717370701",
+      "name": "KFC"
+    },
+    {
+      "id": "poi:osm-node-12717370801",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599327,
+      "lon": 77.0882053,
+      "nodeType": "facility",
+      "osmId": "12717370801",
+      "name": "Taste of India"
+    },
+    {
+      "id": "poi:osm-node-12717371101",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559734,
+      "lon": 77.0874762,
+      "nodeType": "facility",
+      "osmId": "12717371101",
+      "name": "Dosa Factory"
+    },
+    {
+      "id": "poi:osm-node-12717371201",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5598425,
+      "lon": 77.0883431,
+      "nodeType": "facility",
+      "osmId": "12717371201",
+      "name": "Costa Coffee"
+    },
+    {
+      "id": "poi:osm-node-13814644435",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646699,
+      "lon": 77.1197967,
+      "nodeType": "facility",
+      "osmId": "13814644435",
+      "name": "Carnatic Café"
+    },
+    {
+      "id": "poi:osm-node-13814644436",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646511,
+      "lon": 77.1196014,
+      "nodeType": "facility",
+      "osmId": "13814644436",
+      "name": "Dilli Streat"
+    },
+    {
+      "id": "poi:osm-node-13814644437",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5646497,
+      "lon": 77.1194613,
+      "nodeType": "facility",
+      "osmId": "13814644437",
+      "name": "Theobroma"
+    },
+    {
+      "id": "poi:osm-node-14318533435",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5587458,
+      "lon": 77.0874469,
+      "nodeType": "facility",
+      "osmId": "14318533435",
+      "name": "Haldiram's"
+    },
+    {
+      "id": "poi:osm-node-14318533442",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594294,
+      "lon": 77.0881796,
+      "nodeType": "facility",
+      "osmId": "14318533442",
+      "name": "Samsonite"
+    },
+    {
+      "id": "poi:osm-node-14318533449",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559418,
+      "lon": 77.0877244,
+      "nodeType": "facility",
+      "osmId": "14318533449",
+      "name": "Idli.com"
+    },
+    {
+      "id": "poi:osm-node-14318533450",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594466,
+      "lon": 77.0880756,
+      "nodeType": "facility",
+      "osmId": "14318533450",
+      "name": "Toycraft"
+    },
+    {
+      "id": "poi:osm-node-14318533452",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593237,
+      "lon": 77.0882007,
+      "nodeType": "facility",
+      "osmId": "14318533452",
+      "name": "Art Port"
+    },
+    {
+      "id": "poi:osm-node-14318533453",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5597239,
+      "lon": 77.0884895,
+      "nodeType": "facility",
+      "osmId": "14318533453",
+      "name": "Pizza Hut"
+    },
+    {
+      "id": "poi:osm-node-14318533458",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5596373,
+      "lon": 77.0877904,
+      "nodeType": "facility",
+      "osmId": "14318533458",
+      "name": "W"
+    },
+    {
+      "id": "poi:osm-node-14318533465",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599083,
+      "lon": 77.0882558,
+      "nodeType": "facility",
+      "osmId": "14318533465",
+      "name": "Tiffin Express"
+    },
+    {
+      "id": "poi:osm-node-14318533473",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599079,
+      "lon": 77.087934,
+      "nodeType": "facility",
+      "osmId": "14318533473",
+      "name": "Hush Puppies"
+    },
+    {
+      "id": "poi:osm-node-14318533476",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5588219,
+      "lon": 77.0873279,
+      "nodeType": "facility",
+      "osmId": "14318533476",
+      "name": "Thomas Cook Money Exchange"
+    },
+    {
+      "id": "poi:osm-node-14318533479",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.559393,
+      "lon": 77.088151,
+      "nodeType": "facility",
+      "osmId": "14318533479",
+      "name": "The Olfactory"
+    },
+    {
+      "id": "poi:osm-node-14318533484",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594106,
+      "lon": 77.0885006,
+      "nodeType": "facility",
+      "osmId": "14318533484",
+      "name": "Authentic Lucknow Chilankari"
+    },
+    {
+      "id": "poi:osm-node-14318533493",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595182,
+      "lon": 77.0879579,
+      "nodeType": "facility",
+      "osmId": "14318533493",
+      "name": "Hidesign"
+    },
+    {
+      "id": "poi:osm-node-14318533496",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5595518,
+      "lon": 77.0882002,
+      "nodeType": "facility",
+      "osmId": "14318533496",
+      "name": "Lift"
+    },
+    {
+      "id": "poi:osm-node-14318533516",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5592563,
+      "lon": 77.0880234,
+      "nodeType": "facility",
+      "osmId": "14318533516",
+      "name": "Lift"
+    },
+    {
+      "id": "poi:osm-node-14318533525",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595535,
+      "lon": 77.0878016,
+      "nodeType": "facility",
+      "osmId": "14318533525",
+      "name": "Ethos"
+    },
+    {
+      "id": "poi:osm-node-14318533544",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5591518,
+      "lon": 77.0881702,
+      "nodeType": "facility",
+      "osmId": "14318533544",
+      "name": "Forest Essentials"
+    },
+    {
+      "id": "poi:osm-node-14318533555",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.558738,
+      "lon": 77.0874936,
+      "nodeType": "facility",
+      "osmId": "14318533555",
+      "name": "State Bank of India"
+    },
+    {
+      "id": "poi:osm-node-14318533559",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.55987,
+      "lon": 77.0882998,
+      "nodeType": "facility",
+      "osmId": "14318533559",
+      "name": "Noodle"
+    },
+    {
+      "id": "poi:osm-node-14318533561",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595176,
+      "lon": 77.0885113,
+      "nodeType": "facility",
+      "osmId": "14318533561",
+      "name": "Miniso"
+    },
+    {
+      "id": "poi:osm-node-14318533566",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595827,
+      "lon": 77.0876793,
+      "nodeType": "facility",
+      "osmId": "14318533566",
+      "name": "Giva"
+    },
+    {
+      "id": "poi:osm-node-14318533572",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5593853,
+      "lon": 77.0876881,
+      "nodeType": "facility",
+      "osmId": "14318533572",
+      "name": "Cafeccino"
+    },
+    {
+      "id": "poi:osm-node-14318533573",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5599599,
+      "lon": 77.0881605,
+      "nodeType": "facility",
+      "osmId": "14318533573",
+      "name": "Subway"
+    },
+    {
+      "id": "poi:osm-node-14318533574",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5594641,
+      "lon": 77.0877728,
+      "nodeType": "facility",
+      "osmId": "14318533574",
+      "name": "Dhaba@T2"
+    },
+    {
+      "id": "poi:osm-node-14318533581",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5592572,
+      "lon": 77.0881917,
+      "nodeType": "facility",
+      "osmId": "14318533581",
+      "name": "Neo Travel"
+    },
+    {
+      "id": "poi:osm-node-14318533590",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595832,
+      "lon": 77.0877413,
+      "nodeType": "facility",
+      "osmId": "14318533590",
+      "name": "Lumiere"
+    },
+    {
+      "id": "poi:osm-node-14318533602",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595178,
+      "lon": 77.0876178,
+      "nodeType": "facility",
+      "osmId": "14318533602",
+      "name": "Renee"
+    },
+    {
+      "id": "poi:osm-node-14318533604",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5598106,
+      "lon": 77.0883844,
+      "nodeType": "facility",
+      "osmId": "14318533604",
+      "name": "Gujarati Svado"
+    },
+    {
+      "id": "poi:osm-node-14318533616",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5596007,
+      "lon": 77.0878562,
+      "nodeType": "facility",
+      "osmId": "14318533616",
+      "name": "United Colors of Benetton"
+    },
+    {
+      "id": "poi:osm-node-14318533620",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5595519,
+      "lon": 77.0876582,
+      "nodeType": "facility",
+      "osmId": "14318533620",
+      "name": "Swarovski"
+    },
+    {
+      "id": "poi:osm-node-14318533656",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5597723,
+      "lon": 77.0884462,
+      "nodeType": "facility",
+      "osmId": "14318533656",
+      "name": "Chaayos"
+    },
+    {
+      "id": "anchor:t1:hall",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 28.5645282,
+      "lon": 77.1179783,
+      "nodeType": "junction",
+      "name": "Terminal 1 hall (approx.)"
+    },
+    {
+      "id": "anchor:t1:entrance",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 28.5644167,
+      "lon": 77.1179533,
+      "nodeType": "entrance",
+      "name": "Terminal 1 entrance (approx.)"
+    },
+    {
+      "id": "anchor:t2:hall",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 28.5589034,
+      "lon": 77.087483,
+      "nodeType": "junction",
+      "name": "Terminal 2 hall (approx.)"
+    },
+    {
+      "id": "anchor:t2:entrance",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 28.5587456,
+      "lon": 77.0873746,
+      "nodeType": "entrance",
+      "name": "Terminal 2 entrance (approx.)"
+    },
+    {
+      "id": "anchor:t3:hall",
+      "terminalId": "t3",
+      "floorId": "t3-l1",
+      "lat": 28.5518979,
+      "lon": 77.0862354,
+      "nodeType": "junction",
+      "name": "Terminal 3 hall (approx.)"
+    },
+    {
+      "id": "anchor:t3:entrance",
+      "terminalId": "t3",
+      "floorId": "t3-l0",
+      "lat": 28.5527375,
+      "lon": 77.0864234,
+      "nodeType": "entrance",
+      "name": "Terminal 3 entrance (approx.)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "anchor:t1:entrance",
+      "to": "anchor:t1:hall",
+      "distanceMeters": 12.6,
+      "estimatedWalkingSeconds": 40,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift or escalator between the kerbside and the Terminal 1 departures hall (inferred connector)"
+    },
+    {
+      "id": "edge-2",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-11545414522",
+      "distanceMeters": 249.1,
+      "estimatedWalkingSeconds": 199,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to SBI ATM State bank of india"
+    },
+    {
+      "id": "edge-3",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-11545414523",
+      "distanceMeters": 274.2,
+      "estimatedWalkingSeconds": 219,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Indusind bank ATM"
+    },
+    {
+      "id": "edge-4",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-11545414524",
+      "distanceMeters": 275.2,
+      "estimatedWalkingSeconds": 220,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Vijaya bank ATM"
+    },
+    {
+      "id": "edge-5",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-12236483127",
+      "distanceMeters": 308,
+      "estimatedWalkingSeconds": 276,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Lift (inferred connector)"
+    },
+    {
+      "id": "edge-6",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-13814644435",
+      "distanceMeters": 178.3,
+      "estimatedWalkingSeconds": 143,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Carnatic Café"
+    },
+    {
+      "id": "edge-7",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-13814644436",
+      "distanceMeters": 159.1,
+      "estimatedWalkingSeconds": 127,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Dilli Streat"
+    },
+    {
+      "id": "edge-8",
+      "from": "anchor:t1:hall",
+      "to": "poi:osm-node-13814644437",
+      "distanceMeters": 145.5,
+      "estimatedWalkingSeconds": 116,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Theobroma"
+    },
+    {
+      "id": "edge-9",
+      "from": "anchor:t2:entrance",
+      "to": "anchor:t2:hall",
+      "distanceMeters": 20.5,
+      "estimatedWalkingSeconds": 46,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift or escalator between the kerbside and the Terminal 2 departures hall (inferred connector)"
+    },
+    {
+      "id": "edge-10",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11536431602",
+      "distanceMeters": 102.5,
+      "estimatedWalkingSeconds": 112,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Terminal 2 (inferred connector)"
+    },
+    {
+      "id": "edge-11",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11664566940",
+      "distanceMeters": 50,
+      "estimatedWalkingSeconds": 40,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Encalm Lounge"
+    },
+    {
+      "id": "edge-12",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11881372212",
+      "distanceMeters": 107.5,
+      "estimatedWalkingSeconds": 116,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Kotak Mahindra Bank (inferred connector)"
+    },
+    {
+      "id": "edge-13",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11881372214",
+      "distanceMeters": 98.5,
+      "estimatedWalkingSeconds": 109,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Taste of India Express (inferred connector)"
+    },
+    {
+      "id": "edge-14",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11881372216",
+      "distanceMeters": 106.2,
+      "estimatedWalkingSeconds": 115,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to IDFC First Bank (inferred connector)"
+    },
+    {
+      "id": "edge-15",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-12717370701",
+      "distanceMeters": 50.1,
+      "estimatedWalkingSeconds": 40,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to KFC"
+    },
+    {
+      "id": "edge-16",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-12717370801",
+      "distanceMeters": 134.4,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Taste of India"
+    },
+    {
+      "id": "edge-17",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-12717371101",
+      "distanceMeters": 92.4,
+      "estimatedWalkingSeconds": 74,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Dosa Factory"
+    },
+    {
+      "id": "edge-18",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-12717371201",
+      "distanceMeters": 134,
+      "estimatedWalkingSeconds": 107,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Costa Coffee"
+    },
+    {
+      "id": "edge-19",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533435",
+      "distanceMeters": 17.9,
+      "estimatedWalkingSeconds": 14,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Haldiram's"
+    },
+    {
+      "id": "edge-20",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533442",
+      "distanceMeters": 89.7,
+      "estimatedWalkingSeconds": 72,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Samsonite"
+    },
+    {
+      "id": "edge-21",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533449",
+      "distanceMeters": 61.9,
+      "estimatedWalkingSeconds": 50,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Idli.com"
+    },
+    {
+      "id": "edge-22",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533450",
+      "distanceMeters": 83.7,
+      "estimatedWalkingSeconds": 67,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Toycraft"
+    },
+    {
+      "id": "edge-23",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533452",
+      "distanceMeters": 84.2,
+      "estimatedWalkingSeconds": 67,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Art Port"
+    },
+    {
+      "id": "edge-24",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533453",
+      "distanceMeters": 134.1,
+      "estimatedWalkingSeconds": 107,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Pizza Hut"
+    },
+    {
+      "id": "edge-25",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533458",
+      "distanceMeters": 87,
+      "estimatedWalkingSeconds": 70,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to W"
+    },
+    {
+      "id": "edge-26",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533465",
+      "distanceMeters": 134.8,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Tiffin Express"
+    },
+    {
+      "id": "edge-27",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533473",
+      "distanceMeters": 120.1,
+      "estimatedWalkingSeconds": 96,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Hush Puppies"
+    },
+    {
+      "id": "edge-28",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533476",
+      "distanceMeters": 17.7,
+      "estimatedWalkingSeconds": 14,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Thomas Cook Money Exchange"
+    },
+    {
+      "id": "edge-29",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533479",
+      "distanceMeters": 85,
+      "estimatedWalkingSeconds": 68,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to The Olfactory"
+    },
+    {
+      "id": "edge-30",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533484",
+      "distanceMeters": 114.3,
+      "estimatedWalkingSeconds": 91,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Authentic Lucknow Chilankari"
+    },
+    {
+      "id": "edge-31",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533493",
+      "distanceMeters": 82.6,
+      "estimatedWalkingSeconds": 66,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Hidesign"
+    },
+    {
+      "id": "edge-32",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533496",
+      "distanceMeters": 100.5,
+      "estimatedWalkingSeconds": 110,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Lift (inferred connector)"
+    },
+    {
+      "id": "edge-33",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533516",
+      "distanceMeters": 65.8,
+      "estimatedWalkingSeconds": 53,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Lift"
+    },
+    {
+      "id": "edge-34",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533525",
+      "distanceMeters": 78.7,
+      "estimatedWalkingSeconds": 63,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Ethos"
+    },
+    {
+      "id": "edge-35",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533544",
+      "distanceMeters": 72.6,
+      "estimatedWalkingSeconds": 58,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Forest Essentials"
+    },
+    {
+      "id": "edge-36",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533555",
+      "distanceMeters": 18.4,
+      "estimatedWalkingSeconds": 15,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to State Bank of India"
+    },
+    {
+      "id": "edge-37",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533559",
+      "distanceMeters": 133.9,
+      "estimatedWalkingSeconds": 107,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Noodle"
+    },
+    {
+      "id": "edge-38",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533561",
+      "distanceMeters": 121.5,
+      "estimatedWalkingSeconds": 97,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Miniso"
+    },
+    {
+      "id": "edge-39",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533566",
+      "distanceMeters": 77.9,
+      "estimatedWalkingSeconds": 62,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Giva"
+    },
+    {
+      "id": "edge-40",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533572",
+      "distanceMeters": 57.2,
+      "estimatedWalkingSeconds": 46,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Cafeccino"
+    },
+    {
+      "id": "edge-41",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533573",
+      "distanceMeters": 134.8,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Subway"
+    },
+    {
+      "id": "edge-42",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533574",
+      "distanceMeters": 68.5,
+      "estimatedWalkingSeconds": 55,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Dhaba@T2"
+    },
+    {
+      "id": "edge-43",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533581",
+      "distanceMeters": 79.6,
+      "estimatedWalkingSeconds": 64,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Neo Travel"
+    },
+    {
+      "id": "edge-44",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533590",
+      "distanceMeters": 79.7,
+      "estimatedWalkingSeconds": 64,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Lumiere"
+    },
+    {
+      "id": "edge-45",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533602",
+      "distanceMeters": 69.6,
+      "estimatedWalkingSeconds": 56,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Renee"
+    },
+    {
+      "id": "edge-46",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533604",
+      "distanceMeters": 133.9,
+      "estimatedWalkingSeconds": 107,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Gujarati Svado"
+    },
+    {
+      "id": "edge-47",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533616",
+      "distanceMeters": 85.7,
+      "estimatedWalkingSeconds": 69,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to United Colors of Benetton"
+    },
+    {
+      "id": "edge-48",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533620",
+      "distanceMeters": 74.1,
+      "estimatedWalkingSeconds": 59,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Swarovski"
+    },
+    {
+      "id": "edge-49",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-14318533656",
+      "distanceMeters": 134.8,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Chaayos"
+    },
+    {
+      "id": "edge-50",
+      "from": "poi:gate-t3-36",
+      "to": "poi:gate-t3-55",
+      "distanceMeters": 828.5,
+      "estimatedWalkingSeconds": 663,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-51",
+      "from": "poi:gate-t3-55",
+      "to": "poi:gate-t3-62",
+      "distanceMeters": 135.6,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-52",
+      "from": "poi:gate-t3-62",
+      "to": "poi:gate-t3-53",
+      "distanceMeters": 177.7,
+      "estimatedWalkingSeconds": 142,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-53",
+      "from": "poi:gate-t3-53",
+      "to": "poi:gate-t3-60",
+      "distanceMeters": 135.6,
+      "estimatedWalkingSeconds": 108,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-54",
+      "from": "poi:gate-t3-60",
+      "to": "poi:gate-t3-58",
+      "distanceMeters": 45.7,
+      "estimatedWalkingSeconds": 37,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-55",
+      "from": "poi:gate-t3-58",
+      "to": "poi:gate-t3-56",
+      "distanceMeters": 44.1,
+      "estimatedWalkingSeconds": 35,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-56",
+      "from": "poi:gate-t3-56",
+      "to": "poi:gate-t3-51",
+      "distanceMeters": 60.6,
+      "estimatedWalkingSeconds": 48,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-57",
+      "from": "poi:gate-t3-51",
+      "to": "poi:gate-t3-54",
+      "distanceMeters": 92.9,
+      "estimatedWalkingSeconds": 74,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-58",
+      "from": "poi:gate-t3-54",
+      "to": "poi:gate-t3-49",
+      "distanceMeters": 103.6,
+      "estimatedWalkingSeconds": 83,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-59",
+      "from": "poi:gate-t3-49",
+      "to": "poi:gate-t3-52",
+      "distanceMeters": 74,
+      "estimatedWalkingSeconds": 59,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-60",
+      "from": "poi:gate-t3-52",
+      "to": "poi:gate-t3-47",
+      "distanceMeters": 105.9,
+      "estimatedWalkingSeconds": 85,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-61",
+      "from": "poi:gate-t3-47",
+      "to": "poi:gate-t3-50",
+      "distanceMeters": 79.6,
+      "estimatedWalkingSeconds": 64,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-62",
+      "from": "poi:gate-t3-50",
+      "to": "poi:gate-t3-48",
+      "distanceMeters": 47.6,
+      "estimatedWalkingSeconds": 38,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-63",
+      "from": "poi:gate-t3-48",
+      "to": "poi:gate-t3-45",
+      "distanceMeters": 78.1,
+      "estimatedWalkingSeconds": 62,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-64",
+      "from": "poi:gate-t3-45",
+      "to": "poi:gate-t3-46",
+      "distanceMeters": 71.3,
+      "estimatedWalkingSeconds": 57,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-65",
+      "from": "poi:gate-t3-46",
+      "to": "poi:gate-t3-43",
+      "distanceMeters": 79.3,
+      "estimatedWalkingSeconds": 63,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-66",
+      "from": "poi:gate-t3-43",
+      "to": "poi:gate-t3-15",
+      "distanceMeters": 713.1,
+      "estimatedWalkingSeconds": 570,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-67",
+      "from": "poi:gate-t3-15",
+      "to": "poi:gate-t3-17",
+      "distanceMeters": 89.2,
+      "estimatedWalkingSeconds": 71,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-68",
+      "from": "poi:gate-t3-17",
+      "to": "poi:gate-t3-18",
+      "distanceMeters": 80,
+      "estimatedWalkingSeconds": 64,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-69",
+      "from": "poi:gate-t3-18",
+      "to": "poi:gate-t3-19",
+      "distanceMeters": 98.3,
+      "estimatedWalkingSeconds": 79,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-70",
+      "from": "poi:gate-t3-19",
+      "to": "poi:gate-t3-20",
+      "distanceMeters": 73.5,
+      "estimatedWalkingSeconds": 59,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-71",
+      "from": "poi:gate-t3-20",
+      "to": "poi:gate-t3-22",
+      "distanceMeters": 80.2,
+      "estimatedWalkingSeconds": 64,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-72",
+      "from": "poi:gate-t3-22",
+      "to": "poi:gate-t3-27",
+      "distanceMeters": 440.7,
+      "estimatedWalkingSeconds": 353,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-73",
+      "from": "poi:gate-t3-27",
+      "to": "poi:gate-t3-29",
+      "distanceMeters": 90.1,
+      "estimatedWalkingSeconds": 72,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-74",
+      "from": "poi:gate-t3-29",
+      "to": "poi:gate-t3-31",
+      "distanceMeters": 97.2,
+      "estimatedWalkingSeconds": 78,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 3 gate connector (inferred)"
+    },
+    {
+      "id": "edge-75",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-36",
+      "distanceMeters": 535.2,
+      "estimatedWalkingSeconds": 428,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 36"
+    },
+    {
+      "id": "edge-76",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-55",
+      "distanceMeters": 370.3,
+      "estimatedWalkingSeconds": 296,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 55"
+    },
+    {
+      "id": "edge-77",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-62",
+      "distanceMeters": 503.6,
+      "estimatedWalkingSeconds": 403,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 62"
+    },
+    {
+      "id": "edge-78",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-53",
+      "distanceMeters": 326.1,
+      "estimatedWalkingSeconds": 261,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 53"
+    },
+    {
+      "id": "edge-79",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-60",
+      "distanceMeters": 460.3,
+      "estimatedWalkingSeconds": 368,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 60"
+    },
+    {
+      "id": "edge-80",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-58",
+      "distanceMeters": 419.2,
+      "estimatedWalkingSeconds": 335,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 58"
+    },
+    {
+      "id": "edge-81",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-56",
+      "distanceMeters": 380.8,
+      "estimatedWalkingSeconds": 305,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 56"
+    },
+    {
+      "id": "edge-82",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-51",
+      "distanceMeters": 434.2,
+      "estimatedWalkingSeconds": 347,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 51"
+    },
+    {
+      "id": "edge-83",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-54",
+      "distanceMeters": 341.3,
+      "estimatedWalkingSeconds": 273,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 54"
+    },
+    {
+      "id": "edge-84",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-49",
+      "distanceMeters": 239.2,
+      "estimatedWalkingSeconds": 191,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 49"
+    },
+    {
+      "id": "edge-85",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-52",
+      "distanceMeters": 303.1,
+      "estimatedWalkingSeconds": 242,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 52"
+    },
+    {
+      "id": "edge-86",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-47",
+      "distanceMeters": 197.4,
+      "estimatedWalkingSeconds": 158,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 47"
+    },
+    {
+      "id": "edge-87",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-50",
+      "distanceMeters": 271.7,
+      "estimatedWalkingSeconds": 217,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 50"
+    },
+    {
+      "id": "edge-88",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-48",
+      "distanceMeters": 240,
+      "estimatedWalkingSeconds": 192,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 48"
+    },
+    {
+      "id": "edge-89",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-45",
+      "distanceMeters": 164.8,
+      "estimatedWalkingSeconds": 132,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 45"
+    },
+    {
+      "id": "edge-90",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-46",
+      "distanceMeters": 214.9,
+      "estimatedWalkingSeconds": 172,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 46"
+    },
+    {
+      "id": "edge-91",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-43",
+      "distanceMeters": 135.7,
+      "estimatedWalkingSeconds": 109,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 43"
+    },
+    {
+      "id": "edge-92",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-15",
+      "distanceMeters": 619.7,
+      "estimatedWalkingSeconds": 496,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 15"
+    },
+    {
+      "id": "edge-93",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-17",
+      "distanceMeters": 639.8,
+      "estimatedWalkingSeconds": 512,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 17"
+    },
+    {
+      "id": "edge-94",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-18",
+      "distanceMeters": 580.1,
+      "estimatedWalkingSeconds": 464,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 18"
+    },
+    {
+      "id": "edge-95",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-19",
+      "distanceMeters": 672.9,
+      "estimatedWalkingSeconds": 538,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 19"
+    },
+    {
+      "id": "edge-96",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-20",
+      "distanceMeters": 612.7,
+      "estimatedWalkingSeconds": 490,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 20"
+    },
+    {
+      "id": "edge-97",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-22",
+      "distanceMeters": 654.3,
+      "estimatedWalkingSeconds": 523,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 22"
+    },
+    {
+      "id": "edge-98",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-27",
+      "distanceMeters": 218.9,
+      "estimatedWalkingSeconds": 175,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 27"
+    },
+    {
+      "id": "edge-99",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-29",
+      "distanceMeters": 288,
+      "estimatedWalkingSeconds": 230,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 29"
+    },
+    {
+      "id": "edge-100",
+      "from": "anchor:t3:hall",
+      "to": "poi:gate-t3-31",
+      "distanceMeters": 374.7,
+      "estimatedWalkingSeconds": 300,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 3 hall connector to Gate 31"
+    },
+    {
+      "id": "edge-101",
+      "from": "anchor:t3:entrance",
+      "to": "anchor:t3:hall",
+      "distanceMeters": 95.1,
+      "estimatedWalkingSeconds": 106,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift or escalator between the kerbside and the Terminal 3 departures hall (inferred connector)"
+    },
+    {
+      "id": "edge-102",
+      "from": "anchor:t3:hall",
+      "to": "poi:osm-node-4497803089",
+      "distanceMeters": 187.3,
+      "estimatedWalkingSeconds": 150,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to ICICI Bank"
+    },
+    {
+      "id": "edge-103",
+      "from": "anchor:t3:hall",
+      "to": "poi:osm-node-11143430248",
+      "distanceMeters": 285.7,
+      "estimatedWalkingSeconds": 229,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Lift"
+    },
+    {
+      "id": "edge-104",
+      "from": "anchor:t3:hall",
+      "to": "poi:osm-node-11209891343",
+      "distanceMeters": 161.7,
+      "estimatedWalkingSeconds": 129,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Krispy Kreme"
+    },
+    {
+      "id": "edge-105",
+      "from": "anchor:t3:hall",
+      "to": "poi:osm-node-11545414516",
+      "distanceMeters": 279.9,
+      "estimatedWalkingSeconds": 254,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to SBI ATM State Bank of India (inferred connector)"
+    },
+    {
+      "id": "edge-106",
+      "from": "anchor:t3:hall",
+      "to": "poi:osm-node-11545414517",
+      "distanceMeters": 289,
+      "estimatedWalkingSeconds": 261,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Citibank ATM (inferred connector)"
+    },
+    {
+      "id": "edge-107",
+      "from": "anchor:t1:hall",
+      "to": "anchor:t3:hall",
+      "distanceMeters": 3403.5,
+      "estimatedWalkingSeconds": 2040,
+      "transitionType": "shuttle",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "airport",
+      "instruction": "Take the airport inter-terminal shuttle (about 22 min ride; allow about 12 min for the wait). Confirm eligibility and baggage steps with staff.",
+      "wayId": "inter-terminal-t1-t3",
+      "name": "Inter-terminal shuttle",
+      "geometry": [
+        [
+          28.5645282,
+          77.1179783
+        ],
+        [
+          28.5518979,
+          77.0862354
+        ]
+      ]
+    },
+    {
+      "id": "edge-108",
+      "from": "anchor:t2:hall",
+      "to": "anchor:t3:hall",
+      "distanceMeters": 788.4,
+      "estimatedWalkingSeconds": 1200,
+      "transitionType": "shuttle",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "airport",
+      "instruction": "Take the airport inter-terminal shuttle (about 8 min ride; allow about 12 min for the wait). Confirm eligibility and baggage steps with staff.",
+      "wayId": "inter-terminal-t2-t3",
+      "name": "Inter-terminal shuttle",
+      "geometry": [
+        [
+          28.5589034,
+          77.087483
+        ],
+        [
+          28.5518979,
+          77.0862354
+        ]
+      ]
+    },
+    {
+      "id": "edge-109",
+      "from": "anchor:t1:hall",
+      "to": "anchor:t2:hall",
+      "distanceMeters": 3043.2,
+      "estimatedWalkingSeconds": 2040,
+      "transitionType": "shuttle",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "unverified",
+      "source": "airport",
+      "instruction": "Take the airport inter-terminal shuttle (about 22 min ride; allow about 12 min for the wait). Confirm eligibility and baggage steps with staff.",
+      "wayId": "inter-terminal-t1-t2",
+      "name": "Inter-terminal shuttle",
+      "geometry": [
+        [
+          28.5645282,
+          77.1179783
+        ],
+        [
+          28.5589034,
+          77.087483
+        ]
+      ]
+    }
+  ]
+}

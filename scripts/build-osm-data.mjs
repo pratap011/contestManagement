@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url'
 import { XMLParser } from 'fast-xml-parser'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const DATA_DIR = join(ROOT, 'apps/web/src/data/blr')
+const DATA_DIR = join(ROOT, 'apps/web/src/data/airports/blr')
 const CACHE_DIR = join(ROOT, '.data/osm-cache')
 const BBOX = '77.695,13.185,77.720,13.212'
 const OVERPASS_ENDPOINTS = [

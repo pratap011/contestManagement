@@ -36,8 +36,8 @@ Push keys explicitly as environment variables, and do not rely on the local defa
 2. In Render, create a new **Blueprint** and select this repository and that branch.
 3. Render reads `render.yaml`, creates a free PostgreSQL database, builds the Docker image and runs
    the health check at `/api/health`.
-4. Optional: set `AERODATABOX_API_KEY` for schedule coverage beyond the BLR board's current day.
-   The BLR board, queue displays and weather need no key.
+4. Optional: set `AERODATABOX_API_KEY` for schedule coverage beyond the BLR board's current day and
+   for DEL/BOM/HYD/MAA/CCU. The BLR board, queue displays and weather need no key.
 5. Set a stable `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` pair if you want Web Push subscriptions to
    survive redeploys. Generate one with
    `node -e "console.log(require('web-push').generateVAPIDKeys())"`.

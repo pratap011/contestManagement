@@ -1,0 +1,39 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "extractionUrl": "https://api.openstreetmap.org/api/0.6/map",
+  "extractedAt": "2026-11-02T20:10:31.802Z",
+  "bbox": "88.43,22.64,88.45,22.66",
+  "counts": {
+    "terminals": 2,
+    "floors": 4,
+    "pois": 52,
+    "nodes": 48,
+    "edges": 55,
+    "unconnectedPois": 0
+  },
+  "inferred": {
+    "hallConnectors": true,
+    "gateSpines": true,
+    "terminalEntrances": true,
+    "verticalConnectors": true,
+    "poiAccessConnectors": true,
+    "shuttleRide": false
+  },
+  "sources": {
+    "terminals": [
+      "way:372403771",
+      "way:219243641"
+    ],
+    "shuttle": "Kolkata Airport terminal information, retrieved 2026-11-02",
+    "shuttleUrl": "https://www.aai.aero/en/airports/kolkata"
+  },
+  "notes": [
+    "OpenStreetMap is the source of terminal footprints, mapped gates and named facilities.",
+    "Each terminal uses an inferred central hall, gate spine, entrance and access connectors because indoor corridors are not mapped consistently.",
+    "All OSM-derived features are unverified. All derived connectors are inferred and drawn as dashed lines.",
+    "Inter-terminal shuttle existence and stop directions come from the airport source; the schematic connector geometry is straight-line, not OSRM."
+  ]
+}

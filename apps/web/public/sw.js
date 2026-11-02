@@ -1,5 +1,5 @@
-/* BLR Navigator service worker: app-shell caching and Web Push notifications. */
-const CACHE_NAME = 'blr-navigator-shell-v1'
+/* Airport Navigator service worker: app-shell caching and Web Push notifications. */
+const CACHE_NAME = 'airport-navigator-shell-v1'
 const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg']
 
 self.addEventListener('install', (event) => {
@@ -72,9 +72,9 @@ self.addEventListener('push', (event) => {
   } catch {
     payload = {}
   }
-  const title = typeof payload.title === 'string' ? payload.title : 'BLR Navigator'
+  const title = typeof payload.title === 'string' ? payload.title : 'Airport Navigator'
   const options = {
-    body: typeof payload.body === 'string' ? payload.body : 'Open BLR Navigator for the latest details.',
+    body: typeof payload.body === 'string' ? payload.body : 'Open Airport Navigator for the latest details.',
     icon: '/icon.svg',
     badge: '/icon.svg',
     tag: typeof payload.tag === 'string' ? payload.tag : 'blr-navigator',

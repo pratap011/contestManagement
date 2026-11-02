@@ -88,7 +88,7 @@ export function transferWarnings(
   const warnings: string[] = []
   if (terminalsDiffer) {
     warnings.push(
-      'This connection changes terminals. Use the complimentary inter-terminal shuttle and allow for the wait, the ride, and a second security check.',
+      'This connection changes terminals. Use the airport-published inter-terminal transfer and allow for the wait, the ride, and a second security check.',
     )
   }
   if (context?.sameBooking === 'no') {
@@ -112,7 +112,7 @@ export function transferWarnings(
     context?.needsFormalities === 'unknown'
   ) {
     warnings.push(
-      'Some transfer details are still unknown. Confirm them with your airline or a Connections by BLR transfer desk.',
+      'Some transfer details are still unknown. Confirm them with your airline or the airport transfer desk.',
     )
   }
   return warnings

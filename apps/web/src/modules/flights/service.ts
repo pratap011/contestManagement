@@ -22,11 +22,12 @@ const ERROR_COPY: Record<string, string> = {
   invalid: 'The flight number or travel date is invalid.',
 }
 
-export function createConfiguredFlightProvider(): FlightProvider | null {
+export function createConfiguredFlightProvider(airportCode = 'BLR'): FlightProvider | null {
   if (!appConfig.providerLookupEnabled) return null
   return new HttpFlightProvider({
     endpoint: appConfig.providerEndpoint,
     timeoutMs: appConfig.providerTimeoutMs,
+    airportCode,
   })
 }
 
@@ -87,7 +88,7 @@ export async function lookupFlights(
 
 export function flightLookupErrorMessage(outcome: FlightLookupOutcome): string | null {
   if (outcome.status === 'no-results') {
-    return 'No matching flight was found on the live BLR board. The board covers today only, so check the date or enter the details manually.'
+    return 'No matching flight was found. The airport board covers today only, so check the date or enter the details manually.'
   }
   if (outcome.status === 'disabled') {
     return 'Live flight lookup is not enabled in this deployment. Enter the details manually or use a demo journey from the home page.'

@@ -33,6 +33,7 @@ export const appConfig = {
   map: {
     /** OpenFreeMap vector tiles: no API key and no per-request tile limit. */
     styleUrl: 'https://tiles.openfreemap.org/styles/liberty',
+    darkStyleUrl: 'https://tiles.openfreemap.org/styles/dark',
     mapAttribution:
       '<a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a> · © <a href="https://openmaptiles.org" target="_blank" rel="noreferrer">OpenMapTiles</a> · Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors (ODbL)',
     maxZoom: 19,

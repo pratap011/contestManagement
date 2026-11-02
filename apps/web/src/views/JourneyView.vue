@@ -30,6 +30,7 @@ import {
   contextLabel,
   isConnectionContextComplete,
 } from '@/modules/journeys/connection'
+import { longestReportedWaitMinutes, planLeaveBy } from '@/modules/journeys/leave-by'
 import {
   facilitiesForGateFloor,
   recommendFacilities,
@@ -137,6 +138,45 @@ const departureGateResolution = computed(() => {
   )
 })
 const departureGatePoi = computed(() => departureGateResolution.value?.poi)
+
+const departureStartPoi = computed(() =>
+  departureTerminalId.value ? recommendedStartingPoi(departureTerminalId.value) : undefined,
+)
+
+const departureWalk = computed(() => {
+  const from = departureStartPoi.value
+  const to = departureGatePoi.value
+  if (!from || !to || from.id === to.id) return null
+  const outcome = findRoute(airportDataset.nodes, airportDataset.edges, {
+    fromNodeId: from.nodeId,
+    toNodeId: to.nodeId,
+    passengerType: 'departing',
+    accessibleOnly: stepFree.value,
+    allowUnverified: true,
+    paceFactor: paceFactor.value,
+  })
+  return outcome.ok ? outcome.route : null
+})
+
+const departureQueue = computed(() =>
+  liveQueues.value.find((item) => item.direction === 'departure'),
+)
+
+const leaveByPlan = computed(() =>
+  planLeaveBy({
+    scheduledDeparture: departure.value?.scheduledDeparture,
+    boardingBufferMinutes: appConfig.connection.boardingBufferMinutes,
+    securityWaitMinutes: longestReportedWaitMinutes(departureQueue.value),
+    walkMinutes: departureWalk.value
+      ? departureWalk.value.estimatedWalkingSeconds / 60
+      : null,
+  }),
+)
+
+const leaveByPassed = computed(() =>
+  leaveByPlan.value ? new Date(leaveByPlan.value.leaveBy).getTime() <= now.value : false,
+)
+
 const arrivalGateResolution = computed(() => {
   if (!arrivalTerminalId.value || !arrival.value) return null
   return resolveGatePoi(arrivalTerminalId.value, arrival.value.gate, arrival.value.gateFloor)
@@ -489,7 +529,10 @@ onBeforeUnmount(() => {
             <ul class="checks">
               <li>Keep your boarding pass and travel documents ready.</li>
               <li>Check the departure gate and boarding time on airport screens.</li>
-              <li>Allow extra time for security queues and walking; this estimate does not include them.</li>
+              <li>
+                The countdown is the scheduled departure time, not the boarding or gate-closing time.
+                Use the leave-by estimate for the waiting and walking parts it can account for.
+              </li>
               <li>The live board can change gate or time; re-check it before you leave for the airport.</li>
               <li>If your flight details change, edit them in the flight review instead of assuming the countdown is right.</li>
             </ul>
@@ -518,6 +561,55 @@ onBeforeUnmount(() => {
             role="departure"
             :time-zone="timeZone"
           />
+          <section v-if="leaveByPlan" class="card" aria-labelledby="leave-by-heading">
+            <div class="card-header">
+              <div>
+                <h2 id="leave-by-heading">Leave-by estimate</h2>
+                <p class="small muted no-gap">
+                  Informational planning aid, not a boarding rule or a guarantee.
+                </p>
+              </div>
+              <span class="badge unverified">Estimate</span>
+            </div>
+            <p class="duration-figure">
+              Start walking by {{ formatTime(leaveByPlan.leaveBy, timeZone) }}
+            </p>
+            <p class="small muted">
+              From {{ departureStartPoi?.name ?? 'your mapped start point' }} towards
+              {{ departureGatePoi?.name ?? 'your departure gate' }}, so you reach the gate around
+              {{ formatTime(leaveByPlan.boarding, timeZone) }}.
+            </p>
+            <dl class="meta-list">
+              <dt>Boarding allowance</dt>
+              <dd>{{ leaveByPlan.boardingBufferMinutes }} min kept free before departure</dd>
+              <dt>Mapped walk to gate</dt>
+              <dd>
+                {{ leaveByPlan.walkMinutes === null
+                  ? 'Not available'
+                  : `${leaveByPlan.walkMinutes} min, OpenStreetMap estimate` }}
+              </dd>
+              <dt>Reported checkpoint wait</dt>
+              <dd>
+                {{ leaveByPlan.securityWaitMinutes === null
+                  ? 'Not published'
+                  : `${leaveByPlan.securityWaitMinutes} min, airport-reported longest wait` }}
+              </dd>
+            </dl>
+            <p v-if="leaveByPlan.gaps.includes('security-wait')" class="tiny muted">
+              Security and immigration waits are not published right now, so add your own queue time.
+            </p>
+            <p v-if="leaveByPlan.gaps.includes('walk')" class="tiny muted">
+              No mapped walk between a start point and the gate was found, so walking time is not
+              included.
+            </p>
+            <p class="tiny muted no-gap">
+              Excludes travel to the airport, lift waits, bag drop and airline cut-off times.
+            </p>
+            <p v-if="leaveByPassed" class="notice warn small">
+              This estimate has passed. Head towards your gate and ask airline or airport staff for
+              help.
+            </p>
+          </section>
           <section class="card">
             <h2>Terminal status</h2>
             <dl class="meta-list">

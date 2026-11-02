@@ -23,6 +23,8 @@ and optional accounts.
 - Live navigation: device position, accuracy, next step, remaining time and off-route warning.
 - T1↔T2 transfer route and airport-published Connections by BLR scenarios for all three
   international/domestic combinations.
+- Departure leave-by estimate: boarding allowance, mapped walk to the gate and the airport's
+  reported checkpoint waits, with missing parts shown as gaps.
 - Layover connection timing, context questions, required checks and time-buffered facility suggestions.
 - Installable PWA with an app-shell cache and optional Web Push watches for gate, terminal, status,
   time and leave-by alerts.

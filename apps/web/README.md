@@ -34,8 +34,10 @@ npm run build
 - `src/modules/airport-directory/` — OSM-derived dataset, validation, POI search and gate fallback.
 - `src/modules/navigation/` — A*, costs, route validation, directions, live progress, geo helpers.
 - `src/modules/flights/` — live board adapter, manual and demo providers, validation, lookup service.
-- `src/modules/journeys/` — connection assessment and time-buffered facility recommendations.
-- `src/components/MapCanvas.vue` — Leaflet map, OSM tiles, markers, route/shuttle overlays, user dot.
+- `src/modules/journeys/` — connection assessment, transfer scenarios and facility recommendations.
+- `src/modules/live/` — queue, weather and aircraft-position clients.
+- `src/composables/usePushNotifications.ts` — Web Push subscription and watch management.
+- `src/components/MapCanvas.vue` — MapLibre map, OpenFreeMap tiles, markers, route/shuttle overlays, user dot.
 - `src/views/` — home, flight review, map, journey assistant, account and data/privacy screens.
 - `src/stores/` — Pinia journey persistence and optional account session.
 
@@ -52,5 +54,7 @@ rooms, POIs, graph nodes/edges, the T1↔T2 shuttle and a metadata file. See
 - No field-verified accessibility audit.
 - Security/immigration boundaries are not directional graph rules; terminal-change routes warn
   explicitly.
-- Live board coverage is the current airport day unless Aviationstack is configured.
-- OSM public tiles are used at prototype traffic levels; switch to a compliant tile host at scale.
+- Live board coverage is the current airport day unless AeroDataBox is configured.
+- The basemap uses OpenFreeMap vector tiles; keep OpenFreeMap/OpenMapTiles/OSM attribution visible.
+- Web Push delivery is best-effort and needs a stable VAPID keypair in production.
+- ADS-B aircraft position may be unavailable indoors or when OpenSky is unreachable.

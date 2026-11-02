@@ -52,8 +52,9 @@ function clearJourney() {
       <strong>{{ appConfig.providerLookupEnabled ? 'enabled' : 'disabled' }}</strong>
       and runs through this app's server-side proxy. The primary source is the public BLR Airport
       flight board, which supplies today's scheduled and estimated times, terminal and gate. If an
-      <code>AVIATIONSTACK_API_KEY</code> is configured, Aviationstack can widen coverage to other
-      dates. Manual entry and deterministic demo flights always remain available.
+      <code>AERODATABOX_API_KEY</code> is configured, AeroDataBox can widen coverage to other dates;
+      its free plan is non-commercial and requires attribution. Manual entry and deterministic demo
+      flights always remain available.
     </p>
     <ul>
       <li>Flight results are labelled as live board, provider, user-entered, or demo.</li>
@@ -70,6 +71,25 @@ function clearJourney() {
       launch.
     </p>
 
+    <h2>Live airport context</h2>
+    <p>
+      Checkpoint waits come from the airport's public queue displays, weather from Open-Meteo, and
+      aircraft positions from OpenSky Network ADS-B. Each value carries its source and retrieval
+      time, is cached briefly on the server, and falls back to a clear unavailable state. Queue
+      estimates exclude walking, lift waits and airline cut-offs. ADS-B is not a schedule or gate
+      feed and can be missing.
+    </p>
+
+    <h2>Optional notifications</h2>
+    <p>
+      If you choose “Watch this flight”, the browser creates a Web Push subscription and the server
+      stores it with the flight number, date, role and your leave-by lead time. No account is needed.
+      The server polls the public BLR board and sends gate, terminal, boarding/status, time-change and
+      leave-by notifications. You can turn the watch off in the journey assistant; that removes the
+      stored subscription mapping. Delivery is best-effort and depends on the airport board, your
+      browser and push service; it never replaces airport screens.
+    </p>
+
     <h2>OpenStreetMap and ODbL</h2>
     <p>
       Airport geometry and facilities are derived from OpenStreetMap, extracted
@@ -82,10 +102,10 @@ function clearJourney() {
       </a>. The required attribution is shown on the map and in this page.
     </p>
     <p>
-      Do not copy proprietary airport maps or app assets. The public OSM tile server is used for the
-      basemap with attribution at prototype traffic levels. It is not treated as unlimited free tile
-      hosting; a production deployment should use a compliant tile provider or self-hosted tiles.
-      The committed OSM-derived JSON is regenerated with <code>npm run data:osm</code>; the generator
+      Do not copy proprietary airport maps or app assets. The basemap uses OpenFreeMap vector tiles
+      rendered with MapLibre GL, with OpenFreeMap, OpenMapTiles and OpenStreetMap/ODbL attribution
+      visible on the map. The committed OSM-derived JSON is regenerated with
+      <code>npm run data:osm</code>; the generator uses Overpass (with the OSM API as a fallback) and
       records the extraction URL, date, source IDs and inferred segments.
     </p>
     <p>
@@ -109,7 +129,7 @@ function clearJourney() {
           <tr>
             <td><span class="badge verified">Verified</span></td>
             <td>Checked against a reliable, permitted source or on-site validation.</td>
-            <td>Eligible for a route presented as reliable. The current OSM import has no field-verified edges.</td>
+            <td>Eligible for a route presented as reliable. Only the airport-confirmed inter-terminal shuttle and its two kerbside stops currently use this status; walking edges are not field-verified.</td>
           </tr>
           <tr>
             <td><span class="badge unverified">Unverified</span></td>
@@ -132,18 +152,19 @@ function clearJourney() {
 
     <h2>T1↔T2 transfer</h2>
     <p>
-      The map contains the complimentary inter-terminal shuttle. The stop positions come from
-      OpenStreetMap, the road geometry from OSRM/OSM roads, and the public service guidance says the
-      terminals are about 600 m apart with services roughly every 10 minutes and a ride of about
-      10 minutes. This build allows about {{ airport.shuttle.travelMinutes }} minutes for the ride and
+      The map contains the complimentary inter-terminal shuttle. The airport's “Connections by BLR”
+      guidance confirms the T1 departure-kerb stop next to Relay and the T2 arrival-kerb stops at
+      P16/P17; the OSM nodes provide mapped positions and OSRM/OSM roads provide the drawn geometry.
+      This build allows about {{ airport.shuttle.travelMinutes }} minutes for the ride and
       {{ airport.shuttle.waitAllowanceMinutes }} minutes for the wait.
       {{ shuttleEdge ? 'The shuttle edge is present in the routing graph.' : 'The shuttle edge is missing from this dataset.' }}
     </p>
     <p class="small muted">
-      Transfer eligibility, security/immigration, baggage recheck and boarding cut-offs are not
-      determined by this app. The route warns you to confirm them with airline or airport staff.
-      Sources: BLR Airport public transfer guidance and the airport's “Connections by BLR” service
-      announcement; stop and road geometry from OpenStreetMap/OSRM.
+      The layover assistant shows the airport's international→domestic, domestic→international and
+      international→international transfer scenarios, plus warnings based on your booking, baggage
+      and formalities answers. Transfer eligibility, visa rules, security/immigration, baggage
+      recheck and boarding cut-offs are not determined by this app. Approximate transfer-desk
+      markers are labelled inferred. Ask a Connections by BLR desk or airline staff.
     </p>
 
     <h2>Connection guidance</h2>
@@ -214,7 +235,7 @@ function clearJourney() {
       <dt>Dataset updated</dt>
       <dd>{{ airport.lastUpdated }}</dd>
       <dt>OSM extraction</dt>
-      <dd>{{ osmMeta.extractedAt }}</dd>
+      <dd>{{ osmMeta.extractedAt }} · {{ osmMeta.extractionMethod }}</dd>
       <dt>OSM bounding box</dt>
       <dd>{{ osmMeta.bbox }}</dd>
       <dt>Attribution</dt>

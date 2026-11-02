@@ -18,6 +18,7 @@ import {
   verifyPassword,
   type SessionUser,
 } from './auth.ts'
+import { fetchAircraftPosition } from './aircraft.ts'
 import { config } from './config.ts'
 import type { Database } from './db.ts'
 import {
@@ -26,6 +27,19 @@ import {
   isValidTravelDate,
   searchLiveFlights,
 } from './flights.ts'
+import {
+  ensurePushReady,
+  getVapidPublicKey,
+  isWatchWithinWindow,
+  readSubscription,
+  readWatch,
+  removeEndpoint,
+  saveWatch,
+  sendTestNotification,
+} from './push.ts'
+import { fetchQueues, type QueueDirection, type QueueTerminal } from './queues.ts'
+import { UpstreamError } from './upstream.ts'
+import { fetchWeather } from './weather.ts'
 
 interface UserRow extends Record<string, unknown> {
   id: string
@@ -82,6 +96,19 @@ function flightErrorStatus(code: FlightProviderError['code']): number {
   return 502
 }
 
+function upstreamErrorStatus(code: UpstreamError['code']): number {
+  if (code === 'quota') return 429
+  if (code === 'timeout') return 504
+  if (code === 'unauthorized') return 502
+  if (code === 'malformed') return 502
+  return 503
+}
+
+function upstreamErrorBody(error: unknown, fallback: string): { code: string; message: string } {
+  if (error instanceof UpstreamError) return { code: error.code, message: error.message }
+  return { code: 'unavailable', message: fallback }
+}
+
 export async function buildApp(db: Database): Promise<Express> {
   const app = express()
   app.disable('x-powered-by')
@@ -118,6 +145,20 @@ export async function buildApp(db: Database): Promise<Express> {
     legacyHeaders: false,
     message: { error: 'Too many live flight lookups. Please wait a moment.' },
   })
+  const liveDataLimiter = rateLimit({
+    windowMs: 60_000,
+    limit: 60,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Too many live-data requests. Please wait a moment.' },
+  })
+  const pushLimiter = rateLimit({
+    windowMs: 60_000,
+    limit: 20,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Too many notification requests. Please wait a moment.' },
+  })
 
   app.use('/api', apiLimiter)
 
@@ -125,7 +166,11 @@ export async function buildApp(db: Database): Promise<Express> {
     res.json({
       ok: true,
       database: db.driver,
-      liveFlightSource: config.aviationstackKey ? 'blr-board+aviationstack' : 'blr-board',
+      liveFlightSource: config.aerodataboxKey ? 'blr-board+aerodatabox' : 'blr-board',
+      push: Boolean(getVapidPublicKey()),
+      liveQueues: true,
+      aircraft: true,
+      weather: true,
     })
   })
 
@@ -253,6 +298,111 @@ export async function buildApp(db: Database): Promise<Express> {
     res.status(204).end()
   })
 
+  app.get('/api/queues', liveDataLimiter, async (req: Request, res: Response) => {
+    const terminal = String(req.query.terminal ?? '').toUpperCase()
+    const direction = String(req.query.direction ?? '')
+    if (
+      (terminal !== 'T1' && terminal !== 'T2') ||
+      (direction !== 'departure' && direction !== 'arrival')
+    ) {
+      res.status(400).json({ error: 'Use terminal T1 or T2 and direction departure or arrival.' })
+      return
+    }
+    try {
+      const queues = await fetchQueues(terminal as QueueTerminal, direction as QueueDirection)
+      res.setHeader('Cache-Control', 'public, max-age=60')
+      res.json(queues)
+    } catch (error) {
+      res
+        .status(error instanceof UpstreamError ? upstreamErrorStatus(error.code) : 503)
+        .json({ error: upstreamErrorBody(error, 'The airport queue service is unavailable.') })
+    }
+  })
+
+  app.get('/api/weather', liveDataLimiter, async (_req: Request, res: Response) => {
+    try {
+      const weather = await fetchWeather()
+      res.setHeader('Cache-Control', 'public, max-age=600')
+      res.json(weather)
+    } catch (error) {
+      res
+        .status(error instanceof UpstreamError ? upstreamErrorStatus(error.code) : 503)
+        .json({ error: upstreamErrorBody(error, 'Weather context is unavailable.') })
+    }
+  })
+
+  app.get('/api/aircraft', liveDataLimiter, async (req: Request, res: Response) => {
+    const flightNumber = String(req.query.flightNumber ?? '')
+    if (!isValidFlightNumber(flightNumber)) {
+      res.status(400).json({ error: 'Enter a valid flight number.' })
+      return
+    }
+    try {
+      const aircraft = await fetchAircraftPosition(flightNumber)
+      res.setHeader('Cache-Control', 'public, max-age=45')
+      res.json(aircraft)
+    } catch (error) {
+      res
+        .status(error instanceof UpstreamError ? upstreamErrorStatus(error.code) : 503)
+        .json({ error: upstreamErrorBody(error, 'Aircraft position is unavailable.') })
+    }
+  })
+
+  app.get('/api/push/key', pushLimiter, async (_req: Request, res: Response) => {
+    const publicKey = await ensurePushReady()
+    res.json({ enabled: Boolean(publicKey), publicKey, watchWindowDays: config.pushWatchDays })
+  })
+
+  app.post('/api/push/subscribe', pushLimiter, async (req: Request, res: Response) => {
+    const subscription = readSubscription(req.body?.subscription)
+    const watch = readWatch(req.body?.watch)
+    if (!subscription || !watch) {
+      res.status(400).json({
+        error: 'Send a valid browser push subscription and a flight number, date and role.',
+      })
+      return
+    }
+    if (!isWatchWithinWindow(watch.date)) {
+      res.status(400).json({
+        error: `Flight notifications can be enabled from the day before travel through ${config.pushWatchDays} days ahead.`,
+      })
+      return
+    }
+    await ensurePushReady()
+    const saved = await saveWatch(db, subscription, watch)
+    res.status(201).json({ saved: true, id: saved.id, watch })
+  })
+
+  app.post('/api/push/unsubscribe', pushLimiter, async (req: Request, res: Response) => {
+    const subscription = readSubscription(req.body?.subscription)
+    if (!subscription) {
+      res.status(400).json({ error: 'Send a valid browser push subscription.' })
+      return
+    }
+    await removeEndpoint(db, subscription.endpoint)
+    res.status(204).end()
+  })
+
+  app.post('/api/push/test', pushLimiter, async (req: Request, res: Response) => {
+    const subscription = readSubscription(req.body?.subscription)
+    if (!subscription) {
+      res.status(400).json({ error: 'Send a valid browser push subscription.' })
+      return
+    }
+    await ensurePushReady()
+    const result = await sendTestNotification(subscription)
+    if (result === 'expired') {
+      await removeEndpoint(db, subscription.endpoint)
+      res.status(410).json({ error: 'This browser subscription has expired. Enable notifications again.' })
+      return
+    }
+    if (result === 'failed') {
+      res.status(502).json({ error: 'The test notification could not be delivered.' })
+      return
+    }
+    res.json({ sent: true })
+  })
+
   app.get('/api/flights', flightLimiter, async (req: Request, res: Response) => {
     const flightNumber = String(req.query.flightNumber ?? '')
     const date = String(req.query.date ?? '')
@@ -292,7 +442,9 @@ export async function buildApp(db: Database): Promise<Express> {
         index: false,
         maxAge: '1h',
         setHeaders: (res, path) => {
-          if (path.endsWith('index.html')) res.setHeader('Cache-Control', 'no-cache')
+          if (path.endsWith('index.html') || path.endsWith('sw.js')) {
+            res.setHeader('Cache-Control', 'no-cache')
+          }
         },
       }),
     )

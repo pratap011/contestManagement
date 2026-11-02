@@ -81,4 +81,27 @@ export async function initSchema(db: Database): Promise<void> {
     )
   `)
   await db.query('create index if not exists journeys_updated_at_idx on journeys (updated_at)')
+  await db.query(`
+    create table if not exists push_watches (
+      id text primary key,
+      endpoint text not null,
+      subscription jsonb not null,
+      flight_number text not null,
+      flight_date text not null,
+      role text not null,
+      lead_minutes integer not null default 90,
+      last_gate text,
+      last_terminal text,
+      last_status text,
+      last_departure text,
+      leave_by_sent boolean not null default false,
+      initialised boolean not null default false,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      unique (endpoint, flight_number, flight_date, role)
+    )
+  `)
+  await db.query(
+    'create index if not exists push_watches_flight_idx on push_watches (flight_date, flight_number)',
+  )
 }

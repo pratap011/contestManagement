@@ -17,7 +17,7 @@ export interface FlightResult {
   gateFloor?: number
   status?: string
   source: FlightSource
-  provider?: 'blr-airport-board' | 'aviationstack'
+  provider?: 'blr-airport-board' | 'aerodatabox'
   direction?: FlightDirection
   fetchedAt?: string
 }

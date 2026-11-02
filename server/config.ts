@@ -47,17 +47,40 @@ export const config = {
   cookieName: 'blr_session',
   sessionDays: 7,
   appOrigins: readOrigins(process.env.APP_ORIGIN),
-  aviationstackKey: process.env.AVIATIONSTACK_API_KEY?.trim() || null,
-  aviationstackBaseUrl:
-    process.env.AVIATIONSTACK_BASE_URL?.trim() || 'https://api.aviationstack.com/v1',
+  aerodataboxKey:
+    process.env.AERODATABOX_API_KEY?.trim() || process.env.RAPIDAPI_KEY?.trim() || null,
+  aerodataboxBaseUrl:
+    process.env.AERODATABOX_BASE_URL?.trim() ||
+    'https://aerodatabox.p.rapidapi.com',
+  aerodataboxHost: process.env.AERODATABOX_HOST?.trim() || 'aerodatabox.p.rapidapi.com',
   blrBoardUrl:
     process.env.BLR_BOARD_URL?.trim() ||
     'https://gateway.bengaluruairport.com/fis/v2/api/aodb/flights',
   blrGateDirectoryUrl:
     process.env.BLR_GATE_DIRECTORY_URL?.trim() ||
     'https://gateway.bengaluruairport.com/fis/v2/api/aodb/gates',
+  blrQueueBaseUrl:
+    process.env.BLR_QUEUE_URL?.trim() ||
+    'https://gateway.bengaluruairport.com/fis/v2/api/qms/general',
+  queueCacheTtlMs: readInt(process.env.QUEUE_CACHE_TTL_MS, 60_000),
+  weatherUrl:
+    process.env.WEATHER_URL?.trim() || 'https://api.open-meteo.com/v1/forecast',
+  weatherCacheTtlMs: readInt(process.env.WEATHER_CACHE_TTL_MS, 10 * 60_000),
+  openskyBaseUrl:
+    process.env.OPENSKY_BASE_URL?.trim() || 'https://opensky-network.org/api',
+  openskyTokenUrl:
+    process.env.OPENSKY_TOKEN_URL?.trim() ||
+    'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token',
+  openskyClientId: process.env.OPENSKY_CLIENT_ID?.trim() || null,
+  openskyClientSecret: process.env.OPENSKY_CLIENT_SECRET?.trim() || null,
+  aircraftCacheTtlMs: readInt(process.env.AIRCRAFT_CACHE_TTL_MS, 45_000),
   flightProviderTimeoutMs: readInt(process.env.FLIGHT_PROVIDER_TIMEOUT_MS, 6000),
   flightCacheTtlMs: readInt(process.env.FLIGHT_CACHE_TTL_MS, 60_000),
+  vapidPublicKey: process.env.VAPID_PUBLIC_KEY?.trim() || null,
+  vapidPrivateKey: process.env.VAPID_PRIVATE_KEY?.trim() || null,
+  vapidSubject: process.env.VAPID_SUBJECT?.trim() || 'mailto:blr-navigator@example.com',
+  pushPollIntervalMs: readInt(process.env.PUSH_POLL_INTERVAL_MS, 5 * 60_000),
+  pushWatchDays: readInt(process.env.PUSH_WATCH_DAYS, 2),
   webDistPath: fileURLToPath(new URL('../apps/web/dist', import.meta.url)),
 } as const
 

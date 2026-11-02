@@ -10,6 +10,8 @@ export default defineConfig({
       NODE_ENV: 'test',
       JWT_SECRET: 'test-only-secret-value-that-is-long-enough',
       PGLITE_DATA_DIR: '.data/test-pglite',
+      AERODATABOX_API_KEY: 'test-aerodatabox-key',
+      VAPID_KEYS_FILE: '.data/test-vapid.json',
     },
   },
 })

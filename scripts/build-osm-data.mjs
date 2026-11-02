@@ -16,8 +16,24 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const DATA_DIR = join(ROOT, 'apps/web/src/data/blr')
 const CACHE_DIR = join(ROOT, '.data/osm-cache')
 const BBOX = '77.695,13.185,77.720,13.212'
-const OSM_API = `https://api.openstreetmap.org/api/0.6/map?bbox=${BBOX}`
+const OVERPASS_ENDPOINTS = [
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+]
+const [BBOX_WEST, BBOX_SOUTH, BBOX_EAST, BBOX_NORTH] = BBOX.split(',')
+const OVERPASS_QUERY = `[out:xml][timeout:180];
+(
+  nwr(${BBOX_SOUTH},${BBOX_WEST},${BBOX_NORTH},${BBOX_EAST});
+);
+out body;
+>;
+out skel qt;`
+const OSM_SOURCE_URL = 'https://www.openstreetmap.org/'
+const OSM_API_URL = `https://api.openstreetmap.org/api/0.6/map?bbox=${BBOX}`
 const EXTRACTED_AT = new Date().toISOString()
+let extractionMethod = 'cached OpenStreetMap extract'
+let extractionUrl = OSM_SOURCE_URL
 const REFRESH = process.argv.includes('--refresh')
 
 const T1_WAY_ID = '60046909'
@@ -191,12 +207,48 @@ async function loadOsmXml() {
   const maxAge = 24 * 60 * 60 * 1000
   if (!REFRESH && existsSync(cacheFile) && Date.now() - statSync(cacheFile).mtimeMs < maxAge) {
     console.log(`Using cached OSM extract ${cacheFile}`)
+    extractionMethod = 'cached OpenStreetMap extract'
+    extractionUrl = OSM_SOURCE_URL
     return readFileSync(cacheFile, 'utf8')
   }
-  console.log(`Fetching ${OSM_API}`)
-  const response = await fetch(OSM_API, {
+  let lastError = ''
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    console.log(`Fetching ${endpoint} (Overpass)`)
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'BLR-Navigator/1.0 (OSM airport data build)',
+          Accept: 'application/xml',
+        },
+        body: new URLSearchParams({ data: OVERPASS_QUERY }),
+        signal: AbortSignal.timeout(180_000),
+      })
+      if (!response.ok) {
+        lastError = `HTTP ${response.status}`
+        continue
+      }
+      const xml = await response.text()
+      if (!xml.includes('<osm')) {
+        lastError = 'unexpected response body'
+        continue
+      }
+      writeFileSync(cacheFile, xml)
+      extractionMethod = 'Overpass API'
+      extractionUrl = endpoint
+      return xml
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error)
+    }
+  }
+
+  // Overpass instances can be at capacity for long periods. The OSM API bbox
+  // endpoint is a slower but authoritative fallback for this small area.
+  console.warn(`Overpass unavailable (${lastError}); falling back to the OSM API bbox endpoint.`)
+  const response = await fetch(OSM_API_URL, {
     headers: {
-      'User-Agent': 'BLR-Navigator/1.0 (OSM airport data build; contact: local-dev)',
+      'User-Agent': 'BLR-Navigator/1.0 (OSM airport data build)',
       Accept: 'application/xml',
     },
     signal: AbortSignal.timeout(180_000),
@@ -205,6 +257,8 @@ async function loadOsmXml() {
   const xml = await response.text()
   if (!xml.includes('<osm')) throw new Error('OSM API returned an unexpected response')
   writeFileSync(cacheFile, xml)
+  extractionMethod = 'OpenStreetMap API 0.6 (bbox fallback)'
+  extractionUrl = OSM_API_URL
   return xml
 }
 
@@ -934,6 +988,33 @@ if (t2Level1WalkwayNodes.length) {
   if (t2Hall) connectAnchorToWalkway(t2Hall.nodeId, 't2', 't2-l1', 30)
 }
 
+// Approximate transfer-desk anchors. The airport confirms that dedicated
+// Connections by BLR desks exist in both terminals, but it does not publish
+// exact indoor coordinates; these are searchable with an inferred warning.
+addAnchor({
+  id: 'anchor:t1:transfer-desk',
+  name: 'T1 Connections by BLR transfer desk (approx.)',
+  category: 'info',
+  terminalId: 't1',
+  floorId: 't1-l0',
+  point: terminalCenters.t1,
+  description:
+    'Approximate location of the airport transfer assistance area. Official guidance confirms dedicated transfer desks in T1; the exact desk position is not mapped. Ask staff or follow the blue and yellow Connections by BLR signs.',
+})
+connectAnchorToWalkway('anchor:t1:transfer-desk', 't1', 't1-l0', 400)
+
+addAnchor({
+  id: 'anchor:t2:transfer-desk',
+  name: 'T2 Connections by BLR transfer desk (approx.)',
+  category: 'info',
+  terminalId: 't2',
+  floorId: 't2-l0',
+  point: terminalCenters.t2,
+  description:
+    'Approximate location of the airport transfer assistance area. Official guidance confirms dedicated transfer desks in T2; the exact desk position is not mapped. Ask staff or follow the blue and yellow Connections by BLR signs.',
+})
+connectAnchorToWalkway('anchor:t2:transfer-desk', 't2', 't2-l0', 400)
+
 const t1GateArea = gateGroups.has('t1|t1-l1') ? gateAreaByGroup.get('t1|t1-l1') : null
 const t2Level1GateArea = gateGroups.has('t2|t2-l1') ? gateAreaByGroup.get('t2|t2-l1') : null
 const t2Level3GateArea = gateGroups.has('t2|t2-l3') ? gateAreaByGroup.get('t2|t2-l3') : null
@@ -1000,6 +1081,24 @@ const t1StopPoi = pois.find((poi) => poi.osmId === T1_SHUTTLE_STOP_ID)
 const t2StopPoi = pois.find((poi) => poi.osmId === T2_SHUTTLE_STOP_ID)
 if (!t1StopPoi || !t2StopPoi) throw new Error('Shuttle stops did not become POIs')
 
+// The airport's public transfer page confirms the complimentary shuttle and
+// these kerbside stops. The objects are still OSM nodes, so name the official
+// stop and keep the airport as the verification source.
+Object.assign(t1StopPoi, {
+  name: 'T1 inter-terminal shuttle stop (departure kerb)',
+  source: 'airport',
+  verificationStatus: 'verified',
+  description:
+    'Complimentary T1↔T2 shuttle stop. Airport guidance places it on the T1 departure kerb, inner lane next to the Relay outlet. OSM node used for the mapped position; confirm the bay with signage.',
+})
+Object.assign(t2StopPoi, {
+  name: 'T2 inter-terminal shuttle stop (arrival kerb, P16/P17)',
+  source: 'airport',
+  verificationStatus: 'verified',
+  description:
+    'Complimentary T1↔T2 shuttle stop. Airport guidance places it on the T2 arrival kerb, inner lane at pick-up points P16 and P17. OSM node used for the mapped position; confirm the bay with signage.',
+})
+
 const shuttleGeometry = await fetchShuttleGeometry(t1ShuttleStop.point, t2ShuttleStop.point)
 const shuttleRideSeconds = Math.max(600, shuttleGeometry.durationSeconds) + 300
 const shuttleEdge = addEdge(t1StopPoi.nodeId, t2StopPoi.nodeId, {
@@ -1008,7 +1107,7 @@ const shuttleEdge = addEdge(t1StopPoi.nodeId, t2StopPoi.nodeId, {
   estimatedWalkingSeconds: shuttleRideSeconds,
   allowedPassengerTypes: ['departing', 'connecting', 'staff'],
   accessible: true,
-  verificationStatus: 'inferred',
+  verificationStatus: 'verified',
   source: 'airport',
   wayId: 'inter-terminal-shuttle',
   name: 'Inter-terminal shuttle',
@@ -1042,12 +1141,13 @@ const airport = {
     waitAllowanceMinutes: 5,
     stopNames: ['T1 inter-terminal shuttle stop', 'T2 inter-terminal shuttle stop'],
     notes: [
-      'Complimentary inter-terminal shuttle between T1 and T2.',
-      'Allow about 10 minutes for the ride and about 5 minutes for the wait.',
-      'If you are connecting, confirm with your airline or airport staff whether you need to clear security or immigration again.',
-      'Public stop locations are mapped from OpenStreetMap; follow airport signage on the day.',
+      'Complimentary inter-terminal shuttle between T1 and T2, confirmed by the airport’s Connections by BLR transfer guidance.',
+      'T1 stop: departure kerb, inner lane next to the Relay outlet. T2 stop: arrival kerb, inner lane at pick-up points P16 and P17.',
+      'Allow about 10 minutes for the ride and about 5 minutes for the wait. Follow airport signage on the day.',
+      'If you are connecting, confirm transfer eligibility, security and baggage steps with your airline or a Connections by BLR transfer desk.',
     ],
-    source: 'BLR Airport public transfer guidance, OpenStreetMap stops, OSRM road geometry',
+    source:
+      'BLR Airport Connections by BLR transfer guidance (bengaluruairport.com), OpenStreetMap stops, OSRM road geometry',
     retrievedAt: EXTRACTED_AT,
     geometrySource: shuttleGeometry.source,
   },
@@ -1123,13 +1223,25 @@ writeJson('transfer.json', {
   nodes: [graphNodes.get(t1StopPoi.nodeId), graphNodes.get(t2StopPoi.nodeId)].filter(Boolean),
   edges: shuttleEdge ? [shuttleEdge] : [],
   stops: [t1StopPoi, t2StopPoi],
+  guidance: {
+    name: 'Connections by BLR',
+    operator: 'Bangalore International Airport Limited',
+    url: 'https://www.bengaluruairport.com/travellers/services/all-facilities/transfers',
+    retrievedAt: datePart,
+    signage: 'Blue and yellow Connections by BLR signs; dedicated transfer desks and transfer zones in both terminals.',
+    t1ShuttleStop: 'Departure kerb, inner lane next to the Relay outlet.',
+    t2ShuttleStop: 'Arrival kerb, inner lane at pick-up points P16 and P17.',
+    bagDrop:
+      'T2 has a bag-drop facility immediately after the customs zone for international-to-domestic passengers, subject to airline participation.',
+  },
 })
 writeJson('osm-meta.json', {
   source: 'OpenStreetMap',
   license: 'ODbL 1.0',
   licenseUrl: 'https://opendatacommons.org/licenses/odbl/1-0/',
   copyrightUrl: 'https://www.openstreetmap.org/copyright',
-  extractionUrl: OSM_API,
+  extractionUrl,
+  extractionMethod,
   extractedAt: EXTRACTED_AT,
   bbox: BBOX,
   terminalWayIds: { t1: T1_WAY_ID, t2Relation: T2_RELATION_ID, t2OuterWay: t2OuterWayId },
@@ -1146,12 +1258,12 @@ writeJson('osm-meta.json', {
     terminalEntrances: true,
     verticalConnectors: true,
     poiAccessConnectors: true,
-    shuttleRide: true,
+    shuttleRide: false,
   },
   notes: [
-    'OpenStreetMap is the source of footprints, mapped walkways, gates and facilities.',
+    'OpenStreetMap is the source of footprints, mapped walkways, gates and facilities, extracted with the Overpass API.',
     'Terminal and floor assignments are cross-checked against the BLR live gate directory where a gate reference matches.',
     'Connectors that are not mapped as walkways are marked verificationStatus "inferred" and are drawn as inferred segments.',
-    'The shuttle geometry is a road route from the OSRM demo server and is used only to draw the transfer; it is not a live vehicle position.',
+    'The inter-terminal shuttle and its kerbside stops are confirmed by the airport’s Connections by BLR guidance. The road geometry comes from the OSRM demo server and is not a live vehicle position.',
   ],
 })

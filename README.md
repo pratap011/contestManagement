@@ -1,109 +1,117 @@
-# 🏆 Contest Management System (Backend)
+# BLR Navigator
 
-A **Node.js + Express + MongoDB** backend for managing contests, user participation, questions, scoring, leaderboards, and automated prize distribution.  
-Built as part of the **TenTwenty Backend Assignment**, this project emphasizes **clean architecture**, **security**, and **production-ready design**.
+A flight-aware, mobile-friendly navigator for Kempegowda International Airport (BLR), Bengaluru.
+It combines the airport's public live flight board with OpenStreetMap-derived terminal geometry,
+A* walking routes, device location, the T1↔T2 shuttle, and optional accounts.
 
----
+> OpenStreetMap data is not field-verified. Some entrance, level and connector segments are
+> inferred and drawn as dashed lines. Indoor GPS can be inaccurate. Airport signs, airline
+> instructions and staff take precedence.
 
-## ✈️ BLR Navigator MVP (`apps/web`)
+## Features
 
-This repository also contains an independent **BLR Navigator** prototype built from the BLR Navigator
-PRD. It is a separate Vue 3 + TypeScript app and does **not** modify the contest-management backend.
+- Departing and layover journeys without an account.
+- Live BLR flight board: airline, route, scheduled/estimated times, terminal, gate and gate floor.
+- Optional Aviationstack fallback for other dates when an API key is configured.
+- Manual entry and deterministic demo flights when live lookup is unavailable.
+- Flight review with provenance badges, retrieval time, stale handling and explicit confirmation.
+- OpenStreetMap terminal footprints, mapped gates, corridors, shops, restrooms and transport stops.
+- Geographic Leaflet map with T1/T2 and floor switching, search, category filters, pan/zoom.
+- A* routing with passenger-type rules, step-free mode and optional inferred connectors.
+- Live navigation: device position, accuracy, next step, remaining time and off-route warning.
+- T1↔T2 transfer route using the complimentary shuttle, OSM stop locations and OSM/OSRM road geometry.
+- Layover connection timing, context questions, required checks and time-buffered facility suggestions.
+- Optional email/password account that syncs the latest journey across devices.
+- Fully responsive UI and an OpenStreetMap/ODbL attribution page.
 
-BLR Navigator lets a passenger plan a departing or layover journey without an account, review demo or
-manually entered flight details, search a schematic Terminal 1/2 map, calculate a demo walking route,
-and see connection timing with conservative warnings.
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| Frontend | Vue 3, TypeScript, Vite, Pinia, Leaflet |
+| Map | OpenStreetMap tiles + committed OSM-derived JSON |
+| Routing | Pure TypeScript A* with access and step-free filters |
+| API | Node 24 + Express 5 |
+| Database | PostgreSQL in production; embedded PGlite for local development |
+| Auth | Email/password, scrypt hashing, HTTP-only SameSite cookie |
+| Flight data | BLR public live board server proxy; optional Aviationstack |
+| Tests | Vitest across the web app and API |
+
+## Run locally
 
 ```bash
-cd apps/web
 npm install
-npm run dev       # local development
-npm run test      # Vitest unit tests
-npm run build     # typecheck + production build
+npm --prefix apps/web install
+
+# Terminal 1: API + auth + live flight proxy (http://localhost:8787)
+npm run dev:server
+
+# Terminal 2: Vite app (http://localhost:5173, proxies /api to 8787)
+npm run dev:web
 ```
 
-> **Important:** the bundled map and flight data is demonstration data. Terminal floors, gates, POIs,
-> walking edges, and access rules are unverified and are not for live airport navigation. Live flight
-> lookup is feature-flagged off by default; manual entry and deterministic demo flights always work.
-> Airline and airport instructions take precedence.
+Copy `.env.example` to `.env` if you want to change the port, enable PostgreSQL, set a real
+`JWT_SECRET`, or add an Aviationstack key. Without `DATABASE_URL`, the API uses a local
+PostgreSQL-compatible PGlite database in `.data/pglite`.
 
-See [`apps/web/README.md`](apps/web/README.md), [`apps/web/docs/data-sources.md`](apps/web/docs/data-sources.md),
-[`apps/web/docs/map-verification.md`](apps/web/docs/map-verification.md), and
-[`apps/web/docs/flight-provider-proxy.md`](apps/web/docs/flight-provider-proxy.md).
+Production-style single process:
 
----
-
-## 🚀 Features
-
-- 🧑‍💼 **User Management**
-  - Register / Login with role-based access (Admin, VIP, Normal)
-  - JWT Authentication and secure password hashing
-
-- 🏁 **Contest Management**
-  - Create Normal or VIP contests
-  - Tracks participants and current top scorer automatically
-
-- ❓ **Question Management**
-  - Add single-select, multi-select, or boolean questions per contest
-
-- 🧮 **Participation & Scoring**
-  - Users can start and submit contests
-  - Scores automatically calculated based on correct answers
-
-- 🏅 **Leaderboard & Prizes**
-  - Periodic cron job checks for ended contests and awards prizes
-
-- 🔒 **Security**
-  - Environment-based secrets (`.env`)
-  - Express Rate Limiting for abuse prevention
-  - Request validation using Joi
-
----
-
-## 🧩 Tech Stack
-
-| Component | Technology |
-|------------|-------------|
-| **Runtime** | Node.js (v18+) |
-| **Framework** | Express.js |
-| **Database** | MongoDB (Mongoose ODM) |
-| **Authentication** | JWT |
-| **Validation** | Joi |
-| **Rate Limiting** | express-rate-limit |
-| **Scheduling** | node-cron |
-| **Deployment** | Render |
-
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/pratap011/contestManagement.git
-cd contestManagement
-
-2️⃣ Install Dependencies
-npm install
-
-3️⃣ Create .env File
-
-In the root directory, create a .env file and add the following variables:
-
-PORT=5000
-MONGO_URI=<your-mongodb-connection-uri>
-JWT_KEY=<your-secret-jwt-key>
-
-4️⃣ Start the Server
+npm run build:web
 npm start
 ```
-### This project uses MongoDB as primary database hence mongoDB is a prerequisite to run the code. 
-## Live link
-https://contestmanagement.onrender.com/
 
-## Note
-- The cron job wont function on the deployment since it is on a free tier and not supported.
+`npm start` serves `apps/web/dist` and the API from port 8787.
 
-## Improvements
-- In current implementation, frontend is not available and that can be added.
-- Write operations can be faster with PostgreSQL
-- Caching operations for fettching popular contests is not implemented. 
+## Checks
+
+```bash
+npm test                 # web unit tests + API tests
+npm run typecheck        # server + web TypeScript
+npm run build:web        # production bundle
+npm run data:osm         # refresh committed OSM-derived dataset
+```
+
+## Live flight data
+
+The server calls the airport's public flight board and caches the response. The browser never
+receives provider credentials. If the board is unavailable, the review screen falls back to manual
+entry; demo flights are always deterministic.
+
+The board covers the current airport day. For other dates, set `AVIATIONSTACK_API_KEY` on the server
+or use manual entry. Never put a provider key in a `VITE_` variable.
+
+## OpenStreetMap data
+
+`apps/web/src/data/blr/` is generated by `scripts/build-osm-data.mjs` from an OpenStreetMap extract.
+The committed files allow the app to run without an OSM API dependency. The generator records the
+extraction date, bounding box, source IDs and inferred connectors in `osm-meta.json`.
+
+- OSM data © OpenStreetMap contributors, ODbL 1.0.
+- Attribution is shown on the map, in the footer, and on the Data & privacy page.
+- Mapped edges are marked `unverified`; derived connectors are `inferred`.
+- Refresh with `npm run data:osm -- --refresh`, then review the diff and run the checks.
+
+## Accounts and privacy
+
+Accounts are optional. Only an email, a scrypt password hash, and the latest confirmed journey are
+stored. No PNR, passport, date of birth, payment data or itinerary analytics are requested. The
+anonymous app keeps the journey in `localStorage` and works if storage is unavailable.
+
+## Deployment
+
+The repository includes a multi-stage `Dockerfile`, `docker-compose.yml` (app + PostgreSQL) and a
+`render.yaml` blueprint. See [`DEPLOYMENT.md`](DEPLOYMENT.md). The app is static-first and portable;
+the API is only required for live flight lookup and optional accounts.
+
+## Repository layout
+
+```text
+apps/web/               Vue app, map, routing, tests, committed OSM dataset
+server/                 Express API, auth, PostgreSQL/PGlite, flight proxy
+scripts/build-osm-data.mjs  OSM + OSRM dataset generator
+docs/                   data sources, map verification, flight proxy, attribution
+Dockerfile              production image
+docker-compose.yml      app + PostgreSQL
+render.yaml             one-click Render blueprint
+```

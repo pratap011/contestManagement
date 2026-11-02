@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { airportDataset } from '@/modules/airport-directory/dataset'
 import { appConfig } from '@/config'
-import { todayInTimeZone } from '@/lib/time'
+import { BLR_TIMEZONE, todayInTimeZone } from '@/lib/time'
 import { DEMO_JOURNEYS } from '@/modules/flights/providers/demo'
 import { isValidFlightNumber, isValidTravelDate } from '@/modules/flights/validation'
 import { useJourneyStore, type JourneyKind, type SearchMode } from '@/stores/journey'
 
 const router = useRouter()
 const store = useJourneyStore()
-const timeZone = airportDataset.airport.timezone
+const timeZone = BLR_TIMEZONE
 const today = todayInTimeZone(timeZone)
 
 const kind = ref<JourneyKind>('departing')
@@ -110,23 +109,24 @@ function clearSaved() {
         <span class="eyebrow">Kempegowda International Airport · Bengaluru</span>
         <h1 id="home-heading">Know where to go next.</h1>
         <p class="lede">
-          Plan a departure or a layover, review your flight details, and follow a walking route on a
-          schematic map of BLR Terminal 1 or Terminal 2.
+          Plan a departure or a layover, check the live BLR flight board, and follow an
+          OpenStreetMap-based walking route across Terminal 1 and Terminal 2 — including the
+          inter-terminal shuttle.
         </p>
         <div class="hero-points">
           <span>No account needed</span>
-          <span>No PNR requested</span>
-          <span>Manual and demo fallback</span>
+          <span>Live BLR flight board</span>
+          <span>OpenStreetMap + live location</span>
         </div>
       </div>
       <aside class="hero-panel">
-        <span class="eyebrow">MVP prototype</span>
+        <span class="eyebrow">Live data + OSM</span>
         <h2>Useful support, honest limits.</h2>
         <p>
-          Flight data and indoor maps are currently demo or user-entered. Nothing here is a live
-          gate assignment or a verified walking route.
+          Flight, gate and terminal details come from the airport's public live board when available.
+          Maps and walking edges come from OpenStreetMap; inferred connectors are labelled.
         </p>
-        <p>Airline and airport instructions always take precedence.</p>
+        <p>Airport signs and staff instructions always take precedence.</p>
       </aside>
     </section>
 
@@ -263,14 +263,14 @@ function clearSaved() {
         </div>
 
         <div class="notice info">
-          <strong>{{ appConfig.providerLookupEnabled ? 'Live lookup is enabled.' : 'Live lookup is off in this prototype.' }}</strong>
+          <strong>{{ appConfig.providerLookupEnabled ? 'Live BLR flight board enabled.' : 'Live lookup is off in this deployment.' }}</strong>
           {{
             appConfig.providerLookupEnabled
-              ? 'If the provider is unavailable, you can still enter details manually.'
+              ? 'The airport board covers today only. For another date, use manual entry or a demo journey. If lookup fails, manual entry is always available.'
               : 'Continue to review the flight manually, or load a deterministic demo journey below.'
           }}
-          Flight numbers and dates are personal travel information; this prototype stores only the
-          confirmed journey in this browser.
+          Flight numbers and dates are personal travel information; the anonymous app stores only the
+          confirmed journey in this browser. An optional account is available if you want to sync it.
         </div>
 
         <div class="btn-row">
@@ -313,32 +313,32 @@ function clearSaved() {
     <section class="section" aria-labelledby="what-heading">
       <div class="section-heading">
         <span class="eyebrow">What is included</span>
-        <h2 id="what-heading">A small, transparent MVP.</h2>
+        <h2 id="what-heading">A working navigator, with its limits visible.</h2>
         <p class="muted">
-          The prototype covers the core journey from flight details to a schematic destination. It
-          deliberately does not pretend to know more than the data supports.
+          The app covers the journey from live flight details to a mapped destination, including
+          device location, the T1↔T2 shuttle, and optional account sync.
         </p>
       </div>
       <div class="grid-3">
         <article class="card feature-card">
-          <h3>Two journey types</h3>
+          <h3>Live flights and gates</h3>
           <p>
-            Departing and layover flows, with manual flight entry, deterministic demo data, and
-            connection context questions.
+            The public BLR board supplies airline, route, scheduled/estimated times, terminal and
+            gate. Manual entry and demo flights remain available when it fails.
           </p>
         </article>
         <article class="card feature-card">
-          <h3>Schematic terminals</h3>
+          <h3>OpenStreetMap + A*</h3>
           <p>
-            Searchable demo POIs and an A* walking graph for T1 and T2, including lifts, stairs, and
-            a step-free route mode.
+            Terminal footprints, gates, mapped corridors and facilities are rendered on a geographic
+            map. A* routes respect passenger type, step-free mode and inferred-connector settings.
           </p>
         </article>
         <article class="card feature-card">
-          <h3>Clear data provenance</h3>
+          <h3>Live navigation</h3>
           <p>
-            Provider, user-entered, demo, and unknown values are labelled. Missing gates and terminals
-            say “Not available” instead of guessing.
+            Share device location to see your position, next step, remaining time and off-route
+            warning. Indoor GPS accuracy is limited, so airport signs still lead.
           </p>
         </article>
       </div>
@@ -346,10 +346,10 @@ function clearSaved() {
 
     <section class="section" aria-labelledby="limits-heading">
       <div class="notice warn">
-        <strong id="limits-heading">Not for live navigation.</strong>
-        The bundled maps and gates are a hand-curated schematic demonstration. Edges are marked
-        unverified, walking times are estimates, and T1↔T2 transfer guidance is unavailable. Ask
-        airport staff whenever a route or connection matters.
+        <strong id="limits-heading">OpenStreetMap data is not field-verified.</strong>
+        Floors, gate positions and walkways are imported from OSM and may be incomplete. Dashed
+        inferred connectors are not surveyed paths. Indoor device location can be inaccurate, and
+        walking times are estimates. Ask airport staff whenever a route or connection matters.
       </div>
     </section>
   </div>

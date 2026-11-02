@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import { normaliseTerminalCode } from '@/modules/airport-directory/search'
+import { normaliseTerminalCode } from '@/modules/airport-directory/terminal-code'
 import type { FlightResult } from '@/modules/flights/types'
 import {
   DEFAULT_CONNECTION_CONTEXT,
@@ -27,6 +27,7 @@ export interface Journey {
   arrival: FlightResult | null
   connection: FlightResult | null
   context: ConnectionContext
+  /** A manual terminal override; flight terminals take priority when present. */
   terminalId?: string | null
   confirmedAt: string
 }
@@ -36,7 +37,8 @@ export interface MapIntent {
   toPoiId?: string
 }
 
-export const JOURNEY_STORAGE_KEY = 'blr-navigator:journey:v1'
+export const JOURNEY_STORAGE_KEY = 'blr-navigator:journey:v2'
+const LEGACY_STORAGE_KEY = 'blr-navigator:journey:v1'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -63,6 +65,9 @@ export function isSavedJourney(value: unknown): value is Journey {
   ) {
     return false
   }
+  if (typeof value.confirmedAt !== 'string' || Number.isNaN(Date.parse(value.confirmedAt))) {
+    return false
+  }
   if (value.kind === 'departing') return isFlight(value.departure)
   return isFlight(value.arrival) && isFlight(value.connection)
 }
@@ -72,6 +77,7 @@ function readStorage(): { journey: Journey | null; available: boolean } {
     if (typeof window === 'undefined' || !window.localStorage) {
       return { journey: null, available: false }
     }
+    window.localStorage.removeItem(LEGACY_STORAGE_KEY)
     const raw = window.localStorage.getItem(JOURNEY_STORAGE_KEY)
     if (!raw) return { journey: null, available: true }
     const parsed: unknown = JSON.parse(raw)
@@ -87,21 +93,38 @@ export const useJourneyStore = defineStore('journey', () => {
   const search = ref<JourneySearch | null>(null)
   const mapIntent = ref<MapIntent | null>(null)
   const storageAvailable = ref(stored.available)
+  const lastSavedAt = ref<string | null>(stored.journey?.confirmedAt ?? null)
 
   const hasConfirmedJourney = computed(() => journey.value !== null)
 
-  const effectiveTerminalId = computed(() => {
+  const departureTerminalId = computed(() => {
     const current = journey.value
     if (!current) return null
-    const savedTerminal = normaliseTerminalCode(current.terminalId ?? undefined)
-    if (savedTerminal) return savedTerminal
-    if (current.kind === 'departing' && current.departure) {
-      return normaliseTerminalCode(current.departure.terminal)
+    if (current.kind === 'departing') {
+      return (
+        normaliseTerminalCode(current.terminalId ?? undefined) ??
+        normaliseTerminalCode(current.departure?.terminal)
+      )
     }
-    const connecting = normaliseTerminalCode(current.connection?.terminal)
-    if (connecting) return connecting
-    return normaliseTerminalCode(current.arrival?.terminal)
+    return (
+      normaliseTerminalCode(current.terminalId ?? undefined) ??
+      normaliseTerminalCode(current.connection?.terminal)
+    )
   })
+
+  const arrivalTerminalId = computed(() => {
+    const current = journey.value
+    if (!current) return null
+    if (current.kind === 'departing') return null
+    return (
+      normaliseTerminalCode(current.terminalId ?? undefined) ??
+      normaliseTerminalCode(current.arrival?.terminal)
+    )
+  })
+
+  const effectiveTerminalId = computed(
+    () => departureTerminalId.value ?? arrivalTerminalId.value,
+  )
 
   const terminalsDiffer = computed(() => {
     const current = journey.value
@@ -117,8 +140,13 @@ export const useJourneyStore = defineStore('journey', () => {
         storageAvailable.value = false
         return
       }
-      if (value) window.localStorage.setItem(JOURNEY_STORAGE_KEY, JSON.stringify(value))
-      else window.localStorage.removeItem(JOURNEY_STORAGE_KEY)
+      if (value) {
+        window.localStorage.setItem(JOURNEY_STORAGE_KEY, JSON.stringify(value))
+        lastSavedAt.value = new Date().toISOString()
+      } else {
+        window.localStorage.removeItem(JOURNEY_STORAGE_KEY)
+        lastSavedAt.value = null
+      }
       storageAvailable.value = true
     } catch {
       // Private browsing or a full quota: the current session still works.
@@ -185,6 +213,19 @@ export const useJourneyStore = defineStore('journey', () => {
     mapIntent.value = intent
   }
 
+  /** Loads a journey fetched from the optional account service. */
+  function loadJourney(value: unknown): boolean {
+    if (!isSavedJourney(value)) return false
+    journey.value = value
+    search.value = null
+    mapIntent.value = null
+    return true
+  }
+
+  function serialisableJourney(): Journey | null {
+    return journey.value ? JSON.parse(JSON.stringify(journey.value)) as Journey : null
+  }
+
   function reset() {
     journey.value = null
     search.value = null
@@ -197,14 +238,19 @@ export const useJourneyStore = defineStore('journey', () => {
     search,
     mapIntent,
     storageAvailable,
+    lastSavedAt,
     hasConfirmedJourney,
     effectiveTerminalId,
+    departureTerminalId,
+    arrivalTerminalId,
     terminalsDiffer,
     startSearch,
     confirmDeparture,
     confirmLayover,
     setTerminal,
     setMapIntent,
+    loadJourney,
+    serialisableJourney,
     reset,
   }
 })

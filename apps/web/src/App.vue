@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 import { useJourneyStore } from '@/stores/journey'
 
 const store = useJourneyStore()
+const auth = useAuthStore()
 const year = new Date().getFullYear()
+
+onMounted(() => {
+  void auth.fetchMe()
+})
 </script>
 
 <template>
@@ -22,8 +29,9 @@ const year = new Date().getFullYear()
           <RouterLink to="/">Plan</RouterLink>
           <RouterLink v-if="store.hasConfirmedJourney" to="/map">Map</RouterLink>
           <RouterLink v-if="store.hasConfirmedJourney" to="/journey">Assistant</RouterLink>
+          <RouterLink to="/account">{{ auth.user?.email.split('@')[0] ?? 'Account' }}</RouterLink>
           <RouterLink to="/about">Data &amp; privacy</RouterLink>
-          <span class="demo-pill" title="Schematic maps and demo flights only">Demo data</span>
+          <span class="demo-pill live" title="Live BLR flight board and OpenStreetMap data">Live board · OSM</span>
         </nav>
       </div>
     </header>
@@ -35,12 +43,15 @@ const year = new Date().getFullYear()
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <p class="footer-title">BLR Navigator · MVP prototype</p>
+          <p class="footer-title">BLR Navigator</p>
           <p class="small muted">
-            Schematic demo data, not verified for live airport navigation. Airline and airport
-            instructions take precedence.
+            Live BLR flight board plus OpenStreetMap-derived maps. Not field-verified for indoor
+            positioning. Airport signs and staff instructions take precedence.
           </p>
-          <p class="small muted">© {{ year }} BLR Navigator. Not affiliated with BIAL.</p>
+          <p class="small muted">
+            © {{ year }} BLR Navigator. Not affiliated with BIAL. Map data © OpenStreetMap
+            contributors (ODbL).
+          </p>
         </div>
         <div class="footer-links">
           <RouterLink to="/about">Data sources, privacy &amp; limitations</RouterLink>

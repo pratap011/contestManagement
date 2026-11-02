@@ -1,10 +1,10 @@
 export type VerificationStatus = 'verified' | 'unverified' | 'inferred' | 'unknown'
 
-export type DataSource = 'osm' | 'curated-demo' | 'manual' | 'provider' | 'demo'
+export type DataSource = 'osm' | 'airport' | 'derived' | 'curated-demo' | 'manual' | 'provider' | 'demo'
 
 export type PassengerType = 'departing' | 'connecting' | 'staff'
 
-export type TransitionType = 'walk' | 'stairs' | 'escalator' | 'elevator'
+export type TransitionType = 'walk' | 'stairs' | 'escalator' | 'elevator' | 'shuttle'
 
 export type PoiCategory =
   | 'gate'
@@ -19,6 +19,35 @@ export type PoiCategory =
   | 'escalator'
   | 'entrance'
   | 'info'
+  | 'transport'
+  | 'service'
+
+export type LatLonTuple = [number, number]
+
+export interface LatLon {
+  lat: number
+  lon: number
+}
+
+export interface AirportBounds {
+  south: number
+  west: number
+  north: number
+  east: number
+}
+
+export interface ShuttleInfo {
+  available: boolean
+  terminals: string[]
+  travelMinutes: number
+  frequencyMinutes: number
+  waitAllowanceMinutes: number
+  stopNames: string[]
+  notes: string[]
+  source: string
+  retrievedAt: string
+  geometrySource: string
+}
 
 export interface Airport {
   code: string
@@ -29,25 +58,29 @@ export interface Airport {
   source: DataSource
   verificationStatus: VerificationStatus
   lastUpdated: string
+  center: LatLon
+  bounds: AirportBounds
   disclaimer: string
+  attribution: string
+  attributionUrl: string
+  liveFlightSource: string
+  shuttle: ShuttleInfo
 }
 
 export interface Terminal {
   id: string
   airportCode: string
   name: string
+  center: LatLon
+  polygon: LatLonTuple[]
   supportedFloors: string[]
 }
 
-export interface MapArea {
+export interface FloorArea {
   id: string
   label?: string
   kind: 'outline' | 'zone' | 'room' | 'corridor' | 'island' | 'gate'
-  x: number
-  y: number
-  width: number
-  height: number
-  rx?: number
+  polygon: LatLonTuple[]
 }
 
 export interface Floor {
@@ -56,10 +89,9 @@ export interface Floor {
   label: string
   shortLabel: string
   levelIndex: number
+  level: number
   mapAsset: string
-  width: number
-  height: number
-  areas: MapArea[]
+  areas: FloorArea[]
 }
 
 export interface Poi {
@@ -68,22 +100,25 @@ export interface Poi {
   category: PoiCategory
   terminalId: string
   floorId: string
-  x: number
-  y: number
+  lat: number
+  lon: number
   nodeId: string
   source: DataSource
   verificationStatus: VerificationStatus
   lastVerifiedAt?: string
   description?: string
+  osmId?: string
 }
 
 export interface MapNode {
   id: string
   terminalId: string
   floorId: string
-  x: number
-  y: number
+  lat: number
+  lon: number
   nodeType: 'junction' | 'entrance' | 'facility' | 'vertical' | 'gate'
+  osmId?: string
+  name?: string
 }
 
 export interface MapEdge {
@@ -97,6 +132,10 @@ export interface MapEdge {
   accessible: boolean
   verificationStatus: VerificationStatus
   source: DataSource
+  instruction?: string
+  wayId?: string
+  name?: string
+  geometry?: LatLonTuple[]
 }
 
 export interface AirportDataset {
@@ -121,6 +160,8 @@ export const POI_CATEGORY_LABELS: Record<PoiCategory, string> = {
   escalator: 'Escalator',
   entrance: 'Entrance',
   info: 'Information',
+  transport: 'Transport',
+  service: 'Service',
 }
 
 export const POI_CATEGORY_ORDER: PoiCategory[] = [
@@ -131,9 +172,11 @@ export const POI_CATEGORY_ORDER: PoiCategory[] = [
   'food',
   'shop',
   'lounge',
+  'transport',
   'entrance',
   'elevator',
   'escalator',
   'stairs',
   'info',
+  'service',
 ]

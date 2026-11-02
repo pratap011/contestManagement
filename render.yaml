@@ -1,0 +1,31 @@
+databases:
+  - name: blr-navigator-db
+    plan: free
+    databaseName: blr_navigator
+    user: blr
+
+services:
+  - type: web
+    name: blr-navigator
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: blr-navigator-db
+          property: connectionString
+      - key: DATABASE_SSL
+        value: "true"
+      # Optional: another same-site page origin allowed by the API. Keep the
+      # web app and API on the same origin; no CORS is configured.
+      - key: APP_ORIGIN
+        sync: false
+      # Optional: the BLR public board works without a key.
+      - key: AVIATIONSTACK_API_KEY
+        sync: false

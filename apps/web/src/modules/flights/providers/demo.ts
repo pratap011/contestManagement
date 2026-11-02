@@ -1,5 +1,5 @@
 import { fromZonedTime } from 'date-fns-tz'
-import type { FlightProvider, FlightResult } from '../types'
+import type { FlightProvider, FlightResult, FlightRole } from '../types'
 import {
   isValidFlightNumber,
   isValidTravelDate,
@@ -98,7 +98,11 @@ function findDefinition(flightNumber: string): DemoFlightDefinition | undefined 
   return DEMO_FLIGHTS.find((flight) => flight.flightNumber === wanted)
 }
 
-export function findDemoFlights(flightNumber: string, date: string): FlightResult[] {
+export function findDemoFlights(
+  flightNumber: string,
+  date: string,
+  role: FlightRole = 'departure',
+): FlightResult[] {
   if (!isValidFlightNumber(flightNumber) || !isValidTravelDate(date)) return []
   const definition = findDefinition(flightNumber)
   if (!definition) return []
@@ -114,6 +118,7 @@ export function findDemoFlights(flightNumber: string, date: string): FlightResul
       gate: definition.gate,
       status: 'Scheduled (demo)',
       source: 'demo',
+      direction: role === 'arrival' ? 'arrival' : 'departure',
       fetchedAt: new Date().toISOString(),
     },
   ]
@@ -123,7 +128,11 @@ export class DemoFlightProvider implements FlightProvider {
   readonly id = DEMO_PROVIDER_ID
   readonly label = 'Deterministic demo schedule'
 
-  async searchFlight(flightNumber: string, date: string): Promise<FlightResult[]> {
-    return findDemoFlights(flightNumber, date)
+  async searchFlight(
+    flightNumber: string,
+    date: string,
+    role?: FlightRole,
+  ): Promise<FlightResult[]> {
+    return findDemoFlights(flightNumber, date, role)
   }
 }

@@ -119,7 +119,7 @@ describe('HTTP flight provider', () => {
   const input = ['6E 2134', '2026-11-02'] as const
 
   it('maps a successful proxy response and normalises values', async () => {
-    const fetchImpl = vi.fn(async () =>
+    const fetchImpl = vi.fn(async (_url: string | URL | Request) =>
       new Response(
         JSON.stringify({
           results: [
@@ -131,6 +131,9 @@ describe('HTTP flight provider', () => {
               scheduledDeparture: '2026-11-02T20:00:00+05:30',
               terminal: '1',
               gate: 'a3',
+              gateFloor: 1,
+              provider: 'blr-airport-board',
+              direction: 'departure',
             },
           ],
         }),
@@ -142,7 +145,7 @@ describe('HTTP flight provider', () => {
       timeoutMs: 500,
       fetchImpl,
     })
-    const results = await provider.searchFlight(...input)
+    const results = await provider.searchFlight(...input, 'departure')
     expect(results[0]).toMatchObject({
       flightNumber: '6E 2134',
       source: 'provider',
@@ -150,9 +153,13 @@ describe('HTTP flight provider', () => {
       destination: 'DEL',
       terminal: 'T1',
       gate: 'A3',
+      gateFloor: 1,
+      provider: 'blr-airport-board',
+      direction: 'departure',
     })
     expect(results[0].scheduledDeparture).toBe('2026-11-02T14:30:00.000Z')
     expect(fetchImpl).toHaveBeenCalledOnce()
+    expect(String(fetchImpl.mock.calls[0]?.[0])).toContain('role=departure')
   })
 
   it('drops provider timestamps without an explicit timezone offset', async () => {

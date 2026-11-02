@@ -30,6 +30,12 @@ const router = createRouter({
       meta: { title: 'Journey assistant' },
     },
     {
+      path: '/account',
+      name: 'account',
+      component: () => import('@/views/AccountView.vue'),
+      meta: { title: 'Account' },
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('@/views/AboutView.vue'),

@@ -20,6 +20,7 @@ export function createManualFlight(
     terminal: normaliseTerminalLabel(values.terminal),
     gate: values.gate.trim().toUpperCase() || undefined,
     source: 'manual',
+    direction: role === 'arrival' ? 'arrival' : 'departure',
     fetchedAt: new Date().toISOString(),
   }
   if (role === 'arrival') {

@@ -1,10 +1,18 @@
-import type { Floor, MapNode, PassengerType } from '@/modules/airport-directory/types'
+import type {
+  Floor,
+  LatLonTuple,
+  MapEdge,
+  MapNode,
+  PassengerType,
+} from '@/modules/airport-directory/types'
 import type { FloorTransition, RouteResult } from './astar'
+import { haversineMeters } from './geo'
 
 export interface RouteFloorSegment {
   floorId: string
+  terminalId: string
   nodeIds: string[]
-  points: Array<{ x: number; y: number; nodeId: string }>
+  points: Array<{ lat: number; lon: number; nodeId: string }>
   transitionAtEnd?: FloorTransition
 }
 
@@ -17,11 +25,16 @@ export function groupRouteByFloor(route: RouteResult, nodes: MapNode[]): RouteFl
     if (!node) continue
     let segment = segments[segments.length - 1]
     if (!segment || segment.floorId !== node.floorId) {
-      segment = { floorId: node.floorId, nodeIds: [], points: [] }
+      segment = {
+        floorId: node.floorId,
+        terminalId: node.terminalId,
+        nodeIds: [],
+        points: [],
+      }
       segments.push(segment)
     }
     segment.nodeIds.push(node.id)
-    segment.points.push({ x: node.x, y: node.y, nodeId: node.id })
+    segment.points.push({ lat: node.lat, lon: node.lon, nodeId: node.id })
 
     const next = nodeById.get(route.nodeIds[index + 1])
     if (next && next.floorId !== node.floorId) {
@@ -32,6 +45,44 @@ export function groupRouteByFloor(route: RouteResult, nodes: MapNode[]): RouteFl
   }
 
   return segments
+}
+
+/** Returns an edge polyline in travel order, using mapped geometry when available. */
+export function edgeGeometry(
+  edge: MapEdge,
+  fromNode: MapNode,
+  toNode: MapNode,
+): LatLonTuple[] {
+  const start: LatLonTuple = [fromNode.lat, fromNode.lon]
+  const end: LatLonTuple = [toNode.lat, toNode.lon]
+  if (!edge.geometry || edge.geometry.length < 2) return [start, end]
+  const first = edge.geometry[0]
+  const last = edge.geometry[edge.geometry.length - 1]
+  const forward =
+    haversineMeters(first, start) + haversineMeters(last, end) <=
+    haversineMeters(last, start) + haversineMeters(first, end)
+  return forward ? edge.geometry : [...edge.geometry].reverse()
+}
+
+/** Full route polyline for drawing and live-navigation progress. */
+export function routePolyline(route: RouteResult, nodes: MapNode[]): LatLonTuple[] {
+  if (!route.edges.length) {
+    const node = nodes.find((item) => item.id === route.nodeIds[0])
+    return node ? [[node.lat, node.lon]] : []
+  }
+  const nodeById = new Map(nodes.map((node) => [node.id, node]))
+  const points: LatLonTuple[] = []
+  for (let index = 0; index < route.edges.length; index += 1) {
+    const fromNode = nodeById.get(route.nodeIds[index])
+    const toNode = nodeById.get(route.nodeIds[index + 1])
+    if (!fromNode || !toNode) continue
+    const geometry = edgeGeometry(route.edges[index], fromNode, toNode)
+    for (const point of geometry) {
+      const previous = points[points.length - 1]
+      if (!previous || previous[0] !== point[0] || previous[1] !== point[1]) points.push(point)
+    }
+  }
+  return points
 }
 
 export interface RouteAccessRequest {

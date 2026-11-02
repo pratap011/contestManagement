@@ -1,20 +1,21 @@
 import { appConfig } from '@/config'
 import type { MapEdge, MapNode } from '@/modules/airport-directory/types'
+import { haversineMeters } from './geo'
 
 export function edgeCostSeconds(edge: MapEdge, paceFactor: number): number {
+  if (edge.transitionType === 'shuttle') return edge.estimatedWalkingSeconds
   return edge.estimatedWalkingSeconds * paceFactor
 }
 
 /**
- * Straight-line walking time on one floor is a lower bound for A* when the
- * heuristic speed is at least as fast as any mapped edge. Floor plans are
- * stacked schematically, so cross-floor coordinates do not represent walkable
- * distance; returning zero there keeps the heuristic admissible.
+ * Straight-line time is a lower bound for A* when the heuristic speed is at
+ * least as fast as any edge. Floors are stacked, so cross-floor coordinates do
+ * not represent walkable distance; returning zero keeps the heuristic
+ * admissible.
  */
 export function heuristicSeconds(a: MapNode, b: MapNode, paceFactor: number): number {
-  if (a.floorId !== b.floorId) return 0
-  const metres =
-    Math.hypot(a.x - b.x, a.y - b.y) * appConfig.routing.metersPerUnit
+  if (a.floorId !== b.floorId && a.terminalId === b.terminalId) return 0
+  const metres = haversineMeters([a.lat, a.lon], [b.lat, b.lon])
   const speed = appConfig.routing.heuristicSpeedMetersPerSecond
   return (metres / speed) * paceFactor
 }
@@ -31,4 +32,9 @@ export function formatWalkingTime(seconds: number): string {
 export function formatDistance(metres: number): string {
   if (metres < 1000) return `${Math.round(metres)} m`
   return `${(metres / 1000).toFixed(1)} km`
+}
+
+export function formatRemainingTime(seconds: number): string {
+  if (seconds <= 0) return 'Arriving'
+  return formatWalkingTime(seconds)
 }

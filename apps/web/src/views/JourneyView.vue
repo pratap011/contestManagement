@@ -11,11 +11,13 @@ import {
 } from '@/lib/time'
 import { airportDataset } from '@/modules/airport-directory/dataset'
 import {
-  findGatePoi,
+  findGateAreaPoi,
   getFloor,
+  getFloorByLevel,
   getPoisForTerminal,
   getTerminal,
   recommendedStartingPoi,
+  resolveGatePoi,
 } from '@/modules/airport-directory/search'
 import { POI_CATEGORY_LABELS, type Poi, type PoiCategory } from '@/modules/airport-directory/types'
 import { findRoute } from '@/modules/navigation/astar'
@@ -40,7 +42,19 @@ const journey = computed(() => store.journey)
 const departure = computed(() => journey.value?.departure ?? null)
 const arrival = computed(() => journey.value?.arrival ?? null)
 const connection = computed(() => journey.value?.connection ?? null)
-const terminalId = computed(() => store.effectiveTerminalId)
+const arrivalTerminalId = computed(() => store.arrivalTerminalId)
+const departureTerminalId = computed(() => store.departureTerminalId)
+const terminalId = computed(() =>
+  journey.value?.kind === 'layover'
+    ? arrivalTerminalId.value ?? departureTerminalId.value
+    : departureTerminalId.value,
+)
+const arrivalTerminal = computed(() =>
+  arrivalTerminalId.value ? getTerminal(arrivalTerminalId.value) : null,
+)
+const departureTerminal = computed(() =>
+  departureTerminalId.value ? getTerminal(departureTerminalId.value) : null,
+)
 const terminal = computed(() => (terminalId.value ? getTerminal(terminalId.value) : null))
 const now = ref(Date.now())
 const paceId = ref('normal')
@@ -66,22 +80,29 @@ const connectionCountdown = computed(() =>
   formatCountdown(connection.value?.scheduledDeparture, now.value),
 )
 
-const departureGatePoi = computed(() => {
-  if (!terminalId.value || !departure.value) return undefined
-  return findGatePoi(terminalId.value, departure.value.gate)
+const departureGateResolution = computed(() => {
+  if (!departureTerminalId.value || !departure.value) return null
+  return resolveGatePoi(
+    departureTerminalId.value,
+    departure.value.gate,
+    departure.value.gateFloor,
+  )
 })
-const arrivalGatePoi = computed(() => {
-  if (!terminalId.value || !arrival.value) return undefined
-  return findGatePoi(terminalId.value, arrival.value.gate)
+const departureGatePoi = computed(() => departureGateResolution.value?.poi)
+const arrivalGateResolution = computed(() => {
+  if (!arrivalTerminalId.value || !arrival.value) return null
+  return resolveGatePoi(arrivalTerminalId.value, arrival.value.gate, arrival.value.gateFloor)
 })
-const connectionGatePoi = computed(() => {
-  if (!terminalId.value || !connection.value) return undefined
-  return findGatePoi(terminalId.value, connection.value.gate)
+const arrivalGatePoi = computed(() => arrivalGateResolution.value?.poi)
+const connectionGateResolution = computed(() => {
+  if (!departureTerminalId.value || !connection.value) return null
+  return resolveGatePoi(
+    departureTerminalId.value,
+    connection.value.gate,
+    connection.value.gateFloor,
+  )
 })
-const securityPoi = computed(() => {
-  if (!terminalId.value) return undefined
-  return getPoisForTerminal(terminalId.value).find((poi) => poi.category === 'security')
-})
+const connectionGatePoi = computed(() => connectionGateResolution.value?.poi)
 
 const timingBasisText = computed(() => {
   if (!assessment.value) return 'Not available'
@@ -136,9 +157,9 @@ const requiredChecks = computed(() => {
 })
 
 const recommendedPois = computed(() => {
-  if (!terminalId.value) return []
+  if (!departureTerminalId.value) return []
   return facilitiesForGateFloor(
-    getPoisForTerminal(terminalId.value),
+    getPoisForTerminal(departureTerminalId.value),
     connectionGatePoi.value?.floorId,
   )
 })
@@ -181,16 +202,28 @@ const facilityUnavailableReason = computed(() => {
     return 'Your terminal is not confirmed, so mapped facility suggestions are unavailable. Choose a terminal on the map or ask airport staff.'
   }
   if (store.terminalsDiffer) {
-    return 'This layover changes terminals. T1↔T2 transfer guidance is not verified, so facility suggestions are unavailable.'
+    return 'This layover changes terminals. The map includes the complimentary shuttle route, but facility suggestions are limited to the departure terminal after transfer. Confirm transfer eligibility, security and baggage steps with airline or airport staff.'
   }
   if (
     journey.value &&
     (journey.value.context.sameBooking === 'no' || journey.value.context.baggageThrough === 'no')
   ) {
-    return 'Because you may need to collect baggage or check in again, this demo does not assume an airside facility is reachable. Confirm your transfer path with airline or airport staff before leaving the gate area.'
+    return 'Because you may need to collect baggage or check in again, this route does not assume an airside facility is reachable. Confirm your transfer path with airline or airport staff before leaving the gate area.'
   }
   if (!arrivalGatePoi.value || !connectionGatePoi.value) {
-    return 'Facility suggestions need a mapped arrival gate and a mapped departure gate. One or both gate values are missing or not in the demo map.'
+    return 'Facility suggestions need a mapped arrival point and a mapped departure gate or gate area. One or both values are missing from the OpenStreetMap data.'
+  }
+  if (
+    connection.value?.gateFloor !== undefined &&
+    departureTerminalId.value &&
+    connectionGatePoi.value
+  ) {
+    const liveFloor = getFloorByLevel(departureTerminalId.value, connection.value.gateFloor)
+    if (liveFloor && liveFloor.id !== connectionGatePoi.value.floorId) {
+      return `The live gate is on ${liveFloor.shortLabel}, but the mapped route ends at ${connectionGatePoi.value.name} on ${
+        getFloor(connectionGatePoi.value.floorId)?.shortLabel ?? connectionGatePoi.value.floorId
+      }. Facility suggestions are unavailable until the exact gate level is mapped.`
+    }
   }
   if (!assessment.value || assessment.value.usableMinutes === null) {
     return 'A valid scheduled connection duration is needed before facilities can be suggested.'
@@ -217,15 +250,20 @@ const categoryShort: Record<PoiCategory, string> = {
   escalator: 'ES',
   entrance: 'IN',
   info: 'i',
+  transport: 'T',
+  service: 'SV',
 }
 
 function openMap() {
   const intent: { fromPoiId?: string; toPoiId?: string } = {}
   if (journey.value?.kind === 'departing') {
-    const start = terminalId.value
-      ? recommendedStartingPoi(terminalId.value, true)
-      : recommendedStartingPoi('t1', true)
-    const target = departureGatePoi.value ?? securityPoi.value
+    const terminal = departureTerminalId.value ?? 't1'
+    const start = recommendedStartingPoi(terminal)
+    const target =
+      departureGatePoi.value ??
+      findGateAreaPoi(terminal, departure.value?.gateFloor !== undefined
+        ? `${terminal}-l${departure.value.gateFloor}`
+        : undefined)
     if (start) intent.fromPoiId = start.id
     if (target) intent.toPoiId = target.id
   } else {
@@ -248,9 +286,10 @@ function poiFloor(poi: Poi) {
 }
 
 function gateStatusText() {
-  if (!departure.value?.gate) return 'Gate not available from the flight data.'
-  if (departureGatePoi.value) return `Gate ${departure.value.gate} is mapped on the demo floor plan.`
-  return `Gate ${departure.value.gate} is not on the mapped demo floor plan.`
+  return (
+    departureGateResolution.value?.message ??
+    'Gate not available from the flight data. Confirm it on airport screens.'
+  )
 }
 
 let timer: ReturnType<typeof setInterval> | undefined
@@ -284,8 +323,9 @@ onBeforeUnmount(() => {
     </header>
 
     <div class="notice warn" style="margin-bottom: 1.2rem">
-      <strong>Not a guarantee and not for live navigation.</strong>
-      This prototype uses demo or user-entered flight data and unverified schematic map edges.
+      <strong>Guidance, not a guarantee.</strong>
+      Flight details come from the airport's live board or your manual entry. Map geometry and
+      walkways come from OpenStreetMap and are not field-verified; inferred connectors are dashed.
       Airline and airport instructions take precedence. Ask staff whenever a connection or route
       matters.
     </div>
@@ -302,7 +342,7 @@ onBeforeUnmount(() => {
                 <h2 id="departure-timeline">Departure timeline</h2>
                 <p class="small muted no-gap">Known steps only; counter and gate details are not guessed.</p>
               </div>
-              <span class="badge soft">Demo map</span>
+              <span class="badge soft">OSM map</span>
             </div>
             <ol class="timeline">
               <li class="done">
@@ -317,8 +357,9 @@ onBeforeUnmount(() => {
                 <span class="timeline-dot" aria-hidden="true">2</span>
                 <h3>Clear security</h3>
                 <p>
-                  Head to the mapped security checkpoint on Level 2. Real queues and access rules
-                  are not verified.
+                  Follow airport signs to security. The exact security checkpoint is not mapped in
+                  OpenStreetMap, so the route begins at your chosen mapped start and does not model
+                  queues or access rules.
                 </p>
               </li>
               <li>
@@ -339,10 +380,11 @@ onBeforeUnmount(() => {
               <li>Keep your boarding pass and travel documents ready.</li>
               <li>Check the departure gate and boarding time on airport screens.</li>
               <li>Allow extra time for security queues and walking; this estimate does not include them.</li>
+              <li>The live board can change gate or time; re-check it before you leave for the airport.</li>
               <li>If your flight details change, edit them in the flight review instead of assuming the countdown is right.</li>
             </ul>
             <div class="btn-row" style="margin-top: 1rem">
-              <button type="button" class="btn" @click="openMap">Open the map</button>
+              <button type="button" class="btn" @click="openMap">Open live map</button>
               <RouterLink class="btn secondary" :to="{ name: 'review', query: { edit: '1' } }">
                 Review flight details
               </RouterLink>
@@ -369,10 +411,10 @@ onBeforeUnmount(() => {
               <dd>{{ terminal?.name ?? 'Not supplied' }}</dd>
               <dt>Gate</dt>
               <dd>{{ departure?.gate ?? 'Not available' }}</dd>
-              <dt>Mapped gate</dt>
+              <dt>Mapped route end</dt>
               <dd>{{ departureGatePoi ? departureGatePoi.name : 'Not mapped' }}</dd>
               <dt>Saved</dt>
-              <dd>In this browser only</dd>
+              <dd>This browser · optional account sync</dd>
             </dl>
             <button type="button" class="btn ghost small-btn" style="margin-top: 0.8rem" @click="clearJourney">
               Clear journey data
@@ -447,7 +489,8 @@ onBeforeUnmount(() => {
                 <h3>Confirm transfer requirements</h3>
                 <p>
                   {{ contextComplete ? 'Your context answers are recorded below.' : 'Some context is still unknown; stay conservative and confirm with staff.' }}
-                  BLR transfer rules are not verified in this prototype.
+                  The mapped route includes the complimentary T1↔T2 shuttle where needed. Confirm
+                  transfer eligibility, security and baggage steps with your airline or airport staff.
                 </p>
               </li>
               <li>
@@ -478,11 +521,11 @@ onBeforeUnmount(() => {
               <div>
                 <h2 id="facilities-heading">Facilities that fit the time</h2>
                 <p class="small muted no-gap">
-                  Mapped facilities on the departure gate's level that leave the full return buffer.
-                  The demo does not assume you can leave and re-enter security.
+                  Mapped facilities on the departure gate's or gate area's level that leave the full
+                  return buffer. The route does not assume you can leave and re-enter security.
                 </p>
               </div>
-              <span class="badge unverified">Demo estimates</span>
+              <span class="badge unverified">OSM estimates</span>
             </div>
 
             <div class="form-grid" style="margin-bottom: 0.9rem">
@@ -532,7 +575,7 @@ onBeforeUnmount(() => {
               </div>
             </div>
             <p class="assumption">
-              Walking estimates use the demo graph at your selected pace
+              Walking estimates use the OpenStreetMap-derived graph at your selected pace
               ({{ paceFactor.toFixed(2) }}× normal). The {{ appConfig.connection.facilityReturnBufferMinutes }}
               min return buffer is kept free before the departure gate. Queues and lift waits are not
               included.
@@ -588,7 +631,7 @@ onBeforeUnmount(() => {
               <RouterLink class="btn secondary small-btn" :to="{ name: 'review', query: { edit: '1' } }">
                 Edit connection details
               </RouterLink>
-              <button type="button" class="btn" @click="openMap">Open map</button>
+              <button type="button" class="btn" @click="openMap">Open live map</button>
             </div>
             <button type="button" class="btn ghost small-btn" style="margin-top: 0.7rem" @click="clearJourney">
               Clear journey data
@@ -598,8 +641,10 @@ onBeforeUnmount(() => {
           <section class="card">
             <h2>Terminal and gates</h2>
             <dl class="meta-list">
-              <dt>Terminal</dt>
-              <dd>{{ terminal?.name ?? 'Not supplied' }}</dd>
+              <dt>Arrival terminal</dt>
+              <dd>{{ arrivalTerminal?.name ?? 'Not supplied' }}</dd>
+              <dt>Departure terminal</dt>
+              <dd>{{ departureTerminal?.name ?? 'Not supplied' }}</dd>
               <dt>Arrival gate</dt>
               <dd>{{ arrival?.gate ?? 'Not available' }}</dd>
               <dt>Departure gate</dt>
@@ -609,8 +654,10 @@ onBeforeUnmount(() => {
               <dt>Mapped departure</dt>
               <dd>{{ connectionGatePoi?.name ?? 'Not mapped' }}</dd>
             </dl>
-            <p v-if="store.terminalsDiffer" class="notice danger small" style="margin-top: 0.8rem">
-              T1↔T2 transfer guidance is unavailable. Ask staff.
+            <p v-if="store.terminalsDiffer" class="notice warn small" style="margin-top: 0.8rem">
+              This connection changes terminals. The map includes the complimentary shuttle route
+              (about {{ airportDataset.airport.shuttle.travelMinutes }} min plus wait). Confirm
+              transfer eligibility, security and baggage steps with airline or airport staff.
             </p>
           </section>
         </aside>

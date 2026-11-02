@@ -8,18 +8,34 @@ function readPositiveNumber(value: string | undefined, fallback: number): number
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
 }
 
+const apiBase = (import.meta.env.VITE_API_BASE ?? '').replace(/\/$/, '')
+
 export const appConfig = {
   appEnv: import.meta.env.VITE_APP_ENV ?? 'development',
+  apiBase,
   demoFlightsEnabled: readFlag(import.meta.env.VITE_ENABLE_DEMO_FLIGHTS, true),
-  providerLookupEnabled: readFlag(import.meta.env.VITE_ENABLE_PROVIDER_LOOKUP, false),
-  providerEndpoint: import.meta.env.VITE_FLIGHT_PROXY_URL ?? '/api/flights',
-  providerTimeoutMs: readPositiveNumber(import.meta.env.VITE_FLIGHT_PROVIDER_TIMEOUT_MS, 5000),
+  providerLookupEnabled: readFlag(import.meta.env.VITE_ENABLE_PROVIDER_LOOKUP, true),
+  providerEndpoint: import.meta.env.VITE_FLIGHT_PROXY_URL ?? `${apiBase}/api/flights`,
+  providerTimeoutMs: readPositiveNumber(import.meta.env.VITE_FLIGHT_PROVIDER_TIMEOUT_MS, 8000),
   routing: {
-    /** Curated map coordinates are schematic. One unit is roughly 0.3 m. */
-    metersPerUnit: 0.3,
-    /** Used for the A* lower-bound heuristic; must be >= the edge speed. */
-    heuristicSpeedMetersPerSecond: 1.6,
+    /** Used for the A* lower-bound heuristic; must be >= the fastest edge speed. */
+    heuristicSpeedMetersPerSecond: 3.5,
     defaultPaceFactor: 1,
+    defaultAllowUnverified: true,
+    defaultAllowInferred: true,
+  },
+  liveNavigation: {
+    offRouteThresholdMeters: 45,
+    gpsSnapRadiusMeters: 300,
+    recalcCooldownMs: 15_000,
+    followZoom: 18,
+  },
+  map: {
+    tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    tileAttribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+    initialZoom: 16,
   },
   connection: {
     /** Informational planning allowance only; not an airline rule. */

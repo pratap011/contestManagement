@@ -2,6 +2,7 @@ import { appConfig } from '@/config'
 import type {
   FlightLookupOutcome,
   FlightProvider,
+  FlightRole,
   FlightSearchInput,
 } from './types'
 import { FlightProviderError } from './types'
@@ -15,7 +16,7 @@ import {
 const ERROR_COPY: Record<string, string> = {
   timeout: 'Live flight lookup timed out. You can enter the flight details manually.',
   quota: 'The live lookup request limit has been reached. Manual entry is still available.',
-  unauthorized: 'Live flight lookup is not configured. Use manual entry or demo flights.',
+  unauthorized: 'The live flight service rejected this deployment. Use manual entry or demo flights.',
   unavailable: 'Live flight lookup is unavailable. Manual entry is still available.',
   malformed: 'The live provider returned data we could not read. Please enter details manually.',
   invalid: 'The flight number or travel date is invalid.',
@@ -31,7 +32,7 @@ export function createConfiguredFlightProvider(): FlightProvider | null {
 
 export async function lookupFlights(
   input: FlightSearchInput,
-  options: { provider: FlightProvider | null; enabled: boolean },
+  options: { provider: FlightProvider | null; enabled: boolean; role?: FlightRole },
 ): Promise<FlightLookupOutcome> {
   if (!isValidFlightNumber(input.flightNumber) || !isValidTravelDate(input.date)) {
     return {
@@ -51,6 +52,7 @@ export async function lookupFlights(
     const results = await options.provider.searchFlight(
       normaliseFlightNumber(input.flightNumber),
       input.date,
+      options.role,
     )
     const wanted = normaliseFlightNumber(input.flightNumber)
     // Never silently substitute a different flight for the requested number.
@@ -58,7 +60,12 @@ export async function lookupFlights(
       (result) => normaliseFlightNumber(result.flightNumber) === wanted,
     )
     if (!matching.length) return { status: 'no-results', results: [] }
-    return { status: 'success', results: matching }
+    return {
+      status: 'success',
+      results: matching,
+      provider: matching[0]?.provider,
+      fetchedAt: matching[0]?.fetchedAt,
+    }
   } catch (error) {
     if (error instanceof FlightProviderError) {
       return {
@@ -80,7 +87,7 @@ export async function lookupFlights(
 
 export function flightLookupErrorMessage(outcome: FlightLookupOutcome): string | null {
   if (outcome.status === 'no-results') {
-    return 'No matching flight was found in live data. Check the number, try another date, or enter the details manually.'
+    return 'No matching flight was found on the live BLR board. The board covers today only, so check the date or enter the details manually.'
   }
   if (outcome.status === 'disabled') {
     return 'Live flight lookup is not enabled in this deployment. Enter the details manually or use a demo journey from the home page.'

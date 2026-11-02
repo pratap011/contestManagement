@@ -95,7 +95,7 @@ describe('connection duration', () => {
       context,
       { terminalsDiffer: true },
     )
-    expect(assessment.warnings.join(' ')).toMatch(/T1.*T2 transfer guidance/)
+    expect(assessment.warnings.join(' ')).toMatch(/complimentary T1.*T2 shuttle.*eligibility/)
   })
 
   it('does not present a negative duration as usable time', () => {
@@ -121,10 +121,16 @@ function route(seconds: number): RouteResult {
     nodeIds: ['a', 'b'],
     edges: [],
     totalDistanceMeters: 0,
+    walkingSeconds: seconds,
+    shuttleSeconds: 0,
     baseWalkingSeconds: seconds,
     estimatedWalkingSeconds: seconds,
     floorTransitions: [],
     hasUnverifiedSegments: true,
+    hasInferredSegments: false,
+    hasShuttleSegments: false,
+    inferredEdgeCount: 0,
+    unverifiedEdgeCount: 2,
     passengerType: 'connecting',
     accessibleOnly: false,
     paceFactor: 1,
@@ -138,11 +144,11 @@ function candidate(name: string, category: FacilityCandidate['poi']['category'],
       name,
       category,
       terminalId: 't1',
-      floorId: 't1-l2',
-      x: 0,
-      y: 0,
+      floorId: 't1-l1',
+      lat: 13.2009,
+      lon: 77.7095,
       nodeId: name,
-      source: 'curated-demo',
+      source: 'osm',
       verificationStatus: 'unverified',
     },
     fromArrival: route(seconds),
@@ -174,11 +180,11 @@ describe('facility recommendations', () => {
   })
 
   it('keeps connecting-passenger suggestions on the departure gate floor', () => {
-    const facilities = facilitiesForGateFloor(getPoisForTerminal('t1'), 't1-l2')
+    const facilities = facilitiesForGateFloor(getPoisForTerminal('t1'), 't1-l1')
     expect(facilities.length).toBeGreaterThan(0)
-    expect(facilities.every((poi) => poi.floorId === 't1-l2')).toBe(true)
+    expect(facilities.every((poi) => poi.floorId === 't1-l1')).toBe(true)
     expect(facilities.map((poi) => poi.name)).not.toContain('Café')
-    expect(facilities.map((poi) => poi.name)).toContain('Food court')
+    expect(facilities.map((poi) => poi.name)).toContain('KFC')
     expect(facilitiesForGateFloor(getPoisForTerminal('t1'), undefined)).toEqual([])
   })
 

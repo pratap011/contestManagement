@@ -5,9 +5,13 @@ import FlightSummary from '@/components/FlightSummary.vue'
 import ManualFlightForm from '@/components/ManualFlightForm.vue'
 import ProvenanceBadge from '@/components/ProvenanceBadge.vue'
 import { appConfig } from '@/config'
-import { formatDateTime, formatFetchedAt, isoToLocalInput } from '@/lib/time'
-import { airportDataset } from '@/modules/airport-directory/dataset'
-import { normaliseTerminalCode } from '@/modules/airport-directory/search'
+import {
+  BLR_TIMEZONE,
+  formatDateTime,
+  formatFetchedAt,
+  isoToLocalInput,
+} from '@/lib/time'
+import { normaliseTerminalCode } from '@/modules/airport-directory/terminal-code'
 import { findDemoFlights } from '@/modules/flights/providers/demo'
 import { createManualFlight } from '@/modules/flights/providers/manual'
 import {
@@ -51,7 +55,7 @@ interface SegmentState {
 const route = useRoute()
 const router = useRouter()
 const store = useJourneyStore()
-const timeZone = airportDataset.airport.timezone
+const timeZone = BLR_TIMEZONE
 const provider = createConfiguredFlightProvider()
 const search = store.search
 const editing = route.query.edit === '1' && Boolean(store.journey)
@@ -207,7 +211,7 @@ async function resolveSegment(segment: SegmentState) {
       }
       segment.showManual = true
     } else {
-      const results = findDemoFlights(segment.flightNumber, segment.date)
+      const results = findDemoFlights(segment.flightNumber, segment.date, segment.role)
       segment.outcome =
         results.length > 0
           ? { status: 'success', results }
@@ -221,7 +225,7 @@ async function resolveSegment(segment: SegmentState) {
 
   const outcome = await lookupFlights(
     { flightNumber: segment.flightNumber, date: segment.date },
-    { provider, enabled: appConfig.providerLookupEnabled },
+    { provider, enabled: appConfig.providerLookupEnabled, role: segment.role },
   )
   segment.outcome = outcome
   if (outcome.status === 'success' && outcome.results.length === 1) {
@@ -243,7 +247,7 @@ onMounted(() => {
 function sourceModeLabel() {
   if (editing) return 'Saved journey'
   if (search?.mode === 'demo') return 'Demo lookup'
-  if (appConfig.providerLookupEnabled) return 'Live provider lookup'
+  if (appConfig.providerLookupEnabled) return 'Live flight lookup'
   return 'Manual entry fallback'
 }
 
@@ -348,7 +352,7 @@ function backToFlights() {
         {{
           stage === 'context'
             ? 'These answers cannot be inferred safely from a flight number. Confirm them before seeing the layover estimate.'
-            : 'Confirm the correct flight instance. Provider results are optional; manual entry always remains available.'
+            : 'Confirm the correct flight instance. Live results come from the airport board; manual entry always remains available.'
         }}
       </p>
     </header>
@@ -477,8 +481,14 @@ function backToFlights() {
                     <span>This is an estimate, not the scheduled time.</span>
                   </div>
                   <p v-if="result.fetchedAt" class="tiny muted no-gap">
-                    {{ formatFetchedAt(result.fetchedAt, timeZone) }} · schedule values are
-                    {{ result.source === 'demo' ? 'demo data' : 'provider-sourced' }}
+                    {{ formatFetchedAt(result.fetchedAt, timeZone) }} ·
+                    {{
+                      result.source === 'demo'
+                        ? 'demo data'
+                        : result.source === 'manual'
+                          ? 'user-entered'
+                          : 'BLR airport live board'
+                    }}
                   </p>
                 </div>
               </div>
@@ -530,7 +540,8 @@ function backToFlights() {
 
       <div class="notice warn" style="margin-top: 1.2rem">
         <strong>Data honesty:</strong> missing terminal or gate values are shown as “Not available”.
-        No gate, terminal, or scheduled time is invented. Demo values are only examples.
+        No gate, terminal, or scheduled time is invented. Live board values are labelled with their
+        retrieval time; demo values are only examples.
       </div>
     </template>
 
@@ -612,8 +623,9 @@ function backToFlights() {
 
         <div v-if="selectedTerminalsDiffer" class="notice danger" style="margin-top: 1.1rem">
           <strong>Terminal change detected in your entries.</strong>
-          T1↔T2 transfer guidance is not verified in this MVP. Ask airport staff and allow extra time;
-          do not rely on the schematic map for an inter-terminal transfer.
+          The map can include the complimentary T1↔T2 shuttle, but transfer eligibility, security,
+          immigration and baggage steps depend on your airline and ticket. Confirm them with airline
+          or airport staff and allow extra time.
         </div>
 
         <div class="context-actions">

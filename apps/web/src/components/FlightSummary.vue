@@ -36,7 +36,12 @@ const estimatedTime = computed(() => {
   return isValidIso(iso) ? formatFullDateTime(iso, props.timeZone) : null
 })
 const terminal = computed(() => props.flight.terminal ?? 'Not available')
-const gate = computed(() => props.flight.gate ?? 'Not available')
+const gate = computed(() => {
+  if (!props.flight.gate) return 'Not available'
+  return props.flight.gateFloor !== undefined
+    ? `${props.flight.gate} · Level ${props.flight.gateFloor}`
+    : props.flight.gate
+})
 const fetched = computed(() =>
   props.flight.source === 'provider' || props.flight.source === 'demo'
     ? formatFetchedAt(props.flight.fetchedAt, props.timeZone)
@@ -93,9 +98,20 @@ const missingTime = computed(() => {
     <p v-if="stale" class="notice warn small no-gap">
       This provider data may be stale. Check airport screens before relying on it.
     </p>
-    <p v-if="fetched" class="tiny muted no-gap">{{ fetched }} · {{ flight.source === 'demo' ? 'not a real schedule' : 'source: provider proxy' }}</p>
+    <p v-if="fetched" class="tiny muted no-gap">
+      {{ fetched }} ·
+      {{
+        flight.source === 'demo'
+          ? 'not a real schedule'
+          : flight.provider === 'blr-airport-board'
+            ? 'BLR airport live board'
+            : flight.provider === 'aviationstack'
+              ? 'Aviationstack'
+              : 'provider proxy'
+      }}
+    </p>
     <p v-if="showDemoNote && flight.source === 'demo'" class="tiny muted no-gap">
-      Demo terminal and gate labels are illustrative, not verified BLR assignments.
+      Demo terminal and gate labels are illustrative, not live BLR assignments.
     </p>
   </article>
 </template>

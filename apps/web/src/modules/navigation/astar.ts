@@ -12,14 +12,16 @@ export interface RouteRequest {
   toNodeId: string
   passengerType: PassengerType
   accessibleOnly?: boolean
-  /** Demo data is unverified, so the UI explicitly opts in to demo routing. */
+  /** OSM-mapped edges are not field-verified; the UI opts in with a warning. */
   allowUnverified?: boolean
+  /** Short access/spine connectors derived from mapped positions. */
+  allowInferred?: boolean
   paceFactor?: number
 }
 
 export interface FloorTransition {
   edgeId: string
-  transitionType: Exclude<TransitionType, 'walk'>
+  transitionType: Exclude<TransitionType, 'walk' | 'shuttle'>
   fromFloorId: string
   toFloorId: string
   atNodeId: string
@@ -30,10 +32,16 @@ export interface RouteResult {
   nodeIds: string[]
   edges: MapEdge[]
   totalDistanceMeters: number
+  walkingSeconds: number
+  shuttleSeconds: number
   baseWalkingSeconds: number
   estimatedWalkingSeconds: number
   floorTransitions: FloorTransition[]
   hasUnverifiedSegments: boolean
+  hasInferredSegments: boolean
+  hasShuttleSegments: boolean
+  inferredEdgeCount: number
+  unverifiedEdgeCount: number
   passengerType: PassengerType
   accessibleOnly: boolean
   paceFactor: number
@@ -64,8 +72,14 @@ function isEdgeEligible(edge: MapEdge, request: RouteRequest): boolean {
     if (!edge.accessible) return false
     if (edge.transitionType === 'stairs' || edge.transitionType === 'escalator') return false
   }
-  if (!request.allowUnverified && edge.verificationStatus !== 'verified') return false
-  return true
+  if (edge.verificationStatus === 'verified') return true
+  if (edge.verificationStatus === 'inferred') {
+    return request.allowInferred ?? appConfig.routing.defaultAllowInferred
+  }
+  if (edge.verificationStatus === 'unverified') {
+    return request.allowUnverified ?? appConfig.routing.defaultAllowUnverified
+  }
+  return false
 }
 
 function buildAdjacency(
@@ -95,8 +109,9 @@ function lowestScore(open: Set<string>, scores: Map<string, number>): Candidate 
 }
 
 /**
- * A* over the curated walking graph. Edges are undirected; access is filtered
- * before the search so a prohibited edge cannot be returned.
+ * A* over the OpenStreetMap-derived walking graph. Edges are undirected; access
+ * and verification rules are filtered before the search so a prohibited edge
+ * cannot be returned.
  */
 export function findRoute(
   nodes: MapNode[],
@@ -107,10 +122,18 @@ export function findRoute(
   const start = nodeById.get(request.fromNodeId)
   const goal = nodeById.get(request.toNodeId)
   if (!start) {
-    return { ok: false, reason: 'unknown-origin', message: 'The starting point is not on the mapped graph.' }
+    return {
+      ok: false,
+      reason: 'unknown-origin',
+      message: 'The starting point is not on the mapped network.',
+    }
   }
   if (!goal) {
-    return { ok: false, reason: 'unknown-destination', message: 'The destination is not on the mapped graph.' }
+    return {
+      ok: false,
+      reason: 'unknown-destination',
+      message: 'The destination is not on the mapped network.',
+    }
   }
   if (request.fromNodeId === request.toNodeId) {
     return {
@@ -119,10 +142,16 @@ export function findRoute(
         nodeIds: [start.id],
         edges: [],
         totalDistanceMeters: 0,
+        walkingSeconds: 0,
+        shuttleSeconds: 0,
         baseWalkingSeconds: 0,
         estimatedWalkingSeconds: 0,
         floorTransitions: [],
         hasUnverifiedSegments: false,
+        hasInferredSegments: false,
+        hasShuttleSegments: false,
+        inferredEdgeCount: 0,
+        unverifiedEdgeCount: 0,
         passengerType: request.passengerType,
         accessibleOnly: Boolean(request.accessibleOnly),
         paceFactor: request.paceFactor ?? appConfig.routing.defaultPaceFactor,
@@ -170,7 +199,7 @@ export function findRoute(
     ok: false,
     reason: 'no-route',
     message:
-      'No valid route exists in the current schematic data for this passenger type and access setting.',
+      'No mapped route exists for this passenger type and access setting. Try a mapped starting point, enable inferred connectors, or ask airport staff.',
   }
 }
 
@@ -195,8 +224,10 @@ function buildRoute(
   pathEdges.reverse()
 
   let totalDistanceMeters = 0
-  let baseWalkingSeconds = 0
-  let hasUnverifiedSegments = false
+  let walkingSeconds = 0
+  let shuttleSeconds = 0
+  let inferredEdgeCount = 0
+  let unverifiedEdgeCount = 0
   const floorTransitions: FloorTransition[] = []
 
   for (let index = 0; index < pathEdges.length; index += 1) {
@@ -205,9 +236,11 @@ function buildRoute(
     const toNode = nodeById.get(nodeIds[index + 1])
     if (!fromNode || !toNode) continue
     totalDistanceMeters += edge.distanceMeters
-    baseWalkingSeconds += edge.estimatedWalkingSeconds
-    if (edge.verificationStatus !== 'verified') hasUnverifiedSegments = true
-    if (fromNode.floorId !== toNode.floorId && edge.transitionType !== 'walk') {
+    if (edge.transitionType === 'shuttle') shuttleSeconds += edge.estimatedWalkingSeconds
+    else walkingSeconds += edge.estimatedWalkingSeconds
+    if (edge.verificationStatus === 'inferred') inferredEdgeCount += 1
+    if (edge.verificationStatus === 'unverified') unverifiedEdgeCount += 1
+    if (fromNode.floorId !== toNode.floorId && edge.transitionType !== 'walk' && edge.transitionType !== 'shuttle') {
       floorTransitions.push({
         edgeId: edge.id,
         transitionType: edge.transitionType,
@@ -223,10 +256,16 @@ function buildRoute(
     nodeIds,
     edges: pathEdges,
     totalDistanceMeters,
-    baseWalkingSeconds,
-    estimatedWalkingSeconds: baseWalkingSeconds * paceFactor,
+    walkingSeconds,
+    shuttleSeconds,
+    baseWalkingSeconds: walkingSeconds + shuttleSeconds,
+    estimatedWalkingSeconds: walkingSeconds * paceFactor + shuttleSeconds,
     floorTransitions,
-    hasUnverifiedSegments,
+    hasUnverifiedSegments: unverifiedEdgeCount > 0,
+    hasInferredSegments: inferredEdgeCount > 0,
+    hasShuttleSegments: shuttleSeconds > 0,
+    inferredEdgeCount,
+    unverifiedEdgeCount,
     passengerType: request.passengerType,
     accessibleOnly: Boolean(request.accessibleOnly),
     paceFactor,

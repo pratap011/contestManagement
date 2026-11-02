@@ -1,101 +1,95 @@
 # BLR Navigator data sources
 
-## What is bundled today
+## What is bundled
 
 | Dataset | Version | Source | Verification |
 | --- | --- | --- | --- |
-| BLR airport, terminals, floors, POIs, graph | `demo-2026.11` | Hand-curated schematic demo | `unverified` |
-| Flight schedules | Deterministic demo catalogue + manual entry | Demo provider / user | Labelled `demo` / `manual` |
-| Live flight lookup | Disabled by default | Optional server-side proxy | `provider` when enabled |
+| BLR airport, terminals, floors, POIs, graph | `osm-2026-11-02` | OpenStreetMap extract + OSRM road geometry | `unverified` (OSM) / `inferred` (derived connectors) |
+| Live flights | Current airport day | BLR Airport public live board via server proxy | `provider` |
+| Other-date flights | User-selected date | Optional Aviationstack key via server proxy | `provider` |
+| Manual flights | User input | Passenger | `manual` |
+| Demo flights | Deterministic catalogue | Local `demo.ts` | `demo` |
+| Optional accounts | — | PostgreSQL / local PGlite | User-controlled |
 
-No OpenStreetMap data is bundled in this build. The schematic SVG is rendered from local JSON
-geometry. If OSM-derived data is added later, the extraction date, query, source metadata, and
-required attribution must be recorded with the dataset.
+The exact OSM extraction date, bounding box, source IDs and counts are in
+`apps/web/src/data/blr/osm-meta.json`. The generator is `scripts/build-osm-data.mjs`.
 
-## Honest limitations
+## OpenStreetMap derivation
 
-- The terminal floors and POIs are illustrative. They are not a survey of the real T1/T2.
-- Every graph edge is `unverified`. Routes are shown only as demo routes with a visible warning.
-- There is no T1↔T2 transfer edge. The UI explicitly says transfer guidance is unavailable.
-- Security edges are currently undirected in the demo graph. The assistant avoids suggesting
-  landside facilities to connecting passengers, but a manual map route can still cross the boundary.
-  This must be modelled with directional access rules before claiming reliable airside routing.
-- Accessible flags are demo values. Step-free mode is not a wheelchair-accessibility guarantee.
+The generator downloads the OSM map extract for `77.695,13.185,77.720,13.212` from the public OSM API.
+It extracts:
 
-## OSM / Overpass audit status
+- T1 footprint (OSM way `60046909`) and T2 footprint (relation `13779616`, outer way `1029667204`).
+- `aeroway=gate` positions for T1 and T2.
+- Mapped indoor corridors, footways, steps and lifts.
+- Shops, food, restrooms, entrances, transport stops and other named facilities.
+- Terminal 2 indoor room polygons for the level-1 retail area.
+- The two mapped inter-terminal shuttle stops.
 
-The PRD's M0 audit was **not completed** as part of this prototype, so there is no go decision for
-OSM indoor routing. Do not import OSM geometry and mark it verified without reviewing coverage and
-permissions.
+It then derives airport routing data:
 
-When the audit is run, keep the query and extraction date in this document. A starting query (to be
-reviewed, not executed by the app) is:
+- Node/edge chains from consecutive OSM way points, using `level` and `indoor` tags.
+- Haversine distances and walking times at 1.25 m/s (0.6 m/s stairs, 0.8 m/s escalator, 30 s lift).
+- Passenger access from `access`/`foot` tags; step-free flags from `wheelchair`, stairs and escalators.
+- Gate spines and POI access connectors where OSM has gate/facility points but no mapped walkway.
+- Approximate terminal entrance, hall and vertical connectors.
+- A T1↔T2 shuttle edge between the mapped stops, with road geometry from the OSRM demo server.
 
-```overpassql
-[out:json][timeout:60];
-area["aeroway"="aerodrome"]["name"~"Kempegowda",i]->.a;
-(
-  nwr["aeroway"](area.a);
-  nwr["indoor"](area.a);
-  nwr["level"](area.a);
-  nwr["amenity"](area.a);
-  nwr["shop"](area.a);
-  nwr["wheelchair"](area.a);
-);
-out center tags;
-```
-
-Review at minimum `aeroway`, `indoor`, `level`, `amenity`, `shop`, and `wheelchair` tags. Record
-counts per terminal/floor and note whether corridors, gates, and floor transitions are actually
-mapped. Do not treat a mapped feature as routable without verification.
-
-If OSM data is used, display “© OpenStreetMap contributors” and comply with ODbL obligations for a
-distributed derived database. Do not treat the public OSM tile servers as unlimited free hosting;
-the current app uses local SVG, not OSM tiles.
-
-## Data files
-
-```
-src/data/blr/
-  airport.json
-  terminals/t1/floors.json
-  terminals/t1/pois.json
-  terminals/t1/graph.json
-  terminals/t2/floors.json
-  terminals/t2/pois.json
-  terminals/t2/graph.json
-```
-
-- Floor geometry uses a 1000×620 schematic coordinate system per floor (width/height are stored in
-  each floor record).
-- Graph nodes carry terminal, floor, and schematic x/y coordinates.
-- POIs reference a graph node and must be on the same floor.
-- `estimatedWalkingSeconds` is a demo estimate derived from schematic distance at roughly 1.2 m/s.
-  Cross-floor edges use fixed demo transition times.
-- Edges are undirected in this MVP. `allowedPassengerTypes` is the serialized access rule used by A*.
-- `accessible` excludes stairs/escalators from step-free mode; lifts must be marked accessible.
-
-`validateDataset()` runs when the app loads and in the test suite. Add data through the JSON files
-and keep the validator/test green.
+All OSM-derived edges are marked `unverified` because they have not been field-checked. Every derived
+connector is marked `inferred` and drawn dashed. The app includes both by default but lets the user
+turn inferred connectors off.
 
 ## Verification statuses
 
 | Status | Meaning | Routing policy |
 | --- | --- | --- |
-| `verified` | Checked against a reliable, permitted source or on-site validation. | Eligible for a route presented as reliable. |
-| `unverified` | Imported, demo, or collected but not checked. | Searchable with a warning; demo routing only. |
-| `inferred` | Approximate or derived location. | Not for safety-critical routing. |
-| `unknown` | No reliable value. | Display as “Not available”; never invent a route. |
+| `verified` | Checked against a reliable, permitted source or on-site validation. | Eligible for a route presented as reliable. The current import has none. |
+| `unverified` | Imported from OpenStreetMap but not checked. | Used with a visible data-quality warning. |
+| `inferred` | Derived connector, approximate level or entrance. | Dashed; included only when inferred connectors are enabled. |
+| `unknown` | No reliable value. | Display as “Not available”; do not invent. |
 
-To promote data, record the permitted source, verification date, reviewer, and method in the dataset
-metadata, update `verificationStatus`, and add/adjust tests. Do not change statuses to make the UI
-look complete.
+To promote data, record the permitted source, verification date, reviewer and method in the metadata,
+update `verificationStatus`, and adjust tests. Do not change statuses to make the UI look complete.
 
-## Flight providers
+## T1↔T2 transfer
 
-`VITE_ENABLE_PROVIDER_LOOKUP=false` by default. Manual entry and deterministic demo flights are
-always available. The browser calls a configurable server-side proxy
-(`VITE_FLIGHT_PROXY_URL`); no provider secret belongs in a `VITE_` variable or client bundle.
+Public BLR guidance says the terminals are about 600 m apart, with a complimentary shuttle roughly
+every 10 minutes and a ride of about 10 minutes. The graph uses the two mapped OSM stops, OSRM/OSM
+road geometry, a 10-minute ride and a 5-minute wait allowance. This is a transfer route, not a
+guarantee that a passenger is eligible to transit without immigration, security or baggage steps.
+The UI warns about this explicitly.
 
-See [flight-provider-proxy.md](./flight-provider-proxy.md) for the proxy contract and
-[map-verification.md](./map-verification.md) for the verification checklist.
+Sources:
+
+- BLR Airport public transfer guidance (complimentary inter-terminal shuttle, stops at T1 departures
+  and T1 kerbside, T2 P16/P17 arrivals).
+- BLR Airport “Connections by BLR” transfer-service announcement (dedicated transfer desks,
+  wayfinding, complimentary inter-terminal shuttle).
+- OpenStreetMap stop and road geometry.
+
+## Live flights
+
+The primary provider is the BLR Airport public flight board
+(`/fis/v2/api/aodb/flights`) plus the public gate directory (`/fis/v2/api/aodb/gates`). The server:
+
+- calls the board server-side with the required origin/referer headers,
+- caches the board for 60 seconds and the gate directory for 10 minutes,
+- filters by flight number and departure/arrival role,
+- maps airport-local timestamps to ISO with the fixed `+05:30` offset,
+- returns terminal, gate and gate floor when supplied,
+- rate-limits client requests and never exposes a key to the browser.
+
+The board covers the current airport day only. The optional Aviationstack fallback can cover other
+dates when `AVIATIONSTACK_API_KEY` is set. Manual entry and demo data always work if both fail.
+
+## Limits
+
+- Indoor corridors are only mapped for part of T2. T1's indoor walkways are inferred from gate/facility
+  positions and terminal geometry.
+- Some T2 gates on floors 0 and 3 have no mapped indoor corridor. The route ends at a mapped gate
+  area and tells the user to confirm the exact gate.
+- OSM coverage, tags and gate positions change. Re-run the generator and review the diff before a
+  public launch.
+- The public OSM tile server is used for the basemap at prototype traffic levels; it is not unlimited
+  free tile hosting.
+- Step-free flags are OSM-derived, not a wheelchair-accessibility guarantee.

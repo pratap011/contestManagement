@@ -1,5 +1,7 @@
 export type FlightSource = 'provider' | 'manual' | 'demo'
 
+export type FlightDirection = 'departure' | 'arrival'
+
 export interface FlightResult {
   flightNumber: string
   airline?: string
@@ -11,8 +13,12 @@ export interface FlightResult {
   estimatedArrival?: string
   terminal?: string
   gate?: string
+  /** Airport-published floor for the gate, when the live gate directory supplies it. */
+  gateFloor?: number
   status?: string
   source: FlightSource
+  provider?: 'blr-airport-board' | 'aviationstack'
+  direction?: FlightDirection
   fetchedAt?: string
 }
 
@@ -24,7 +30,7 @@ export interface FlightSearchInput {
 export interface FlightProvider {
   readonly id: string
   readonly label: string
-  searchFlight(flightNumber: string, date: string): Promise<FlightResult[]>
+  searchFlight(flightNumber: string, date: string, role?: FlightRole): Promise<FlightResult[]>
 }
 
 export type FlightProviderErrorCode =
@@ -50,6 +56,8 @@ export type FlightLookupStatus = 'success' | 'no-results' | 'disabled' | 'error'
 export interface FlightLookupOutcome {
   status: FlightLookupStatus
   results: FlightResult[]
+  provider?: string
+  fetchedAt?: string
   error?: {
     code: FlightProviderErrorCode | 'validation'
     message: string

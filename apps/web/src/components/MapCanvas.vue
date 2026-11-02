@@ -1,23 +1,42 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import { appConfig } from '@/config'
 import { airportDataset } from '@/modules/airport-directory/dataset'
 import {
   POI_CATEGORY_LABELS,
   type Floor,
+  type FloorArea,
   type Poi,
   type PoiCategory,
 } from '@/modules/airport-directory/types'
-import type { FloorTransition, RouteResult } from '@/modules/navigation/astar'
-import { groupRouteByFloor } from '@/modules/navigation/route-validator'
+import type { RouteResult } from '@/modules/navigation/astar'
+import type { UserPosition } from '@/composables/useGeolocation'
+import { edgeGeometry } from '@/modules/navigation/route-validator'
 
-const props = defineProps<{
-  floor: Floor
-  pois: Poi[]
-  route: RouteResult | null
-  originPoiId?: string | null
-  destinationPoiId?: string | null
-  selectedPoiId?: string | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    activeTerminalId: string
+    floor: Floor | null
+    pois: Poi[]
+    route: RouteResult | null
+    originPoiId?: string | null
+    destinationPoiId?: string | null
+    selectedPoiId?: string | null
+    userPosition?: UserPosition | null
+    followUser?: boolean
+    autoFit?: boolean
+  }>(),
+  {
+    originPoiId: null,
+    destinationPoiId: null,
+    selectedPoiId: null,
+    userPosition: null,
+    followUser: false,
+    autoFit: true,
+  },
+)
 
 const emit = defineEmits<{
   'select-poi': [poiId: string]
@@ -36,420 +55,386 @@ const GLYPHS: Record<PoiCategory, string> = {
   escalator: 'ES',
   entrance: 'IN',
   info: 'i',
+  transport: 'T',
+  service: 'SV',
 }
 
-const TRANSITION_GLYPHS: Record<FloorTransition['transitionType'], string> = {
-  elevator: 'EL',
-  stairs: 'ST',
-  escalator: 'ES',
+const mapEl = ref<HTMLDivElement | null>(null)
+const map = shallowRef<L.Map | null>(null)
+const terminalLayer = shallowRef<L.LayerGroup | null>(null)
+const areaLayer = shallowRef<L.LayerGroup | null>(null)
+const poiLayer = shallowRef<L.LayerGroup | null>(null)
+const routeLayer = shallowRef<L.LayerGroup | null>(null)
+const userLayer = shallowRef<L.LayerGroup | null>(null)
+let resizeObserver: ResizeObserver | null = null
+
+const activeTerminal = computed(() =>
+  airportDataset.terminals.find((terminal) => terminal.id === props.activeTerminalId),
+)
+
+const floorLabel = computed(() => props.floor?.label ?? 'Airport map')
+
+const nodeById = computed(() => new Map(airportDataset.nodes.map((node) => [node.id, node])))
+
+function clearLayer(layer: L.LayerGroup | null) {
+  if (layer) layer.clearLayers()
 }
 
-const svgRef = ref<SVGSVGElement | null>(null)
-const viewBox = reactive({ x: 0, y: 0, w: props.floor.width, h: props.floor.height })
-const panning = ref(false)
-let drag:
-  | {
-      pointerId: number
-      startClientX: number
-      startClientY: number
-      startViewX: number
-      startViewY: number
+function polygonBounds(polygon: [number, number][]): L.LatLngBounds {
+  return L.latLngBounds(polygon.map(([lat, lon]) => [lat, lon]))
+}
+
+function drawTerminals() {
+  if (!map.value || !terminalLayer.value) return
+  clearLayer(terminalLayer.value)
+  for (const terminal of airportDataset.terminals) {
+    const active = terminal.id === props.activeTerminalId
+    const polygon = L.polygon(terminal.polygon, {
+      color: active ? '#0b726c' : '#7b8ca3',
+      weight: active ? 3 : 2,
+      opacity: active ? 0.95 : 0.55,
+      fillColor: active ? '#14b8a6' : '#94a3b8',
+      fillOpacity: active ? 0.08 : 0.03,
+    })
+    polygon.bindTooltip(terminal.name, { direction: 'center', className: 'map-tooltip' })
+    polygon.addTo(terminalLayer.value)
+  }
+}
+
+function areaStyle(area: FloorArea): L.PathOptions {
+  if (area.kind === 'room') {
+    return {
+      color: '#7c95b1',
+      weight: 1,
+      opacity: 0.65,
+      fillColor: '#bdd7e8',
+      fillOpacity: 0.16,
     }
-  | null = null
+  }
+  return {
+    color: '#8aa0b8',
+    weight: 1,
+    opacity: 0.5,
+    fillColor: '#dbeafe',
+    fillOpacity: 0.12,
+  }
+}
 
-const routeSegments = computed(() =>
-  props.route ? groupRouteByFloor(props.route, airportDataset.nodes) : [],
-)
-const segment = computed(() =>
-  routeSegments.value.find((item) => item.floorId === props.floor.id),
-)
-const routePoints = computed(() =>
-  segment.value?.points.map((point) => `${point.x},${point.y}`).join(' ') ?? '',
-)
-const transitionPoint = computed(() => segment.value?.points.at(-1) ?? null)
-const transition = computed(() => segment.value?.transitionAtEnd ?? null)
-const floorPois = computed(() =>
-  airportDataset.pois.filter((poi) => poi.floorId === props.floor.id),
-)
+function drawAreas() {
+  if (!areaLayer.value) return
+  clearLayer(areaLayer.value)
+  if (!props.floor) return
+  for (const area of props.floor.areas) {
+    const polygon = L.polygon(area.polygon, areaStyle(area))
+    if (area.label) {
+      polygon.bindTooltip(area.label, { sticky: true, className: 'map-tooltip' })
+    }
+    polygon.addTo(areaLayer.value)
+  }
+}
 
-function areaHasPoi(area: Floor['areas'][number]) {
-  return floorPois.value.some(
-    (poi) =>
-      poi.x >= area.x &&
-      poi.x <= area.x + area.width &&
-      poi.y >= area.y &&
-      poi.y <= area.y + area.height,
+function poiIcon(poi: Poi): L.DivIcon {
+  const selected = props.selectedPoiId === poi.id
+  const origin = props.originPoiId === poi.id
+  const destination = props.destinationPoiId === poi.id
+  const classes = [
+    'poi-pin',
+    `poi-${poi.category}`,
+    selected ? 'is-selected' : '',
+    origin ? 'is-origin' : '',
+    destination ? 'is-destination' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+  return L.divIcon({
+    className: 'poi-icon-wrapper',
+    html: `<span class="${classes}" aria-hidden="true">${GLYPHS[poi.category]}</span>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+  })
+}
+
+function drawPois() {
+  if (!poiLayer.value) return
+  clearLayer(poiLayer.value)
+  for (const poi of props.pois) {
+    const marker = L.marker([poi.lat, poi.lon], {
+      icon: poiIcon(poi),
+      title: `${poi.name} · ${POI_CATEGORY_LABELS[poi.category]}`,
+      alt: poi.name,
+      keyboard: true,
+    })
+    marker.bindTooltip(
+      `${poi.name}<br><span class="map-tooltip-sub">${POI_CATEGORY_LABELS[poi.category]}${
+        poi.verificationStatus === 'inferred' ? ' · inferred location' : ''
+      }</span>`,
+      { direction: 'top', offset: [0, -12], className: 'map-tooltip' },
+    )
+    marker.on('click', () => emit('select-poi', poi.id))
+    marker.addTo(poiLayer.value)
+  }
+}
+
+function drawEndpointMarker(
+  layer: L.LayerGroup,
+  position: [number, number],
+  label: string,
+  className: string,
+) {
+  const icon = L.divIcon({
+    className: 'route-endpoint-wrapper',
+    html: `<span class="route-endpoint ${className}">${label}</span>`,
+    iconSize: [54, 28],
+    iconAnchor: [27, 14],
+  })
+  L.marker(position, { icon, interactive: false }).addTo(layer)
+}
+
+function drawRoute() {
+  if (!routeLayer.value) return
+  clearLayer(routeLayer.value)
+  if (!props.route || !props.route.edges.length) return
+  const layer = routeLayer.value
+  const nodes = nodeById.value
+  const segments: Array<{ geometry: [number, number][]; edge: (typeof props.route.edges)[number] }> = []
+  for (let index = 0; index < props.route.edges.length; index += 1) {
+    const edge = props.route.edges[index]
+    const from = nodes.get(props.route.nodeIds[index])
+    const to = nodes.get(props.route.nodeIds[index + 1])
+    if (!from || !to) continue
+    segments.push({ geometry: edgeGeometry(edge, from, to), edge })
+  }
+
+  for (const segment of segments) {
+    L.polyline(segment.geometry, {
+      color: '#ffffff',
+      weight: 9,
+      opacity: 0.85,
+      lineCap: 'round',
+      lineJoin: 'round',
+      interactive: false,
+    }).addTo(layer)
+  }
+  for (const segment of segments) {
+    const isShuttle = segment.edge.transitionType === 'shuttle'
+    const isInferred = segment.edge.verificationStatus === 'inferred'
+    L.polyline(segment.geometry, {
+      color: isShuttle ? '#2556a6' : isInferred ? '#c2410c' : '#0b726c',
+      weight: isShuttle ? 7 : 5,
+      opacity: isShuttle ? 0.95 : 0.9,
+      dashArray: isShuttle ? '14 8' : isInferred ? '6 8' : undefined,
+      lineCap: 'round',
+      lineJoin: 'round',
+      interactive: false,
+    }).addTo(layer)
+  }
+
+  const shuttleSegment = segments.find((segment) => segment.edge.transitionType === 'shuttle')
+  if (shuttleSegment && shuttleSegment.geometry.length > 1) {
+    const middle = shuttleSegment.geometry[Math.floor(shuttleSegment.geometry.length / 2)]
+    const icon = L.divIcon({
+      className: 'shuttle-badge-wrapper',
+      html: '<span class="shuttle-badge">Shuttle</span>',
+      iconSize: [64, 24],
+      iconAnchor: [32, 12],
+    })
+    L.marker(middle, { icon, interactive: false }).addTo(layer)
+  }
+
+  const firstNode = nodes.get(props.route.nodeIds[0])
+  const lastNode = nodes.get(props.route.nodeIds[props.route.nodeIds.length - 1])
+  if (firstNode) drawEndpointMarker(layer, [firstNode.lat, firstNode.lon], 'START', 'is-start')
+  if (lastNode) drawEndpointMarker(layer, [lastNode.lat, lastNode.lon], 'GOAL', 'is-goal')
+}
+
+function drawUser() {
+  if (!userLayer.value) return
+  clearLayer(userLayer.value)
+  if (!props.userPosition) return
+  const position: [number, number] = [props.userPosition.lat, props.userPosition.lon]
+  L.circle(position, {
+    radius: Math.max(8, props.userPosition.accuracy),
+    color: '#2556a6',
+    weight: 1,
+    opacity: 0.4,
+    fillColor: '#2556a6',
+    fillOpacity: 0.08,
+    interactive: false,
+  }).addTo(userLayer.value)
+  const heading = props.userPosition.heading
+  const icon = L.divIcon({
+    className: 'user-location-wrapper',
+    html: `<span class="user-location-dot"${
+      heading === null ? '' : ` style="transform: rotate(${heading}deg)"`
+    }><span class="user-location-heading"></span></span>`,
+    iconSize: [26, 26],
+    iconAnchor: [13, 13],
+  })
+  L.marker(position, { icon, title: 'Your location', interactive: false }).addTo(userLayer.value)
+  if (props.followUser && map.value) {
+    map.value.setView(position, Math.max(map.value.getZoom(), appConfig.liveNavigation.followZoom), {
+      animate: true,
+      duration: 0.5,
+    })
+  }
+}
+
+function fitTerminal(terminalId = props.activeTerminalId) {
+  if (!map.value) return
+  const terminal = airportDataset.terminals.find((item) => item.id === terminalId)
+  if (!terminal) return
+  map.value.fitBounds(polygonBounds(terminal.polygon), { padding: [36, 36], maxZoom: 18 })
+}
+
+function fitRoute() {
+  if (!map.value) return
+  if (!props.route || !props.route.edges.length) {
+    fitTerminal()
+    return
+  }
+  const nodes = nodeById.value
+  const points: [number, number][] = []
+  for (let index = 0; index < props.route.edges.length; index += 1) {
+    const from = nodes.get(props.route.nodeIds[index])
+    const to = nodes.get(props.route.nodeIds[index + 1])
+    if (!from || !to) continue
+    for (const point of edgeGeometry(props.route.edges[index], from, to)) points.push(point)
+  }
+  if (!points.length) {
+    fitTerminal()
+    return
+  }
+  map.value.fitBounds(L.latLngBounds(points), { padding: [42, 42], maxZoom: 18 })
+}
+
+function setViewToUser() {
+  if (!map.value || !props.userPosition) return
+  map.value.setView(
+    [props.userPosition.lat, props.userPosition.lon],
+    Math.max(map.value.getZoom(), appConfig.liveNavigation.followZoom),
+    { animate: true },
   )
 }
 
-function poiDisplayLabel(poi: Poi) {
-  return poi.name.replace(/ to Level [12]$/, '')
+function invalidateSize() {
+  map.value?.invalidateSize()
 }
 
-function resetView() {
-  viewBox.x = 0
-  viewBox.y = 0
-  viewBox.w = props.floor.width
-  viewBox.h = props.floor.height
-}
+onMounted(() => {
+  if (!mapEl.value) return
+  const initial = activeTerminal.value ?? airportDataset.terminals[0]
+  const center = initial?.center ?? airportDataset.airport.center
+  const initialMap = L.map(mapEl.value, {
+    center: [center.lat, center.lon],
+    zoom: appConfig.map.initialZoom,
+    zoomControl: false,
+    attributionControl: true,
+    minZoom: 14,
+    maxZoom: appConfig.map.maxZoom,
+    preferCanvas: true,
+  })
+  L.tileLayer(appConfig.map.tileUrl, {
+    maxZoom: appConfig.map.maxZoom,
+    attribution: appConfig.map.tileAttribution,
+  }).addTo(initialMap)
+  L.control.zoom({ position: 'bottomright' }).addTo(initialMap)
+  L.control.scale({ imperial: false, position: 'bottomleft', maxWidth: 120 }).addTo(initialMap)
+  initialMap.attributionControl.setPrefix(false)
 
-watch(() => props.floor.id, resetView)
+  const terminals = L.layerGroup().addTo(initialMap)
+  const areas = L.layerGroup().addTo(initialMap)
+  const pois = L.layerGroup().addTo(initialMap)
+  const route = L.layerGroup().addTo(initialMap)
+  const user = L.layerGroup().addTo(initialMap)
 
-function clampView() {
-  viewBox.w = Math.min(props.floor.width, Math.max(260, viewBox.w))
-  viewBox.h = Math.min(props.floor.height, Math.max(190, viewBox.h))
-  viewBox.x = Math.min(Math.max(0, viewBox.x), Math.max(0, props.floor.width - viewBox.w))
-  viewBox.y = Math.min(Math.max(0, viewBox.y), Math.max(0, props.floor.height - viewBox.h))
-}
+  map.value = initialMap
+  terminalLayer.value = terminals
+  areaLayer.value = areas
+  poiLayer.value = pois
+  routeLayer.value = route
+  userLayer.value = user
 
-function zoom(factor: number) {
-  const centerX = viewBox.x + viewBox.w / 2
-  const centerY = viewBox.y + viewBox.h / 2
-  viewBox.w /= factor
-  viewBox.h /= factor
-  viewBox.x = centerX - viewBox.w / 2
-  viewBox.y = centerY - viewBox.h / 2
-  clampView()
-}
+  drawTerminals()
+  drawAreas()
+  drawPois()
+  drawRoute()
+  drawUser()
+  requestAnimationFrame(() => {
+    initialMap.invalidateSize()
+    if (props.route && props.route.edges.length && props.autoFit) fitRoute()
+    else fitTerminal()
+  })
 
-function onPointerDown(event: PointerEvent) {
-  if (event.button !== 0) return
-  const target = event.currentTarget as SVGRectElement
-  target.setPointerCapture(event.pointerId)
-  drag = {
-    pointerId: event.pointerId,
-    startClientX: event.clientX,
-    startClientY: event.clientY,
-    startViewX: viewBox.x,
-    startViewY: viewBox.y,
-  }
-  panning.value = true
-}
+  resizeObserver = new ResizeObserver(() => initialMap.invalidateSize())
+  resizeObserver.observe(mapEl.value)
+})
 
-function onPointerMove(event: PointerEvent) {
-  if (!drag || !svgRef.value) return
-  const rect = svgRef.value.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
-  const dx = ((event.clientX - drag.startClientX) * viewBox.w) / rect.width
-  const dy = ((event.clientY - drag.startClientY) * viewBox.h) / rect.height
-  viewBox.x = drag.startViewX - dx
-  viewBox.y = drag.startViewY - dy
-  clampView()
-}
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  resizeObserver = null
+  map.value?.remove()
+  map.value = null
+})
 
-function endPan(event: PointerEvent) {
-  if (!drag) return
-  const target = event.currentTarget as SVGRectElement
-  if (target.hasPointerCapture(drag.pointerId)) target.releasePointerCapture(drag.pointerId)
-  drag = null
-  panning.value = false
-}
+watch(
+  () => props.activeTerminalId,
+  () => {
+    drawTerminals()
+    if (props.autoFit) fitTerminal()
+  },
+)
 
-function selectPoi(poiId: string) {
-  emit('select-poi', poiId)
-}
+watch(
+  () => props.floor?.id,
+  () => {
+    drawAreas()
+    drawPois()
+  },
+)
 
-function isOrigin(poiId: string) {
-  return props.originPoiId === poiId
-}
+watch(
+  () => [props.pois, props.selectedPoiId, props.originPoiId, props.destinationPoiId],
+  () => drawPois(),
+  { deep: false },
+)
 
-function isDestination(poiId: string) {
-  return props.destinationPoiId === poiId
-}
+watch(
+  () => [props.route, props.originPoiId, props.destinationPoiId],
+  () => {
+    drawRoute()
+    if (props.route && props.autoFit && !props.followUser) fitRoute()
+  },
+  { deep: false },
+)
 
-function markerLabel(poi: Poi) {
-  const flags = [
-    isOrigin(poi.id) ? 'origin' : '',
-    isDestination(poi.id) ? 'destination' : '',
-  ].filter(Boolean)
-  return `${poi.name}, ${POI_CATEGORY_LABELS[poi.category]}${flags.length ? `, ${flags.join(', ')}` : ''}`
-}
+watch(
+  () => props.userPosition,
+  () => drawUser(),
+  { deep: true },
+)
+
+watch(
+  () => props.followUser,
+  (follow) => {
+    if (follow) drawUser()
+  },
+)
+
+defineExpose({ fitRoute, fitTerminal, setViewToUser, invalidateSize })
 </script>
 
 <template>
-  <div class="map-frame">
-    <svg
-      ref="svgRef"
-      class="map-canvas"
-      :class="{ panning }"
-      :viewBox="`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`"
-      role="group"
-      :aria-label="`Schematic map of ${floor.label}. Demo data, not to scale.`"
-    >
-      <defs>
-        <marker
-          id="route-arrow"
-          viewBox="0 0 10 10"
-          refX="8"
-          refY="5"
-          markerWidth="5"
-          markerHeight="5"
-          orient="auto-start-reverse"
-        >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#c2410c" />
-        </marker>
-      </defs>
-
-      <rect
-        class="map-pan-surface"
-        x="0"
-        y="0"
-        :width="floor.width"
-        :height="floor.height"
-        fill="transparent"
-        @pointerdown="onPointerDown"
-        @pointermove="onPointerMove"
-        @pointerup="endPan"
-        @pointercancel="endPan"
-      />
-
-      <g class="map-areas" aria-hidden="true">
-        <g v-for="area in floor.areas" :key="area.id">
-          <rect
-            :class="['map-area', area.kind]"
-            :x="area.x"
-            :y="area.y"
-            :width="area.width"
-            :height="area.height"
-            :rx="area.rx ?? (area.kind === 'zone' || area.kind === 'outline' ? 24 : 8)"
-          />
-          <text
-            v-if="area.label && !areaHasPoi(area)"
-            class="area-label"
-            :x="area.x + area.width / 2"
-            :y="area.y + area.height / 2"
-            text-anchor="middle"
-            dominant-baseline="middle"
-          >
-            {{ area.label }}
-          </text>
-        </g>
-      </g>
-
-      <g v-if="routePoints" class="route-layer" aria-hidden="true">
-        <polyline class="route-line-halo" :points="routePoints" />
-        <polyline
-          class="route-line"
-          :points="routePoints"
-          :marker-end="segment && !segment.transitionAtEnd ? 'url(#route-arrow)' : undefined"
-        />
-        <g
-          v-if="transition && transitionPoint"
-          :transform="`translate(${transitionPoint.x}, ${transitionPoint.y})`"
-        >
-          <circle class="transition-marker" r="15" />
-          <text class="transition-glyph" text-anchor="middle" dominant-baseline="middle">
-            {{ TRANSITION_GLYPHS[transition.transitionType] }}
-          </text>
-        </g>
-      </g>
-
-      <g class="poi-layer">
-        <g
-          v-for="poi in pois"
-          :key="poi.id"
-          class="poi-marker"
-          :class="{
-            'is-origin': isOrigin(poi.id),
-            'is-destination': isDestination(poi.id),
-            'is-selected': selectedPoiId === poi.id,
-          }"
-          :transform="`translate(${poi.x}, ${poi.y})`"
-          role="button"
-          tabindex="0"
-          :aria-label="markerLabel(poi)"
-          @click="selectPoi(poi.id)"
-          @keydown.enter.prevent="selectPoi(poi.id)"
-          @keydown.space.prevent="selectPoi(poi.id)"
-          @pointerdown.stop
-        >
-          <title>{{ markerLabel(poi) }}</title>
-          <circle v-if="isOrigin(poi.id)" class="marker-ring origin-ring" r="21" />
-          <circle v-if="isDestination(poi.id)" class="marker-ring destination-ring" r="21" />
-          <circle v-if="selectedPoiId === poi.id" class="marker-ring selected-ring" r="25" />
-          <circle class="poi-dot" :class="poi.category" r="12.5" />
-          <text class="poi-glyph" text-anchor="middle" dominant-baseline="middle">
-            {{ GLYPHS[poi.category] }}
-          </text>
-          <text class="map-poi-label" y="28" text-anchor="middle">{{ poiDisplayLabel(poi) }}</text>
-        </g>
-      </g>
-    </svg>
-
-    <div class="map-controls">
-      <button type="button" class="map-control-btn" aria-label="Zoom in" @click="zoom(1.35)">+</button>
-      <button type="button" class="map-control-btn" aria-label="Zoom out" @click="zoom(1 / 1.35)">−</button>
-      <button type="button" class="map-control-btn" aria-label="Reset map view" @click="resetView">↺</button>
-    </div>
-    <div class="map-footer">Schematic · not to scale · {{ airportDataset.airport.mapVersion }}</div>
+  <div class="map-shell">
+    <div
+      ref="mapEl"
+      class="leaflet-map"
+      role="application"
+      :aria-label="`Map of ${floorLabel}. OpenStreetMap base map with mapped terminal facilities and route overlays.`"
+    />
+    <p class="map-credit tiny muted">
+      Base map © OpenStreetMap contributors · Map data
+      <a :href="airportDataset.airport.attributionUrl" target="_blank" rel="noreferrer">ODbL</a>
+      · {{ airportDataset.airport.mapVersion }}
+    </p>
   </div>
 </template>
-
-<style scoped>
-.map-canvas {
-  background: #e9f1f7;
-}
-
-.map-area.outline {
-  fill: #f7fbfd;
-  stroke: #c2d2e0;
-  stroke-width: 3;
-}
-
-.map-area.zone {
-  fill: #ffffff;
-  stroke: #d7e3ee;
-  stroke-width: 1.5;
-}
-
-.map-area.room {
-  fill: #f1f6fa;
-  stroke: #cbd9e6;
-  stroke-width: 1.5;
-}
-
-.map-area.corridor {
-  fill: #e2edf5;
-  stroke: #cbdbe8;
-  stroke-width: 1;
-}
-
-.map-area.island {
-  fill: #d8e8f2;
-  stroke: #b8cfdf;
-  stroke-width: 1.5;
-}
-
-.map-area.gate {
-  fill: #e2f3ee;
-  stroke: #a9d4c8;
-  stroke-width: 1.5;
-}
-
-.area-label {
-  fill: #6f8298;
-  font-size: 13px;
-  font-weight: 600;
-  pointer-events: none;
-}
-
-.map-areas,
-.route-layer {
-  pointer-events: none;
-}
-
-.map-pan-surface {
-  cursor: grab;
-}
-
-.map-canvas.panning .map-pan-surface {
-  cursor: grabbing;
-}
-
-.route-line-halo {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-
-.route-line {
-  fill: none;
-  stroke: #c2410c;
-  stroke-width: 4.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-
-.transition-marker {
-  fill: #fff;
-  stroke: #c2410c;
-  stroke-width: 3;
-}
-
-.transition-glyph {
-  fill: #c2410c;
-  font-size: 9px;
-  font-weight: 800;
-}
-
-.poi-marker {
-  cursor: pointer;
-  outline: none;
-}
-
-.poi-marker:focus-visible .poi-dot {
-  stroke: #10233f;
-  stroke-width: 4;
-}
-
-.poi-dot {
-  stroke: #ffffff;
-  stroke-width: 2.5;
-}
-
-.poi-dot.gate { fill: #0b726c; }
-.poi-dot.checkin { fill: #2556a6; }
-.poi-dot.security { fill: #7c3aed; }
-.poi-dot.restroom { fill: #475569; }
-.poi-dot.food { fill: #c2410c; }
-.poi-dot.shop { fill: #a16207; }
-.poi-dot.lounge { fill: #0f766e; }
-.poi-dot.entrance { fill: #16794c; }
-.poi-dot.elevator { fill: #1d4ed8; }
-.poi-dot.stairs { fill: #64748b; }
-.poi-dot.escalator { fill: #64748b; }
-.poi-dot.info { fill: #0891b2; }
-
-.poi-glyph {
-  fill: #fff;
-  font-size: 8px;
-  font-weight: 800;
-  pointer-events: none;
-}
-
-.map-poi-label {
-  fill: #33465f;
-  font-size: 12px;
-  font-weight: 600;
-  paint-order: stroke;
-  stroke: #ffffff;
-  stroke-width: 3px;
-  stroke-linejoin: round;
-  pointer-events: none;
-}
-
-.poi-marker.is-origin .map-poi-label {
-  fill: #16794c;
-  font-weight: 800;
-}
-
-.poi-marker.is-destination .map-poi-label {
-  fill: #9a3412;
-  font-weight: 800;
-}
-
-.marker-ring {
-  fill: none;
-  stroke-width: 4;
-}
-
-.origin-ring {
-  stroke: #16a34a;
-}
-
-.destination-ring {
-  stroke: #ea580c;
-}
-
-.selected-ring {
-  stroke: #2556a6;
-  stroke-width: 2;
-  stroke-dasharray: 5 4;
-}
-</style>

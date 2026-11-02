@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const label = computed(() => {
-  if (props.source === 'provider') return 'Provider data'
+  if (props.source === 'provider') return 'Live board'
   if (props.source === 'manual') return 'User-entered'
   if (props.source === 'demo') return 'Demo data'
   return 'Unknown'
@@ -19,7 +19,9 @@ const title = computed(() => {
     return 'Deterministic demo schedule. This is not a real flight and was not retrieved from an airline.'
   }
   if (props.source === 'manual') return 'Entered by the passenger in this browser.'
-  if (props.source === 'provider') return 'Sourced from the configured flight-data provider through a server-side proxy.'
+  if (props.source === 'provider') {
+    return 'Sourced from the airport public live board, or an optional Aviationstack fallback, through a server-side proxy. Check the retrieval time and airport screens.'
+  }
   return 'The source of this value is unknown.'
 })
 </script>

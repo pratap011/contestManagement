@@ -113,7 +113,7 @@ export function assessConnection(
 
   if (options.terminalsDiffer) {
     warnings.push(
-      'The arrival and departure terminals differ. T1↔T2 transfer guidance is not verified in this MVP; ask airport staff.',
+      'The arrival and departure terminals differ. The map includes the complimentary T1↔T2 shuttle, but confirm transfer eligibility, security and baggage steps with airline or airport staff.',
     )
   }
 

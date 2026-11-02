@@ -1,72 +1,90 @@
-# Optional flight-provider proxy contract
+# Live flight lookup and proxy contract
 
-Live lookup is feature-flagged off by default. The browser never holds a provider key; it calls a
-server-side proxy configured with `VITE_FLIGHT_PROXY_URL` (default `/api/flights`). The proxy can be
-a Cloudflare Worker, Express route, or equivalent, and must keep the API key server-side.
+Live lookup is **enabled by default**. The browser never holds a provider key; it calls the API at
+`/api/flights` (or `VITE_FLIGHT_PROXY_URL` if configured). The API is implemented in
+`server/flights.ts` and does not need a separate Worker for this deployment.
+
+## Sources
+
+1. **Primary: BLR Airport public live board**
+   - Board: `https://gateway.bengaluruairport.com/fis/v2/api/aodb/flights`
+   - Gate directory: `https://gateway.bengaluruairport.com/fis/v2/api/aodb/gates`
+   - Covers the current airport day.
+   - Supplies airline, route, scheduled/estimated times, status, terminal, gate and gate floor.
+   - Requested server-side with the public website origin/referer headers.
+   - Cached for 60 seconds (board) and 10 minutes (gate directory).
+2. **Optional fallback: Aviationstack**
+   - Enabled only when `AVIATIONSTACK_API_KEY` is set on the server.
+   - Useful for dates outside the current airport day.
+   - Normalises schedules touching BLR to `+05:30`; other-airport timestamps are left as supplied.
+3. **Manual entry** and **demo flights** always remain available.
 
 ## Request
 
 ```http
-GET /api/flights?flightNumber=6E%202134&date=2026-11-02
+GET /api/flights?flightNumber=6E%205082&date=2026-11-02&role=departure
 Accept: application/json
 ```
 
-- `flightNumber` is normalised to `XX 123` form before the request.
+- `flightNumber` is validated and normalised to `XX 123` form.
 - `date` is `YYYY-MM-DD` in airport-local time.
-- The proxy should apply its own conservative timeout, caching, rate limit, and provider quota guard.
+- `role` is optional: `departure`, `arrival` or `connection`. `departure`/`connection` select departures
+  from BLR; `arrival` selects arrivals at BLR.
+- The server applies a timeout, rate limit, board cache and provider fallback.
 
 ## Response
 
-Return `200` with either an array or `{ "results": [...] }`:
+`200` with:
 
 ```json
 {
   "results": [
     {
-      "flightNumber": "6E 2134",
+      "flightNumber": "6E 5082",
       "airline": "IndiGo",
       "origin": "BLR",
-      "destination": "DEL",
-      "scheduledDeparture": "2026-11-02T20:00:00+05:30",
-      "scheduledArrival": "2026-11-02T22:25:00+05:30",
-      "estimatedDeparture": null,
-      "estimatedArrival": null,
+      "destination": "BOM",
+      "scheduledDeparture": "2026-11-02T19:00:00.000Z",
+      "estimatedDeparture": "2026-11-02T19:20:00.000Z",
       "terminal": "T1",
-      "gate": "A3",
-      "status": "scheduled",
-      "fetchedAt": "2026-11-02T14:30:00.000Z"
+      "gate": "33",
+      "gateFloor": 1,
+      "status": "Delayed",
+      "source": "provider",
+      "provider": "blr-airport-board",
+      "direction": "departure",
+      "fetchedAt": "2026-11-02T13:30:00.000Z"
     }
-  ]
+  ],
+  "provider": "blr-airport-board",
+  "fetchedAt": "2026-11-02T13:30:00.000Z"
 }
 ```
 
-The client normalises timestamps to ISO UTC, normalises terminal values to `T1`/`T2`, and marks the
-result `source: "provider"`. Every timestamp must include an explicit UTC or numeric offset
-(`Z`, `+05:30`, `-04:00`); timestamps without an offset are treated as unavailable rather than being
-silently read in the browser's timezone. It discards records without a valid flight number and does not silently
-substitute a different flight number. `fetchedAt` is used for the freshness label; if the provider
-does not return one, the client uses retrieval time.
+The client normalises timestamps to ISO UTC, terminal values to `T1`/`T2`, and marks results
+`source: "provider"`. Every timestamp must include an explicit offset; timestamps without one are
+treated as unavailable. The client discards records without a valid flight number and never
+substitutes a different flight number. `fetchedAt` drives the freshness label.
 
 ## Error handling
 
-| Status | Client behaviour |
-| --- | --- |
-| `429` | “Request limit reached”; manual entry remains available. |
-| `401` / `403` | “Not configured correctly”; manual entry remains available. |
-| `5xx` | “Unavailable”; manual entry remains available. |
-| Timeout | “Timed out”; manual entry remains available. |
-| Invalid/malformed JSON | “Could not read data”; manual entry remains available. |
-| `200` with no results | “No matching flight”; manual entry remains available. |
+| Status | Meaning | Client behaviour |
+| --- | --- | --- |
+| `400` | Invalid flight number/date | Shows validation copy; manual entry remains. |
+| `429` | Local rate limit or provider quota | Shows quota copy; manual entry remains. |
+| `502` | Provider unavailable or rejected | Shows unavailable copy; manual entry remains. |
+| `504` | Provider timeout | Shows timeout copy; manual entry remains. |
+| `200` with empty results | No match on the current board | Offers manual entry; explains the board covers today. |
 
-## Rules
+## Security rules
 
-- Never embed `AVIATIONSTACK_API_KEY` or any provider secret in `VITE_` variables or client JSON.
-- Re-check provider terms, free-tier limits, coverage, and non-commercial restrictions before
-  enabling lookup in a deployed environment.
-- Do not imply a gate or terminal is live unless the provider explicitly supplies it and freshness is
-  known.
-- Cache conservatively per flight/date within the provider terms; do not hammer a free tier.
-- Keep the proxy independent of the map/routing modules so the app works without it.
+- Never put `AVIATIONSTACK_API_KEY` or any provider secret in a `VITE_` variable or client bundle.
+- Keep the API server-side and rate-limited.
+- Cache conservatively; do not hammer the airport's public endpoint.
+- Re-check the airport endpoint's terms and Aviationstack's current free-tier/non-commercial terms
+  before a high-traffic public launch.
+- Do not imply a gate or terminal is live unless the source supplies it and freshness is known.
 
-The adapter implementation is `src/modules/flights/providers/http.ts`; failure-mode tests are in
+The client adapter is `src/modules/flights/providers/http.ts`; API tests mock both the board and gate
+directory in `server/app.test.ts`; client failure-mode tests are in
 `src/modules/flights/flights.spec.ts`.

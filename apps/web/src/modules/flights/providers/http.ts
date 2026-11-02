@@ -1,4 +1,4 @@
-import type { FlightProvider, FlightResult } from '../types'
+import type { FlightDirection, FlightProvider, FlightResult, FlightRole } from '../types'
 import { FlightProviderError } from '../types'
 import {
   isValidFlightNumber,
@@ -34,6 +34,19 @@ function readIso(record: Record<string, unknown>, key: string): string | undefin
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
 }
 
+function readNumber(record: Record<string, unknown>, key: string): number | undefined {
+  const value = record[key]
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
+function readDirection(value: unknown): FlightDirection | undefined {
+  return value === 'departure' || value === 'arrival' ? value : undefined
+}
+
+function readProvider(value: unknown): FlightResult['provider'] {
+  return value === 'blr-airport-board' || value === 'aviationstack' ? value : undefined
+}
+
 function mapProviderResult(value: unknown): FlightResult | null {
   if (!isRecord(value)) return null
   const rawFlightNumber = readString(value, 'flightNumber')
@@ -50,8 +63,11 @@ function mapProviderResult(value: unknown): FlightResult | null {
     estimatedArrival: readIso(value, 'estimatedArrival'),
     terminal: normaliseTerminalLabel(readString(value, 'terminal')),
     gate: readString(value, 'gate')?.toUpperCase(),
+    gateFloor: readNumber(value, 'gateFloor'),
     status: readString(value, 'status'),
     source: 'provider',
+    provider: readProvider(value.provider),
+    direction: readDirection(value.direction),
     fetchedAt,
   }
 }
@@ -62,7 +78,7 @@ function mapProviderResult(value: unknown): FlightResult | null {
  */
 export class HttpFlightProvider implements FlightProvider {
   readonly id = 'http-proxy'
-  readonly label = 'Flight provider (via server proxy)'
+  readonly label = 'Live BLR airport board (via server proxy)'
   private readonly endpoint: string
   private readonly timeoutMs: number
   private readonly fetchImpl: typeof fetch
@@ -70,18 +86,25 @@ export class HttpFlightProvider implements FlightProvider {
   constructor(options: HttpFlightProviderOptions) {
     this.endpoint = options.endpoint
     this.timeoutMs = options.timeoutMs
-    this.fetchImpl = options.fetchImpl ?? fetch
+    // Bind the browser's fetch to the global object: calling an unbound
+    // window.fetch as an object method throws "Illegal invocation" in Chrome.
+    this.fetchImpl = options.fetchImpl ?? fetch.bind(globalThis)
   }
 
-  async searchFlight(flightNumber: string, date: string): Promise<FlightResult[]> {
+  async searchFlight(
+    flightNumber: string,
+    date: string,
+    role?: FlightRole,
+  ): Promise<FlightResult[]> {
     if (!isValidFlightNumber(flightNumber) || !isValidTravelDate(date)) {
       throw new FlightProviderError('invalid', 'Flight number or travel date is invalid.')
     }
 
     const separator = this.endpoint.includes('?') ? '&' : '?'
+    const roleParam = role ? `&role=${encodeURIComponent(role)}` : ''
     const url = `${this.endpoint}${separator}flightNumber=${encodeURIComponent(
       normaliseFlightNumber(flightNumber),
-    )}&date=${encodeURIComponent(date)}`
+    )}&date=${encodeURIComponent(date)}${roleParam}`
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), this.timeoutMs)
 

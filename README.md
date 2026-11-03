@@ -51,27 +51,91 @@ others use schematic terminal-level routes with inferred connectors.
 | Notifications | Web Push (VAPID) + service worker |
 | Tests | Vitest across the web app and API |
 
-## Quick start with Docker
+## Run with Docker (recommended)
 
-Requires Docker with Compose v2. No `.env`, database install or secret generation is needed.
+The whole local stack — PostgreSQL, the Node API and the built Vue frontend — runs from one Compose
+file. No `.env`, database installation or manual secret generation is needed.
+
+### Prerequisites
+
+- **Docker Engine 24+** or **Docker Desktop** with the Compose v2 plugin. Check with
+  `docker --version` and `docker compose version`.
+- Port **8787** free on your machine.
+- The first build needs internet access to pull `node:24-bookworm-slim`, `postgres:16-alpine` and npm
+  packages. Later starts use the local cache.
+
+> Use `docker compose ...` (v2). The old standalone `docker-compose` v1 binary is not supported.
+
+### Start the app
 
 ```bash
+git clone https://github.com/pratap011/contestManagement.git
+cd contestManagement
 docker compose up --build
 ```
 
-Open <http://localhost:8787>. Compose starts PostgreSQL 16 and one app container that builds the Vue
-app and serves it with the API. Tables are created on first boot, and a session secret plus Web Push
-keys are generated once and kept in Docker volumes, so accounts and notification subscriptions
-survive restarts.
+The first run takes a few minutes while the images build. When the log says
+`Airport Navigator API listening on http://localhost:8787 (postgres)`, open:
+
+**<http://localhost:8787>**
+
+What Compose starts:
+
+| Container | Purpose |
+| --- | --- |
+| `db` | PostgreSQL 16 with the `blr_navigator` database; data persists in the `pgdata` volume |
+| `app` | Builds the Vue app, serves it and the API on port 8787; creates tables on first boot |
+
+The app container generates a session secret and Web Push keys on first start and stores them in the
+`appdata` volume. Accounts, saved journeys and notification subscriptions therefore survive
+`docker compose restart` and `docker compose down`.
+
+### Verify the stack
 
 ```bash
-docker compose down       # stop; keep the database and generated secrets
-docker compose down -v    # stop and delete all local data
+docker compose ps
+curl http://localhost:8787/api/health
 ```
 
-Optional settings (`AERODATABOX_API_KEY`, stable VAPID keys, a custom database password) can be put in
-a local `.env`; see [`.env.example`](.env.example). `docker compose up` rebuilds nothing by itself, so
-use `--build` after pulling changes.
+The health response should include `"ok":true` and `"database":"postgres"`. In the browser, a demo
+departing journey should reach the assistant and map. Live BLR lookups depend on the airport's public
+board being reachable from your network.
+
+### Everyday commands
+
+```bash
+docker compose up -d          # start in the background
+docker compose logs -f app    # follow app logs
+docker compose restart app    # restart the app only
+docker compose down           # stop; keep the database and generated keys
+docker compose down -v        # stop and delete all local data (accounts, journeys, keys)
+docker compose up --build     # rebuild after pulling code changes
+```
+
+If port 8787 is already in use, change the host side of the mapping in `docker-compose.yml`
+(`"8790:8787"`) and open <http://localhost:8790>.
+
+### Optional settings
+
+The defaults are enough for local use. To add an AeroDataBox key, use stable VAPID keys or choose a
+custom database password, copy the example file and edit it:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+| Variable | Purpose |
+| --- | --- |
+| `AERODATABOX_API_KEY` | Live lookup for future dates and the other five airports (server-side only) |
+| `AERODATABOX_GATEWAY` | `rapidapi` (default) or `direct`, matching where the key was issued |
+| `POSTGRES_PASSWORD` | Local database password; run `docker compose down -v` after changing it |
+| `JWT_SECRET` | Stable session secret; generated automatically when omitted |
+| `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` | Stable Web Push keys so subscriptions survive rebuilds |
+
+The database is not published on the host. If you need to inspect it, use
+`docker compose exec db psql -U blr -d blr_navigator`. See [`DEPLOYMENT.md`](DEPLOYMENT.md) for
+deploying to Render or another Docker host.
 
 ## Run locally without Docker
 
@@ -116,10 +180,22 @@ airports it goes straight to the optional AeroDataBox provider. The browser neve
 credentials. If lookup is unavailable, the review screen falls back to manual entry; demo flights are
 always deterministic and selected per airport.
 
-The BLR board covers the current airport day. For other dates or airports, set
-`AERODATABOX_API_KEY` on the server or use manual entry. Never put a provider key in a `VITE_`
-variable. The free AeroDataBox plan is non-commercial and needs attribution, which the flight summary
-shows.
+The BLR board covers the current airport day. For future dates and the other five airports, set
+`AERODATABOX_API_KEY` on the server. The key can come from RapidAPI or a direct AeroDataBox account;
+set `AERODATABOX_GATEWAY=direct` for direct keys (the default is `rapidapi`). Never put a provider
+key in a `VITE_` variable or the browser bundle. The free AeroDataBox plan is non-commercial and
+needs attribution, which the flight summary shows.
+
+Check the configured coverage or run a real lookup without changing code:
+
+```bash
+npm run flights:check
+npm run flights:check -- "6E 5082" 2026-12-03 DEL departure
+```
+
+The first command prints which airports and dates live lookup can cover. The second calls the same
+server path the app uses and prints the provider result. A missing key leaves BLR-today board lookup
+and manual entry working.
 
 Checkpoint waits come from the airport's public queue displays, weather from Open-Meteo and aircraft
 positions from OpenSky ADS-B. Each is cached and optional; see

@@ -7,7 +7,7 @@
 | BLR airport, terminals, floors, POIs, graph | `osm-2026-11-02` | OpenStreetMap extract + OSRM road geometry | `unverified` (OSM) / `inferred` (derived connectors) |
 | DEL, BOM, HYD, MAA, CCU terminal datasets | `osm-2026-11-02` | OpenStreetMap API bbox extract + airport transfer pages | `unverified` (OSM) / `inferred` (schematic connectors) |
 | Live flights | Current airport day | BLR Airport public live board via server proxy | `provider` |
-| Other-date flights | User-selected date | Optional AeroDataBox key via server proxy | `provider` |
+| Future-date and other-airport flights | User-selected date | AeroDataBox via server proxy when a key is configured | `provider` |
 | Checkpoint queues | Live, cached 60 s | BLR Airport public queue displays via server proxy | `provider` |
 | Weather context | Live, cached 10 min | Open-Meteo | `provider` |
 | Aircraft position | Live, cached 45 s | OpenSky Network ADS-B | `provider` |
@@ -118,9 +118,11 @@ The primary provider is the BLR Airport public flight board
 - returns terminal, gate and gate floor when supplied,
 - rate-limits client requests and never exposes a key to the browser.
 
-The board covers the current airport day only. The optional AeroDataBox fallback can cover other
-dates when `AERODATABOX_API_KEY` is set; its free plan is non-commercial and requires attribution.
-Manual entry and demo data always work if both fail.
+The board covers the current airport day only. When `AERODATABOX_API_KEY` is set, the server uses
+AeroDataBox for future dates and for DEL/BOM/HYD/MAA/CCU, and as a fallback if the BLR board fails or
+has no match. The key stays on the server; the API supports both RapidAPI and direct AeroDataBox
+accounts through `AERODATABOX_GATEWAY` and optional base-URL overrides. The free plan is
+non-commercial and requires attribution. Manual entry and demo data always work if both fail.
 
 The same server proxy pattern supplies the live queue displays, Open-Meteo weather context and
 OpenSky aircraft positions. Each has its own short cache, rate limit and explicit “unavailable”

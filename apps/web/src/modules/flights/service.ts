@@ -88,7 +88,7 @@ export async function lookupFlights(
 
 export function flightLookupErrorMessage(outcome: FlightLookupOutcome): string | null {
   if (outcome.status === 'no-results') {
-    return 'No matching flight was found. The airport board covers today only, so check the date or enter the details manually.'
+    return 'No matching flight was found for this date. Check the flight number and date, or enter the details manually.'
   }
   if (outcome.status === 'disabled') {
     return 'Live flight lookup is not enabled in this deployment. Enter the details manually or use a demo journey from the home page.'

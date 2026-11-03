@@ -1,0 +1,128 @@
+/* Dark-mode corrections for values that are intentionally fixed in
+   components (status colours and third-party map controls). */
+:root[data-theme="dark"] .badge.provider {
+  border-color: #2d4c78;
+  color: #a8c8ff;
+}
+
+:root[data-theme="dark"] .badge.manual {
+  background: #2a2140;
+  border-color: #45346a;
+  color: #d8c7ff;
+}
+
+:root[data-theme="dark"] .badge.demo,
+:root[data-theme="dark"] .badge.unverified {
+  border-color: #5a4517;
+  color: #fcd34d;
+}
+
+:root[data-theme="dark"] .badge.verified,
+:root[data-theme="dark"] .badge.success {
+  border-color: #1d5c46;
+}
+
+:root[data-theme="dark"] .notice.info {
+  border-color: #24466d;
+  border-left-color: #6ea8ff;
+}
+
+:root[data-theme="dark"] .notice.warn {
+  border-color: #5a4517;
+  border-left-color: #d6a62c;
+}
+
+:root[data-theme="dark"] .notice.danger {
+  border-color: #6b2a2a;
+  border-left-color: #fca5a5;
+}
+
+:root[data-theme="dark"] .notice.success {
+  border-color: #1d5c46;
+  border-left-color: #5ed39b;
+}
+
+:root[data-theme="dark"] .warning-list li {
+  border-color: #5a4517;
+  border-left-color: #d6a62c;
+}
+
+:root[data-theme="dark"] .warning-list li:last-child {
+  border-color: var(--line);
+  border-left-color: var(--line-strong);
+}
+
+:root[data-theme="dark"] .route-summary {
+  background: var(--brand-tint);
+  border-color: #28466b;
+}
+
+:root[data-theme="dark"] .live-panel {
+  border-color: #28466b;
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-attrib {
+  background: rgba(17, 28, 45, 0.92) !important;
+  color: var(--ink-soft);
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-attrib a {
+  color: #9dc0ff;
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-group {
+  background: var(--surface);
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-group button + button {
+  border-top-color: var(--line);
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+:root[data-theme="dark"] .poi-pin,
+:root[data-theme="dark"] .route-endpoint,
+:root[data-theme="dark"] .shuttle-badge,
+:root[data-theme="dark"] .user-location-dot {
+  border-color: #0b1220;
+}
+
+:root[data-theme="dark"] .map-tooltip {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .home-hero,
+:root[data-theme="dark"] .trip-banner,
+:root[data-theme="dark"] .countdown-card {
+  background: var(--brand-panel);
+}
+
+:root[data-theme="dark"] .table-wrap table th {
+  background: var(--surface-soft);
+}
+
+:root[data-theme="dark"] .saved-journey {
+  background: var(--brand-tint);
+  border-color: #28466b;
+  border-left-color: #6ea8ff;
+}
+
+:root[data-theme="dark"] .legend-line {
+  border-top-color: #93c5fd;
+}
+
+:root[data-theme="dark"] .legend-line.dashed {
+  border-top-color: #fb923c;
+}
+
+:root[data-theme="dark"] .legend-line.shuttle {
+  border-top-color: #c4b5fd;
+}
+
+:root[data-theme="dark"] .legend-dot {
+  background: #3b82f6;
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px rgba(59, 130, 246, 0.4);
+}

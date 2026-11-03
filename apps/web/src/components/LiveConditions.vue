@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatFetchedAt } from '@/lib/time'
+import { formatInTimeZone } from 'date-fns-tz'
+import { formatFetchedAt, isValidIso } from '@/lib/time'
 import { keyCheckpoints, queueWaitText } from '@/modules/live/api'
 import type { AirportWeather, TerminalQueues } from '@/modules/live/types'
 
@@ -33,6 +34,12 @@ function queueRows(queues: TerminalQueues) {
 function temperatureText(value: number | null): string {
   return value === null ? '—' : `${Math.round(value)}°C`
 }
+
+function observedText(iso: string | null | undefined): string {
+  return iso && isValidIso(iso)
+    ? formatInTimeZone(new Date(iso), props.timeZone, 'd MMM, HH:mm')
+    : 'time unavailable'
+}
 </script>
 
 <template>
@@ -64,7 +71,7 @@ function temperatureText(value: number | null): string {
         </span>
       </div>
       <span class="tiny muted">
-        {{ weather.sourceLabel }} · {{ weather.observedAt ?? 'time unavailable' }}
+        {{ weather.sourceLabel }} · {{ observedText(weather.observedAt) }}
       </span>
     </div>
     <p v-else-if="weatherError" class="small muted">Weather context is unavailable.</p>

@@ -1,4 +1,4 @@
-import { config } from './config.ts'
+import { config, type AeroDataBoxGateway } from './config.ts'
 import type { FlightDirection, ProviderFlight } from './flights.ts'
 import {
   compactFlightNumber,
@@ -14,6 +14,19 @@ interface CacheEntry {
 }
 
 const cache = new Map<string, CacheEntry>()
+
+/** Builds the gateway-specific auth headers without exposing the key to the browser. */
+export function buildAeroDataBoxHeaders(options: {
+  key: string
+  gateway: AeroDataBoxGateway
+  host?: string | null
+}): Record<string, string> {
+  if (options.gateway === 'direct') return { 'X-Api-Key': options.key }
+  return {
+    'X-RapidAPI-Key': options.key,
+    ...(options.host ? { 'X-RapidAPI-Host': options.host } : {}),
+  }
+}
 
 const STATUS_LABELS: Record<string, string> = {
   Unknown: 'Status unknown',
@@ -129,6 +142,11 @@ export async function searchAeroDataBox(
   const key = `${airportCode.toUpperCase()}|${compactFlightNumber(flightNumber)}|${date}|${direction ?? 'both'}`
   const cached = cache.get(key)
   if (cached && cached.expiresAt > Date.now()) return cached.value
+  const authHeaders = buildAeroDataBoxHeaders({
+    key: config.aerodataboxKey,
+    gateway: config.aerodataboxGateway,
+    host: config.aerodataboxHost,
+  })
 
   const url = new URL(
     `${config.aerodataboxBaseUrl.replace(/\/$/, '')}/flights/number/${encodeURIComponent(
@@ -144,15 +162,16 @@ export async function searchAeroDataBox(
       {
         timeoutMs: config.flightProviderTimeoutMs,
         service: 'AeroDataBox',
-        headers: {
-          'X-RapidAPI-Key': config.aerodataboxKey,
-          'X-RapidAPI-Host': config.aerodataboxHost,
-        },
+        headers: authHeaders,
       },
       fetchImpl,
     )
   } catch (error) {
     if (error instanceof UpstreamError) {
+      if (error.code === 'notfound') {
+        cache.set(key, { expiresAt: Date.now() + config.flightCacheTtlMs, value: [] })
+        return []
+      }
       const code =
         error.code === 'quota' || error.code === 'timeout' || error.code === 'unauthorized'
           ? error.code
@@ -163,7 +182,7 @@ export async function searchAeroDataBox(
   }
 
   if (body === null) {
-    cache.set(key, { expiresAt: Date.now() + config.flightCacheTtlMs * 5, value: [] })
+    cache.set(key, { expiresAt: Date.now() + config.flightCacheTtlMs, value: [] })
     return []
   }
   if (!Array.isArray(body)) {
@@ -173,7 +192,9 @@ export async function searchAeroDataBox(
     .map((row) => toProviderFlight(row, direction, fetchedAt, airportCode))
     .filter((flight): flight is ProviderFlight => flight !== null)
   cache.set(key, {
-    expiresAt: Date.now() + config.flightCacheTtlMs * 5,
+    expiresAt:
+      Date.now() +
+      (results.length ? config.aerodataboxCacheTtlMs : config.flightCacheTtlMs),
     value: results,
   })
   return results

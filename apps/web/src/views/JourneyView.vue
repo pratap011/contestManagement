@@ -232,6 +232,25 @@ const estimatedDurationText = computed(() => {
     : null
 })
 
+const bannerFlight = computed(() =>
+  journey.value?.kind === 'layover' ? connection.value : departure.value,
+)
+const bannerRoute = computed(() => {
+  const flight = bannerFlight.value
+  if (!flight) return dataset.value.airport.code
+  return `${flight.flightNumber} · ${flight.origin ?? dataset.value.airport.code} → ${
+    flight.destination ?? 'destination'
+  }`
+})
+const bannerTerminal = computed(() =>
+  journey.value?.kind === 'layover' ? departureTerminal.value : terminal.value,
+)
+const bannerMeta = computed(() =>
+  `${formatFullDateTime(bannerFlight.value?.scheduledDeparture, timeZone)} · ${
+    bannerTerminal.value?.name ?? 'Terminal not supplied'
+  }`,
+)
+
 const usableText = computed(() => {
   const minutes = assessment.value?.usableMinutes
   if (minutes === null || minutes === undefined) return 'Not available'
@@ -458,7 +477,7 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="journey">
     <header class="assistant-hero">
-      <span class="eyebrow">Journey assistant · informational only</span>
+      <p class="page-kicker">Journey assistant</p>
       <h1 v-if="journey.kind === 'departing'">
         Departure to {{ departure?.destination ?? 'your destination' }}
       </h1>
@@ -468,19 +487,35 @@ onBeforeUnmount(() => {
       <p class="muted">
         {{
           journey.kind === 'departing'
-            ? 'Known next steps, a schedule countdown, and a route to a mapped destination.'
-            : 'Connection timing, context you supplied, required checks, and facilities that fit a conservative estimate.'
+            ? 'Your flight status, next steps and the walk to your gate.'
+            : 'Connection timing, transfer steps and facilities that fit the time you have.'
         }}
       </p>
     </header>
 
-    <div class="notice warn" style="margin-bottom: 1.2rem">
-      <strong>Guidance, not a guarantee.</strong>
-      Flight details come from the airport's live board or your manual entry. Map geometry and
-      walkways come from OpenStreetMap and are not field-verified; inferred connectors are dashed.
-      Airline and airport instructions take precedence. Ask staff whenever a connection or route
-      matters.
-    </div>
+    <section class="trip-banner" aria-label="Trip summary">
+      <div>
+        <span class="trip-banner-label">
+          {{ journey.kind === 'departing' ? 'Scheduled departure' : 'Connecting departure' }}
+        </span>
+        <span class="trip-banner-route">{{ bannerRoute }}</span>
+        <span class="trip-banner-meta">{{ bannerMeta }}</span>
+      </div>
+      <div class="trip-banner-countdown">
+        <strong>{{ journey.kind === 'departing' ? departureCountdown : connectionCountdown }}</strong>
+        <span>{{ journey.kind === 'departing' ? 'until departure' : 'until connection' }}</span>
+      </div>
+    </section>
+
+    <details class="page-note">
+      <summary>Guidance, not a guarantee</summary>
+      <p>
+        Flight details come from the airport's live board or your manual entry. Map geometry and
+        walkways come from OpenStreetMap and are not field-verified; inferred connectors are dashed.
+        Airline and airport instructions take precedence. Ask staff whenever a connection or route
+        matters.
+      </p>
+    </details>
     <div v-if="!store.storageAvailable" class="notice info" style="margin-bottom: 1.2rem">
       Browser storage is unavailable, so this journey will last for the current session only.
     </div>
@@ -519,7 +554,7 @@ onBeforeUnmount(() => {
                 <h3>Go to your gate</h3>
                 <p>
                   {{ gateStatusText() }}
-                  {{ terminal?.name ?? 'Terminal not supplied.' }}
+                  {{ terminal?.name ?? 'Terminal not supplied' }}.
                   Confirm the gate and boarding time on airport screens.
                 </p>
               </li>
@@ -550,7 +585,7 @@ onBeforeUnmount(() => {
               <li>If your flight details change, edit them in the flight review instead of assuming the countdown is right.</li>
             </ul>
             <div class="btn-row" style="margin-top: 1rem">
-              <button type="button" class="btn" @click="openMap">Open live map</button>
+              <button type="button" class="btn primary" @click="openMap">Open live map</button>
               <RouterLink class="btn secondary" :to="{ name: 'review', query: { edit: '1' } }">
                 Review flight details
               </RouterLink>
@@ -559,14 +594,6 @@ onBeforeUnmount(() => {
         </div>
 
         <aside class="assistant-side" aria-label="Departure summary">
-          <div class="countdown-card">
-            <span class="eyebrow">Scheduled departure</span>
-            <p class="countdown">{{ departureCountdown }}</p>
-            <p>
-              {{ formatFullDateTime(departure?.scheduledDeparture, timeZone) }} ·
-              {{ terminal?.name ?? 'Terminal not supplied' }}
-            </p>
-          </div>
           <FlightSummary v-if="departure" :flight="departure" role="departure" :time-zone="timeZone" />
           <WatchFlightCard
             v-if="departure && isBlr"
@@ -828,15 +855,6 @@ onBeforeUnmount(() => {
         </div>
 
         <aside class="assistant-side" aria-label="Layover summary">
-          <div class="countdown-card">
-            <span class="eyebrow">Connecting departure</span>
-            <p class="countdown">{{ connectionCountdown }}</p>
-            <p>
-              {{ formatFullDateTime(connection?.scheduledDeparture, timeZone) }} ·
-              {{ terminal?.name ?? 'Terminal not supplied' }}
-            </p>
-          </div>
-
           <FlightSummary v-if="arrival" :flight="arrival" role="arrival" :time-zone="timeZone" />
 
           <section
@@ -919,7 +937,7 @@ onBeforeUnmount(() => {
               <RouterLink class="btn secondary small-btn" :to="{ name: 'review', query: { edit: '1' } }">
                 Edit connection details
               </RouterLink>
-              <button type="button" class="btn" @click="openMap">Open live map</button>
+              <button type="button" class="btn primary" @click="openMap">Open live map</button>
             </div>
             <button type="button" class="btn ghost small-btn" style="margin-top: 0.7rem" @click="clearJourney">
               Clear journey data

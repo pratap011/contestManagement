@@ -1,6 +1,6 @@
 import { searchAeroDataBox } from './aerodatabox.ts'
-import { resolveAirport } from './airports.ts'
-import { config } from './config.ts'
+import { AIRPORTS, airportCodes, resolveAirport } from './airports.ts'
+import { config, type AeroDataBoxGateway } from './config.ts'
 
 export type FlightDirection = 'departure' | 'arrival'
 
@@ -354,6 +354,37 @@ export interface FlightSearchResult {
   results: ProviderFlight[]
   provider: string
   fetchedAt: string
+}
+
+export interface FlightLookupAvailability {
+  airports: string[]
+  board: { airports: string[] }
+  provider: {
+    id: 'aerodatabox'
+    configured: boolean
+    gateway: AeroDataBoxGateway | null
+    airports: string[]
+    futureDates: boolean
+    attributionRequired: boolean
+  }
+}
+
+/** Describes live-flight coverage without ever returning the provider key. */
+export function flightLookupStatus(): FlightLookupAvailability {
+  const codes = airportCodes()
+  const configured = Boolean(config.aerodataboxKey)
+  return {
+    airports: codes,
+    board: { airports: codes.filter((code) => AIRPORTS[code]?.airportBoard) },
+    provider: {
+      id: 'aerodatabox',
+      configured,
+      gateway: configured ? config.aerodataboxGateway : null,
+      airports: configured ? codes : [],
+      futureDates: configured,
+      attributionRequired: true,
+    },
+  }
 }
 
 /**

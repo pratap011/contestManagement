@@ -20,7 +20,8 @@ app and serves it alongside the API. On boot the server creates the tables in Po
 - The image entrypoint creates a random `JWT_SECRET` on first run and stores it in the `appdata`
   volume, so sessions survive container restarts. Web Push keys are stored in the same volume.
 - Optional overrides go in a local `.env`: `POSTGRES_PASSWORD`, `JWT_SECRET`,
-  `AERODATABOX_API_KEY`, stable `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`, or OpenSky credentials.
+  `AERODATABOX_API_KEY` (plus `AERODATABOX_GATEWAY=direct` for direct keys), stable
+  `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`, or OpenSky credentials.
 - The database is not published on the host. If you change `POSTGRES_PASSWORD` after the volume was
   created, run `docker compose down -v` before starting again.
 - Compose passes the password separately from `DATABASE_URL`, so it can contain URL-reserved
@@ -36,8 +37,10 @@ Push keys explicitly as environment variables, and do not rely on the local defa
 2. In Render, create a new **Blueprint** and select this repository and that branch.
 3. Render reads `render.yaml`, creates a free PostgreSQL database, builds the Docker image and runs
    the health check at `/api/health`.
-4. Optional: set `AERODATABOX_API_KEY` for schedule coverage beyond the BLR board's current day and
-   for DEL/BOM/HYD/MAA/CCU. The BLR board, queue displays and weather need no key.
+4. Optional: set `AERODATABOX_API_KEY` for future dates and for DEL/BOM/HYD/MAA/CCU. Keep the
+   default RapidAPI gateway, or set `AERODATABOX_GATEWAY=direct` if the key came from AeroDataBox
+   directly. The BLR board, queue displays and weather need no key. Run `npm run flights:check`
+   locally with the same key to verify coverage before deploying.
 5. Set a stable `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` pair if you want Web Push subscriptions to
    survive redeploys. Generate one with
    `node -e "console.log(require('web-push').generateVAPIDKeys())"`.
@@ -76,7 +79,10 @@ Web Push keys to survive container replacement.
 | `DATABASE_URL` | recommended | PostgreSQL connection string |
 | `DATABASE_SSL` | no | Set `true` for providers that require TLS |
 | `APP_ORIGIN` | no | Extra comma-separated allowed origins |
-| `AERODATABOX_API_KEY` | no | Optional schedule fallback; server-side only, non-commercial free plan |
+| `AERODATABOX_API_KEY` | no | Live lookup for future dates and non-BLR airports; server-side only, non-commercial free plan |
+| `AERODATABOX_GATEWAY` | no | `rapidapi` (default) or `direct`, matching the key source |
+| `AERODATABOX_BASE_URL` | no | Override the provider gateway URL |
+| `AERODATABOX_CACHE_TTL_MS` | no | Positive-result cache, default 15 minutes |
 | `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` | production push | Stable Web Push keypair; without it keys are local/ephemeral |
 | `VAPID_SUBJECT` | no | Contact mailto for VAPID |
 | `OPENSKY_CLIENT_ID` / `OPENSKY_CLIENT_SECRET` | no | Optional higher OpenSky ADS-B allowance |
@@ -88,8 +94,9 @@ Web Push keys to survive container replacement.
 ## Post-deploy checks
 
 - `GET /api/health` returns `{"ok":true,...}`.
+- `GET /api/flights/status` shows whether the provider is configured and which airports/dates it covers.
 - The home screen loads and the map tiles show the OSM attribution.
-- A live flight lookup returns a current BLR flight, or falls back to manual entry.
+- A live flight lookup returns a current BLR flight; with a provider key, also check a future date at DEL/BOM/HYD/MAA/CCU, or fall back to manual entry.
 - The journey assistant shows live checkpoint waits, or a clear unavailable state.
 - Register/sign in, save a journey, sign out, sign in and load it again.
 - Allow location and confirm the map shows a position and live guidance.

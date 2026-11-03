@@ -26,9 +26,12 @@ services:
       # web app and API on the same origin; no CORS is configured.
       - key: APP_ORIGIN
         sync: false
-      # Optional: AeroDataBox widens schedule coverage beyond the current-day
-      # BLR board. Free plan is non-commercial with attribution.
+      # Optional: AeroDataBox covers future dates and the other bundled
+      # airports. Free plan is non-commercial with attribution. Set the gateway
+      # to match the key source (rapidapi or direct).
       - key: AERODATABOX_API_KEY
+        sync: false
+      - key: AERODATABOX_GATEWAY
         sync: false
       # Stable Web Push keys. Generate once and keep them secret; without these
       # the service creates ephemeral keys that break subscriptions on redeploy.

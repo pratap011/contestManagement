@@ -34,8 +34,8 @@ function clearJourney() {
 <template>
   <div class="prose">
     <header class="page-head">
-      <span class="eyebrow">Transparency</span>
-      <h1>Data, privacy, and limits</h1>
+      <p class="page-kicker">About the data</p>
+      <h1>Data, privacy and limits</h1>
       <p class="muted">
         Airport Navigator combines live flight lookup with OpenStreetMap-derived airport geometry,
         optional accounts, and device location. This page shows where each value comes from and
@@ -55,11 +55,10 @@ function clearJourney() {
       Live lookup is
       <strong>{{ appConfig.providerLookupEnabled ? 'enabled' : 'disabled' }}</strong>
       and runs through this app's server-side proxy. For BLR the primary source is the public airport
-      flight board, which supplies today's scheduled and estimated times, terminal and gate. Other
-      airports use the configured provider when it covers them. If an
-      <code>AERODATABOX_API_KEY</code> is configured, AeroDataBox can widen coverage; its free plan is
-      non-commercial and requires attribution. Manual entry and deterministic demo flights always
-      remain available.
+      flight board, which supplies today's scheduled and estimated times, terminal and gate. When a
+      flight provider key is configured on the server, AeroDataBox supplies future dates and the
+      other bundled airports; its free plan is non-commercial and requires attribution. Manual entry
+      and deterministic demo flights always remain available.
     </p>
     <ul>
       <li>Flight results are labelled as live board, provider, user-entered, or demo.</li>
@@ -67,7 +66,7 @@ function clearJourney() {
       <li>Missing terminal or gate values are shown as “Not available”.</li>
       <li>Provider failure, timeout, quota exhaustion, and no-match outcomes do not block manual entry.</li>
       <li>Scheduled and estimated times are shown separately.</li>
-      <li>The public board covers the current airport day; other dates use manual entry or the optional provider.</li>
+      <li>The public BLR board covers the current airport day; a configured provider covers other dates and airports.</li>
     </ul>
     <p class="small muted">
       When you run a live lookup, the flight number and travel date are sent to the airport board

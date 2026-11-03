@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { searchAeroDataBox, clearAeroDataBoxCache } from './aerodatabox.ts'
+import {
+  buildAeroDataBoxHeaders,
+  clearAeroDataBoxCache,
+  searchAeroDataBox,
+} from './aerodatabox.ts'
 import { callsignForFlight, clearAircraftCache, fetchAircraftPosition } from './aircraft.ts'
 import { clearQueueCache, parseQueues } from './queues.ts'
 import { clearWeatherCache, parseWeather } from './weather.ts'
@@ -162,6 +166,27 @@ describe('aircraft position', () => {
   })
 })
 
+describe('AeroDataBox authentication', () => {
+  it('uses the direct gateway API key header', () => {
+    expect(buildAeroDataBoxHeaders({ key: 'direct-key', gateway: 'direct' })).toEqual({
+      'X-Api-Key': 'direct-key',
+    })
+  })
+
+  it('uses RapidAPI headers and the configured host', () => {
+    expect(
+      buildAeroDataBoxHeaders({
+        key: 'rapid-key',
+        gateway: 'rapidapi',
+        host: 'aerodatabox.p.rapidapi.com',
+      }),
+    ).toEqual({
+      'X-RapidAPI-Key': 'rapid-key',
+      'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com',
+    })
+  })
+})
+
 describe('AeroDataBox fallback', () => {
   it('normalises a BLR departure and keeps scheduled/estimated times separate', async () => {
     vi.stubGlobal(
@@ -203,6 +228,36 @@ describe('AeroDataBox fallback', () => {
     expect(results[0].status).toBe('Boarding')
     expect(results[0].scheduledDeparture).toBe('2026-11-03T13:30:00.000Z')
     expect(results[0].estimatedDeparture).toBe('2026-11-03T13:50:00.000Z')
+  })
+
+  it('treats a provider no-match response as an empty result and caches it', async () => {
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ message: 'No flights found for the given query' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const results = await searchAeroDataBox(
+      '6E 7777',
+      '2026-12-31',
+      'departure',
+      '2026-12-30T10:00:00.000Z',
+      'DEL',
+    )
+    expect(results).toEqual([])
+
+    const cached = await searchAeroDataBox(
+      '6E 7777',
+      '2026-12-31',
+      'departure',
+      '2026-12-30T10:00:00.000Z',
+      'DEL',
+    )
+    expect(cached).toEqual([])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
   it('ignores flights that do not touch BLR', async () => {

@@ -5,6 +5,28 @@ function readInt(value: string | undefined, fallback: number): number {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback
 }
 
+export type AeroDataBoxGateway = 'rapidapi' | 'direct'
+
+function readUrlHost(value: string): string | null {
+  try {
+    return new URL(value).host
+  } catch {
+    return null
+  }
+}
+
+function readAeroDataBoxGateway(value: string | undefined, baseUrl: string): AeroDataBoxGateway {
+  const normalised = value?.trim().toLowerCase()
+  if (normalised === 'direct' || normalised === 'rapidapi') return normalised
+  try {
+    return new URL(baseUrl).hostname.toLowerCase().endsWith('rapidapi.com')
+      ? 'rapidapi'
+      : 'direct'
+  } catch {
+    return 'rapidapi'
+  }
+}
+
 function readOrigins(value: string | undefined): string[] {
   const defaults = [
     'http://localhost:5173',
@@ -27,6 +49,18 @@ function readOrigins(value: string | undefined): string[] {
 const nodeEnv = process.env.NODE_ENV ?? 'development'
 const isProduction = nodeEnv === 'production'
 const jwtSecret = process.env.JWT_SECRET ?? (isProduction ? '' : 'dev-only-blr-navigator-secret')
+const aerodataboxBaseUrl =
+  process.env.AERODATABOX_BASE_URL?.trim() ||
+  (process.env.AERODATABOX_GATEWAY?.trim().toLowerCase() === 'direct'
+    ? 'https://api.aerodatabox.com'
+    : 'https://aerodatabox.p.rapidapi.com')
+const aerodataboxGateway = readAeroDataBoxGateway(
+  process.env.AERODATABOX_GATEWAY,
+  aerodataboxBaseUrl,
+)
+const aerodataboxHost =
+  process.env.AERODATABOX_HOST?.trim() ||
+  (aerodataboxGateway === 'rapidapi' ? readUrlHost(aerodataboxBaseUrl) : null)
 
 if (isProduction && (!jwtSecret || jwtSecret === 'dev-only-blr-navigator-secret')) {
   throw new Error('JWT_SECRET must be set to a long random value in production.')
@@ -49,10 +83,10 @@ export const config = {
   appOrigins: readOrigins(process.env.APP_ORIGIN),
   aerodataboxKey:
     process.env.AERODATABOX_API_KEY?.trim() || process.env.RAPIDAPI_KEY?.trim() || null,
-  aerodataboxBaseUrl:
-    process.env.AERODATABOX_BASE_URL?.trim() ||
-    'https://aerodatabox.p.rapidapi.com',
-  aerodataboxHost: process.env.AERODATABOX_HOST?.trim() || 'aerodatabox.p.rapidapi.com',
+  aerodataboxGateway,
+  aerodataboxBaseUrl,
+  aerodataboxHost,
+  aerodataboxCacheTtlMs: readInt(process.env.AERODATABOX_CACHE_TTL_MS, 15 * 60_000),
   blrBoardUrl:
     process.env.BLR_BOARD_URL?.trim() ||
     'https://gateway.bengaluruairport.com/fis/v2/api/aodb/flights',

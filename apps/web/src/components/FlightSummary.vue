@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ProvenanceBadge from '@/components/ProvenanceBadge.vue'
-import { formatFetchedAt, formatFullDateTime, isValidIso } from '@/lib/time'
+import { formatFetchedAt, formatFullDateTime, formatTime, isValidIso } from '@/lib/time'
 import { isStale } from '@/modules/flights/validation'
 import type { FlightResult, FlightRole } from '@/modules/flights/types'
 
@@ -15,15 +15,6 @@ const props = withDefaults(
   { showDemoNote: true },
 )
 
-const route = computed(() => {
-  const origin = props.flight.origin ?? 'Unknown origin'
-  const destination = props.flight.destination ?? 'Unknown destination'
-  return `${origin} → ${destination}`
-})
-
-const primaryLabel = computed(() =>
-  props.role === 'arrival' ? 'Scheduled arrival' : 'Scheduled departure',
-)
 const primaryTime = computed(() =>
   formatFullDateTime(
     props.role === 'arrival' ? props.flight.scheduledArrival : props.flight.scheduledDeparture,
@@ -50,6 +41,17 @@ const fetched = computed(() =>
 const stale = computed(
   () => props.flight.source === 'provider' && isStale(props.flight.fetchedAt),
 )
+const originCode = computed(() => props.flight.origin ?? '—')
+const destinationCode = computed(() => props.flight.destination ?? '—')
+const timeLabel = computed(() => (props.role === 'arrival' ? 'Arrives' : 'Departs'))
+const timeValue = computed(() =>
+  formatTime(
+    props.role === 'arrival'
+      ? props.flight.scheduledArrival
+      : props.flight.scheduledDeparture,
+    props.timeZone,
+  ),
+)
 const missingTime = computed(() => {
   const iso =
     props.role === 'arrival'
@@ -62,20 +64,33 @@ const missingTime = computed(() => {
 <template>
   <article class="flight-summary card-flat">
     <div class="between">
-      <div>
-        <div class="result-title">
-          <strong>{{ flight.airline ?? 'Airline not supplied' }}</strong>
-          <span>{{ flight.flightNumber }}</span>
-          <ProvenanceBadge :source="flight.source" :fetched-at="flight.fetchedAt" />
-        </div>
-        <p class="flight-route">{{ route }}</p>
+      <div class="result-title">
+        <strong>{{ flight.airline ?? 'Airline not supplied' }}</strong>
+        <span class="flight-number">{{ flight.flightNumber }}</span>
+        <ProvenanceBadge :source="flight.source" :fetched-at="flight.fetchedAt" />
       </div>
       <span v-if="flight.status" class="badge soft">{{ flight.status }}</span>
     </div>
 
+    <div class="flight-route-line">
+      <div class="route-point">
+        <strong>{{ originCode }}</strong>
+        <span>{{ role === 'arrival' ? 'From' : `${timeValue} · From` }}</span>
+      </div>
+      <div class="route-track">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 11.5 21 4l-4.2 16-4.1-6.1L3 11.5Z" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div class="route-point">
+        <strong>{{ destinationCode }}</strong>
+        <span>{{ role === 'arrival' ? `${timeValue} · To` : 'To' }}</span>
+      </div>
+    </div>
+
     <dl class="flight-facts">
       <div>
-        <dt>{{ primaryLabel }}</dt>
+        <dt>{{ timeLabel }}</dt>
         <dd>{{ primaryTime }}</dd>
       </div>
       <div v-if="estimatedTime">

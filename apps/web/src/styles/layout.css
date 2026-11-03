@@ -1,0 +1,265 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background: var(--brand-panel);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 10px rgba(9, 27, 58, 0.16);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  min-height: 64px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.brand:hover {
+  color: #fff;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--brand-strong);
+}
+
+.brand-mark svg {
+  width: 21px;
+  height: 21px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brand-text strong {
+  font-size: 1.06rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.brand-text small {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.71rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.site-nav a {
+  color: rgba(255, 255, 255, 0.86);
+  text-decoration: none;
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.87rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.site-nav a.router-link-active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border-bottom-color: var(--accent);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-left: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  flex: 0 0 auto;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.theme-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.theme-toggle-label {
+  display: none;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-block: 2rem;
+  margin-top: auto;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(180px, 0.6fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.footer-title {
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+}
+
+.footer-inner p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.footer-links a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.footer-note {
+  text-align: right;
+}
+
+.footer-note p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .container {
+    width: min(100% - 1.5rem, 1200px);
+  }
+
+  .main-content {
+    padding-block: 1.25rem 2.5rem;
+  }
+
+  .header-inner {
+    min-height: 58px;
+    gap: 0.6rem;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-text strong {
+    font-size: 0.98rem;
+  }
+
+  .brand-text small {
+    display: none;
+  }
+
+  .site-nav {
+    gap: 0;
+    margin-left: auto;
+    min-width: 0;
+  }
+
+  .site-nav a {
+    padding: 0.4rem 0.46rem;
+    font-size: 0.79rem;
+  }
+
+  .nav-about,
+  .nav-account {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 31px;
+    height: 31px;
+    margin-left: 0.15rem;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .footer-note {
+    text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .brand-text strong {
+    font-size: 0.88rem;
+  }
+
+  .site-nav a {
+    padding-inline: 0.42rem;
+    font-size: 0.77rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-text {
+    display: none;
+  }
+
+  .site-nav a {
+    padding-inline: 0.36rem;
+    font-size: 0.74rem;
+  }
+}

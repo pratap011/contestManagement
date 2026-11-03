@@ -84,30 +84,30 @@ const mapStyleUrl = computed(() =>
 const mapPalette = computed(() =>
   isDark.value
     ? {
-        activeFill: '#14b8a6',
-        inactiveFill: '#64748b',
-        activeLine: '#5eead4',
+        activeFill: '#3b82f6',
+        inactiveFill: '#475569',
+        activeLine: '#93c5fd',
         inactiveLine: '#94a3b8',
         areaFill: '#1e3a5f',
         areaLine: '#5b7a9d',
         routeCasing: '#0b1220',
-        route: '#5eead4',
+        route: '#93c5fd',
         inferred: '#fb923c',
-        shuttle: '#93c5fd',
+        shuttle: '#c4b5fd',
         accuracy: '#93c5fd',
       }
     : {
-        activeFill: '#14b8a6',
+        activeFill: '#0b57d0',
         inactiveFill: '#94a3b8',
-        activeLine: '#0b726c',
+        activeLine: '#082f73',
         inactiveLine: '#7b8ca3',
-        areaFill: '#bdd7e8',
+        areaFill: '#d7e3f4',
         areaLine: '#7c95b1',
         routeCasing: '#ffffff',
-        route: '#0b726c',
+        route: '#0b57d0',
         inferred: '#c2410c',
-        shuttle: '#2556a6',
-        accuracy: '#2556a6',
+        shuttle: '#7c3aed',
+        accuracy: '#0b57d0',
       },
 )
 

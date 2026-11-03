@@ -133,11 +133,11 @@ onMounted(() => {
 <template>
   <div>
     <header class="page-head">
-      <span class="eyebrow">Optional account</span>
+      <p class="page-kicker">Optional account</p>
       <h1>{{ auth.user ? 'Your account' : 'Save journeys across devices' }}</h1>
       <p class="muted">
-        The core navigator works without an account. Signing in is optional and stores only your
-        email and the latest confirmed journey, so you can open it on another device.
+        The navigator works without an account. Signing in is optional and stores only your email
+        and latest confirmed journey.
       </p>
     </header>
 
@@ -205,7 +205,7 @@ onMounted(() => {
             {{ auth.syncMessage }}
           </p>
 
-          <button type="submit" class="btn wide" :disabled="auth.loading">
+          <button type="submit" class="btn primary wide" :disabled="auth.loading">
             {{ auth.loading ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account' }}
           </button>
         </form>
@@ -258,7 +258,7 @@ onMounted(() => {
         </p>
 
         <div class="btn-row">
-          <button type="button" class="btn" :disabled="auth.saving" @click="saveCurrentJourney">
+          <button type="button" class="btn primary" :disabled="auth.saving" @click="saveCurrentJourney">
             Save current journey
           </button>
           <button

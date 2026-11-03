@@ -32,7 +32,7 @@ function applyTheme(value: ThemeMode) {
   document.documentElement.style.colorScheme = value
   document
     .querySelector('meta[name="theme-color"]')
-    ?.setAttribute('content', value === 'dark' ? '#0b1220' : '#0b726c')
+    ?.setAttribute('content', value === 'dark' ? '#0a1220' : '#0b3d91')
 }
 
 export function useTheme() {

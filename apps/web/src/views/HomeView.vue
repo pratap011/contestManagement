@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { appConfig } from '@/config'
 import { todayInTimeZone } from '@/lib/time'
 import { demoJourneysFor } from '@/modules/flights/providers/demo'
+import {
+  fetchFlightLookupStatus,
+  type FlightLookupAvailability,
+} from '@/modules/flights/status'
 import { isValidFlightNumber, isValidTravelDate } from '@/modules/flights/validation'
 import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore, type JourneyKind, type SearchMode } from '@/stores/journey'
@@ -18,6 +23,21 @@ const demos = computed(() => demoJourneysFor(airportStore.code))
 const coverageLabel = computed(() =>
   airport.value.coverage === 'full' ? 'Mapped indoor routes' : 'Terminal-level routes',
 )
+const flightStatus = ref<FlightLookupAvailability | null>(null)
+const liveLookupLabel = computed(() => {
+  const providerReady =
+    appConfig.providerLookupEnabled && flightStatus.value?.provider.configured === true
+  if (airport.value.live.airportBoard) {
+    return providerReady
+      ? 'Live board today · future dates supported'
+      : 'Live board today · manual entry for other dates'
+  }
+  return providerReady ? 'Live flights for future dates' : 'Manual flight entry'
+})
+
+onMounted(async () => {
+  flightStatus.value = await fetchFlightLookupStatus()
+})
 
 const kind = ref<JourneyKind>('departing')
 const departureFlightNumber = ref('')
@@ -300,7 +320,7 @@ function clearSaved() {
           <div class="search-hints">
             <span>{{ airport.city }} · {{ coverageLabel }}</span>
             <span class="hint-sep" aria-hidden="true">|</span>
-            <span>{{ airport.live.airportBoard ? 'Live airport board for today' : 'Live lookup + manual entry' }}</span>
+            <span>{{ liveLookupLabel }}</span>
             <span class="hint-sep" aria-hidden="true">|</span>
             <span>No account needed</span>
             <details class="demo-strip">

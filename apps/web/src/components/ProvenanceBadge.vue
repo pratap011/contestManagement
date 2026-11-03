@@ -20,7 +20,7 @@ const title = computed(() => {
   }
   if (props.source === 'manual') return 'Entered by the passenger in this browser.'
   if (props.source === 'provider') {
-    return 'Sourced from the airport public live board, or an optional AeroDataBox fallback, through a server-side proxy. Check the retrieval time and airport screens.'
+    return 'Sourced from the airport public live board or the configured AeroDataBox provider through a server-side proxy. Check the retrieval time and airport screens.'
   }
   return 'The source of this value is unknown.'
 })

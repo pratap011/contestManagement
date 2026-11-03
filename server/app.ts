@@ -24,6 +24,7 @@ import { config } from './config.ts'
 import type { Database } from './db.ts'
 import {
   FlightProviderError,
+  flightLookupStatus,
   isValidFlightNumber,
   isValidTravelDate,
   searchLiveFlights,
@@ -98,6 +99,7 @@ function flightErrorStatus(code: FlightProviderError['code']): number {
 }
 
 function upstreamErrorStatus(code: UpstreamError['code']): number {
+  if (code === 'notfound') return 404
   if (code === 'quota') return 429
   if (code === 'timeout') return 504
   if (code === 'unauthorized') return 502
@@ -168,6 +170,7 @@ export async function buildApp(db: Database): Promise<Express> {
       ok: true,
       database: db.driver,
       liveFlightSource: config.aerodataboxKey ? 'blr-board+aerodatabox' : 'blr-board',
+      flightLookup: flightLookupStatus(),
       airports: airportCodes(),
       airportMetadata: AIRPORTS,
       push: Boolean(getVapidPublicKey()),
@@ -418,6 +421,11 @@ export async function buildApp(db: Database): Promise<Express> {
       return
     }
     res.json({ sent: true })
+  })
+
+  app.get('/api/flights/status', liveDataLimiter, (_req: Request, res: Response) => {
+    res.setHeader('Cache-Control', 'no-store')
+    res.json(flightLookupStatus())
   })
 
   app.get('/api/flights', flightLimiter, async (req: Request, res: Response) => {

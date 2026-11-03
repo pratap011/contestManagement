@@ -19,7 +19,8 @@
     "test:server": "vitest run --config server/vitest.config.ts",
     "typecheck": "tsc -p server/tsconfig.json --noEmit && npm --prefix apps/web run typecheck",
     "data:osm": "node scripts/build-osm-data.mjs",
-    "data:airports": "node scripts/build-airport-datasets.mjs"
+    "data:airports": "node scripts/build-airport-datasets.mjs",
+    "flights:check": "node scripts/check-flight-lookup.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.13",

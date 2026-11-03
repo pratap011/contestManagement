@@ -127,7 +127,8 @@ docker compose up --build
 
 | Variable | Purpose |
 | --- | --- |
-| `AERODATABOX_API_KEY` | Optional schedule lookup for dates/airports the BLR board does not cover |
+| `AERODATABOX_API_KEY` | Live lookup for future dates and the other five airports (server-side only) |
+| `AERODATABOX_GATEWAY` | `rapidapi` (default) or `direct`, matching where the key was issued |
 | `POSTGRES_PASSWORD` | Local database password; run `docker compose down -v` after changing it |
 | `JWT_SECRET` | Stable session secret; generated automatically when omitted |
 | `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` | Stable Web Push keys so subscriptions survive rebuilds |
@@ -179,10 +180,22 @@ airports it goes straight to the optional AeroDataBox provider. The browser neve
 credentials. If lookup is unavailable, the review screen falls back to manual entry; demo flights are
 always deterministic and selected per airport.
 
-The BLR board covers the current airport day. For other dates or airports, set
-`AERODATABOX_API_KEY` on the server or use manual entry. Never put a provider key in a `VITE_`
-variable. The free AeroDataBox plan is non-commercial and needs attribution, which the flight summary
-shows.
+The BLR board covers the current airport day. For future dates and the other five airports, set
+`AERODATABOX_API_KEY` on the server. The key can come from RapidAPI or a direct AeroDataBox account;
+set `AERODATABOX_GATEWAY=direct` for direct keys (the default is `rapidapi`). Never put a provider
+key in a `VITE_` variable or the browser bundle. The free AeroDataBox plan is non-commercial and
+needs attribution, which the flight summary shows.
+
+Check the configured coverage or run a real lookup without changing code:
+
+```bash
+npm run flights:check
+npm run flights:check -- "6E 5082" 2026-12-03 DEL departure
+```
+
+The first command prints which airports and dates live lookup can cover. The second calls the same
+server path the app uses and prints the provider result. A missing key leaves BLR-today board lookup
+and manual entry working.
 
 Checkpoint waits come from the airport's public queue displays, weather from Open-Meteo and aircraft
 positions from OpenSky ADS-B. Each is cached and optional; see

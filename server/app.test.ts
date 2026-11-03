@@ -24,6 +24,26 @@ describe('health and auth', () => {
     expect(response.body.ok).toBe(true)
     expect(['pglite', 'postgres']).toContain(response.body.database)
     expect(response.body.liveFlightSource).toContain('blr-board')
+    expect(response.body.flightLookup.provider.configured).toBe(true)
+    expect(response.body.flightLookup.airports).toEqual(
+      expect.arrayContaining(['BLR', 'DEL', 'BOM', 'HYD', 'MAA', 'CCU']),
+    )
+    expect(JSON.stringify(response.body)).not.toContain('test-aerodatabox-key')
+  })
+
+  it('reports live lookup coverage without exposing the provider key', async () => {
+    const response = await request(app).get('/api/flights/status')
+    expect(response.status).toBe(200)
+    expect(response.body.board.airports).toEqual(['BLR'])
+    expect(response.body.provider).toMatchObject({
+      id: 'aerodatabox',
+      configured: true,
+      gateway: 'rapidapi',
+      futureDates: true,
+      attributionRequired: true,
+    })
+    expect(response.body.provider.airports).toHaveLength(6)
+    expect(JSON.stringify(response.body)).not.toContain('test-aerodatabox-key')
   })
 
   it('registers, restores a session, and logs out', async () => {
@@ -184,6 +204,127 @@ describe('live flight proxy', () => {
     expect(delhi.status).toBe(200)
     expect(delhi.body.results).toEqual([])
     expect(delhi.body.provider).toBe('provider')
+    vi.unstubAllGlobals()
+  })
+
+  it('uses AeroDataBox for a future date at another airport', async () => {
+    const fetchMock = vi.fn(
+      async (input: string | URL | Request, init?: RequestInit) => {
+        expect(String(input)).toContain('/flights/number/6E5082/2026-12-03')
+        expect(String(input)).toContain('dateLocalRole=Both')
+        expect((init?.headers as Record<string, string>)['X-RapidAPI-Key']).toBe(
+          'test-aerodatabox-key',
+        )
+        return new Response(
+          JSON.stringify([
+            {
+              number: '6E 5082',
+              status: 'Expected',
+              airline: { name: 'IndiGo' },
+              departure: {
+                airport: { iata: 'DEL' },
+                scheduledTime: { utc: '2026-12-03T09:30:00Z', local: '2026-12-03T15:00:00+05:30' },
+                terminal: '2',
+                gate: 'T2-204',
+              },
+              arrival: {
+                airport: { iata: 'BOM' },
+                scheduledTime: { utc: '2026-12-03T11:45:00Z', local: '2026-12-03T17:15:00+05:30' },
+              },
+            },
+          ]),
+          { status: 200, headers: { 'Content-Type': 'application/json' } },
+        )
+      },
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await request(app).get(
+      '/api/flights?flightNumber=6E%205082&date=2026-12-03&airport=DEL&role=departure',
+    )
+    expect(response.status).toBe(200)
+    expect(response.body.provider).toBe('aerodatabox')
+    expect(response.body.results).toHaveLength(1)
+    expect(response.body.results[0]).toMatchObject({
+      flightNumber: '6E 5082',
+      origin: 'DEL',
+      destination: 'BOM',
+      terminal: 'T2',
+      gate: 'T2-204',
+      status: 'Scheduled',
+      provider: 'aerodatabox',
+    })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    vi.unstubAllGlobals()
+  })
+
+  it('returns an empty result, not an outage, when AeroDataBox has no match', async () => {
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ message: 'No flights found for the given query' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await request(app).get(
+      '/api/flights?flightNumber=6E%209999&date=2026-12-31&airport=MAA&role=departure',
+    )
+    expect(response.status).toBe(200)
+    expect(response.body.results).toEqual([])
+
+    const cached = await request(app).get(
+      '/api/flights?flightNumber=6E%209999&date=2026-12-31&airport=MAA&role=departure',
+    )
+    expect(cached.status).toBe(200)
+    expect(cached.body.results).toEqual([])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    vi.unstubAllGlobals()
+  })
+
+  it('uses AeroDataBox for a future BLR date instead of the current-day board', async () => {
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      expect(String(input)).toContain('/flights/number/AI508/2026-12-24')
+      return new Response(
+        JSON.stringify([
+          {
+            number: 'AI 508',
+            status: 'Expected',
+            airline: { name: 'Air India' },
+            departure: {
+              airport: { iata: 'BLR' },
+              scheduledTime: { utc: '2026-12-24T01:30:00Z', local: '2026-12-24T07:00:00+05:30' },
+              terminal: '2',
+              gate: 'D12',
+            },
+            arrival: {
+              airport: { iata: 'DEL' },
+              scheduledTime: { utc: '2026-12-24T04:00:00Z', local: '2026-12-24T09:30:00+05:30' },
+            },
+          },
+        ]),
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      )
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await request(app).get(
+      '/api/flights?flightNumber=AI%20508&date=2026-12-24&airport=BLR&role=departure',
+    )
+    expect(response.status).toBe(200)
+    expect(response.body.provider).toBe('aerodatabox')
+    expect(response.body.results[0]).toMatchObject({
+      flightNumber: 'AI 508',
+      origin: 'BLR',
+      destination: 'DEL',
+      terminal: 'T2',
+      gate: 'D12',
+    })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
     vi.unstubAllGlobals()
   })
 

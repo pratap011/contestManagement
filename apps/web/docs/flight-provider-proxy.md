@@ -13,13 +13,23 @@ Live lookup is **enabled by default**. The browser never holds a provider key; i
    - Supplies airline, route, scheduled/estimated times, status, terminal, gate and gate floor.
    - Requested server-side with the public website origin/referer headers.
    - Cached for 60 seconds (board) and 10 minutes (gate directory).
-2. **Optional fallback: AeroDataBox**
+2. **AeroDataBox for future dates and the other airports**
    - Enabled only when `AERODATABOX_API_KEY` is set on the server.
-   - Useful for dates outside the current airport day; free plan is non-commercial and requires
-     attribution.
-   - Calls `https://aerodatabox.p.rapidapi.com/flights/number/{flight}/{date}` with the key only on
-     the server. Keeps scheduled and revised times separate and normalises terminal labels.
+   - Covers future dates and DEL/BOM/HYD/MAA/CCU, and acts as a fallback if the BLR board fails or
+     has no match. Free plan is non-commercial and requires attribution.
+   - Calls `/flights/number/{flight}/{date}?dateLocalRole=Both` with the key only on the server.
+   - Supports both key sources: RapidAPI (`X-RapidAPI-Key` + `X-RapidAPI-Host`, the default) and a
+     direct AeroDataBox account (`X-Api-Key`). Set `AERODATABOX_GATEWAY=direct` for direct keys;
+     `AERODATABOX_BASE_URL` and `AERODATABOX_HOST` remain optional overrides.
+   - Keeps scheduled and revised times separate, normalises terminal labels and filters results to
+     the requested airport and direction.
+   - Caches successful results for 15 minutes and empty results for 1 minute by default
+     (`AERODATABOX_CACHE_TTL_MS`).
 3. **Manual entry** and **demo flights** always remain available.
+
+`GET /api/flights/status` returns the same coverage summary as `/api/health` without the key:
+airports with an airport board, whether the provider is configured, its gateway, and whether it
+covers future dates.
 
 ## Request
 
@@ -76,7 +86,7 @@ substitutes a different flight number. `fetchedAt` drives the freshness label.
 | `429` | Local rate limit or provider quota | Shows quota copy; manual entry remains. |
 | `502` | Provider unavailable or rejected | Shows unavailable copy; manual entry remains. |
 | `504` | Provider timeout | Shows timeout copy; manual entry remains. |
-| `200` with empty results | No match on the current board | Offers manual entry; explains the board covers today. |
+| `200` with empty results | No match from the board or provider | Offers manual entry and asks the user to check the flight number and date. |
 
 ## Security rules
 

@@ -4,6 +4,7 @@ export type UpstreamErrorCode =
   | 'unavailable'
   | 'malformed'
   | 'unauthorized'
+  | 'notfound'
 
 export class UpstreamError extends Error {
   readonly code: UpstreamErrorCode
@@ -51,6 +52,9 @@ export async function fetchJson(
     throw new UpstreamError('unauthorized', `${options.service} rejected the request.`)
   }
   if (response.status === 204) return null
+  if (response.status === 404) {
+    throw new UpstreamError('notfound', `${options.service} found no matching data.`)
+  }
   if (!response.ok) {
     throw new UpstreamError('unavailable', `${options.service} is unavailable.`)
   }

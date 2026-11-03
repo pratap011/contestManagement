@@ -1,54 +1,10 @@
-import airportJson from '@/data/blr/airport.json'
-import t1FloorsJson from '@/data/blr/terminals/t1/floors.json'
-import t1GraphJson from '@/data/blr/terminals/t1/graph.json'
-import t1PoisJson from '@/data/blr/terminals/t1/pois.json'
-import t2FloorsJson from '@/data/blr/terminals/t2/floors.json'
-import t2GraphJson from '@/data/blr/terminals/t2/graph.json'
-import t2PoisJson from '@/data/blr/terminals/t2/pois.json'
-import transferJson from '@/data/blr/transfer.json'
 import { POI_CATEGORY_LABELS } from './types'
 import type {
-  Airport,
   AirportDataset,
   DataSource,
-  Floor,
-  MapEdge,
-  MapNode,
-  Poi,
-  Terminal,
   TransitionType,
   VerificationStatus,
 } from './types'
-
-const airportFile = airportJson as unknown as Airport & { terminals: Terminal[] }
-const { terminals, ...airport } = airportFile
-
-const nodeById = new Map<string, MapNode>()
-for (const node of [
-  ...(t1GraphJson.nodes as unknown as MapNode[]),
-  ...(t2GraphJson.nodes as unknown as MapNode[]),
-  ...(transferJson.nodes as unknown as MapNode[]),
-]) {
-  nodeById.set(node.id, node)
-}
-
-const edgeById = new Map<string, MapEdge>()
-for (const edge of [
-  ...(t1GraphJson.edges as unknown as MapEdge[]),
-  ...(t2GraphJson.edges as unknown as MapEdge[]),
-  ...(transferJson.edges as unknown as MapEdge[]),
-]) {
-  edgeById.set(edge.id, edge)
-}
-
-export const airportDataset: AirportDataset = {
-  airport,
-  terminals,
-  floors: [...t1FloorsJson, ...t2FloorsJson] as unknown as Floor[],
-  pois: [...t1PoisJson, ...t2PoisJson] as unknown as Poi[],
-  nodes: [...nodeById.values()],
-  edges: [...edgeById.values()],
-}
 
 const VERIFICATION_STATUSES: VerificationStatus[] = ['verified', 'unverified', 'inferred', 'unknown']
 const SOURCES: DataSource[] = ['osm', 'airport', 'derived', 'curated-demo', 'manual', 'provider', 'demo']
@@ -61,7 +17,7 @@ function withinBounds(lat: number, lon: number, dataset: AirportDataset): boolea
 }
 
 /**
- * Checks the committed static dataset before the app uses it. The same function
+ * Checks a committed static dataset before the app uses it. The same function
  * runs in the test suite so a bad OpenStreetMap import fails fast.
  */
 export function validateDataset(dataset: AirportDataset): string[] {
@@ -171,8 +127,11 @@ export function validateDataset(dataset: AirportDataset): string[] {
     }
   }
 
-  if (!dataset.edges.some((edge) => edge.transitionType === 'shuttle')) {
-    add('No T1/T2 inter-terminal shuttle edge is present')
+  if (dataset.airport.shuttle.available) {
+    const shuttleUsers = dataset.airport.shuttle.terminals
+    if (shuttleUsers.length > 1 && !dataset.edges.some((edge) => edge.transitionType === 'shuttle')) {
+      add('Airport advertises an inter-terminal shuttle but no shuttle edge is present')
+    }
   }
 
   return errors
@@ -182,8 +141,6 @@ export function validateDataset(dataset: AirportDataset): string[] {
 export function assertValidDataset(dataset: AirportDataset): void {
   const errors = validateDataset(dataset)
   if (errors.length) {
-    throw new Error(`Invalid BLR airport dataset:\n- ${errors.join('\n- ')}`)
+    throw new Error(`Invalid ${dataset.airport.code} airport dataset:\n- ${errors.join('\n- ')}`)
   }
 }
-
-assertValidDataset(airportDataset)

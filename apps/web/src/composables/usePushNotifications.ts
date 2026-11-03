@@ -175,7 +175,7 @@ export function usePushNotifications() {
       watch.value = nextWatch
       storeWatch(nextWatch)
       subscribed.value = true
-      message.value = `Watching ${nextWatch.flightNumber} on the live BLR board.`
+      message.value = `Watching ${nextWatch.flightNumber} on the live airport board.`
       return true
     } catch (reason) {
       error.value = describeError(reason)

@@ -65,7 +65,7 @@ onMounted(() => {
       <div>
         <h2 id="watch-heading">Watch this flight</h2>
         <p class="small muted no-gap">
-          The server checks the live BLR board about every five minutes and sends gate, terminal,
+          The server checks the live airport board about every five minutes and sends gate, terminal,
           status and time changes while this browser stays subscribed. Monitoring covers the day
           before travel through the next {{ push.watchWindowDays.value }} days.
         </p>
@@ -127,7 +127,7 @@ onMounted(() => {
         </div>
       </div>
       <p v-if="withinWatchWindow" class="tiny muted no-gap">
-        The BLR board publishes today's flights; dates beyond today also need the optional
+        The airport board publishes today's flights; dates beyond today also need the optional
         AeroDataBox fallback configured on the server.
       </p>
       <p v-if="!withinWatchWindow" class="notice info small">

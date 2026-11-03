@@ -104,14 +104,14 @@ const missingTime = computed(() => {
         flight.source === 'demo'
           ? 'not a real schedule'
           : flight.provider === 'blr-airport-board'
-            ? 'BLR airport live board'
+            ? 'airport live board'
             : flight.provider === 'aerodatabox'
               ? 'AeroDataBox (free plan, attribution required)'
               : 'provider proxy'
       }}
     </p>
     <p v-if="showDemoNote && flight.source === 'demo'" class="tiny muted no-gap">
-      Demo terminal and gate labels are illustrative, not live BLR assignments.
+      Demo terminal and gate labels are illustrative, not live airport assignments.
     </p>
   </article>
 </template>

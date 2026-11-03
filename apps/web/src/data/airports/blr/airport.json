@@ -41,7 +41,7 @@
       "If you are connecting, confirm transfer eligibility, security and baggage steps with your airline or a Connections by BLR transfer desk."
     ],
     "source": "BLR Airport Connections by BLR transfer guidance (bengaluruairport.com), OpenStreetMap stops, OSRM road geometry",
-    "retrievedAt": "2026-11-02T18:29:57.417Z",
+    "retrievedAt": "2026-11-02T20:01:35.425Z",
     "geometrySource": "OSRM demo server / OpenStreetMap roads"
   },
   "terminals": [

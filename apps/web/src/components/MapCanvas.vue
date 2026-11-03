@@ -4,9 +4,10 @@ import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { Feature, FeatureCollection, LineString, Point, Polygon } from 'geojson'
 import { appConfig } from '@/config'
-import { airportDataset } from '@/modules/airport-directory/dataset'
+import { useTheme } from '@/composables/useTheme'
 import {
   POI_CATEGORY_LABELS,
+  type AirportDataset,
   type Floor,
   type FloorArea,
   type Poi,
@@ -18,6 +19,7 @@ import { edgeGeometry } from '@/modules/navigation/route-validator'
 
 const props = withDefaults(
   defineProps<{
+    dataset: AirportDataset
     activeTerminalId: string
     floor: Floor | null
     pois: Poi[]
@@ -42,6 +44,8 @@ const props = withDefaults(
 const emit = defineEmits<{
   'select-poi': [poiId: string]
 }>()
+
+const { isDark } = useTheme()
 
 const GLYPHS: Record<PoiCategory, string> = {
   gate: 'G',
@@ -70,10 +74,42 @@ let userMarker: maplibregl.Marker | null = null
 let shuttleMarker: maplibregl.Marker | null = null
 
 const activeTerminal = computed(() =>
-  airportDataset.terminals.find((terminal) => terminal.id === props.activeTerminalId),
+  props.dataset.terminals.find((terminal) => terminal.id === props.activeTerminalId),
 )
 const floorLabel = computed(() => props.floor?.label ?? 'Airport map')
-const nodeById = computed(() => new Map(airportDataset.nodes.map((node) => [node.id, node])))
+const nodeById = computed(() => new Map(props.dataset.nodes.map((node) => [node.id, node])))
+const mapStyleUrl = computed(() =>
+  isDark.value ? appConfig.map.darkStyleUrl : appConfig.map.styleUrl,
+)
+const mapPalette = computed(() =>
+  isDark.value
+    ? {
+        activeFill: '#14b8a6',
+        inactiveFill: '#64748b',
+        activeLine: '#5eead4',
+        inactiveLine: '#94a3b8',
+        areaFill: '#1e3a5f',
+        areaLine: '#5b7a9d',
+        routeCasing: '#0b1220',
+        route: '#5eead4',
+        inferred: '#fb923c',
+        shuttle: '#93c5fd',
+        accuracy: '#93c5fd',
+      }
+    : {
+        activeFill: '#14b8a6',
+        inactiveFill: '#94a3b8',
+        activeLine: '#0b726c',
+        inactiveLine: '#7b8ca3',
+        areaFill: '#bdd7e8',
+        areaLine: '#7c95b1',
+        routeCasing: '#ffffff',
+        route: '#0b726c',
+        inferred: '#c2410c',
+        shuttle: '#2556a6',
+        accuracy: '#2556a6',
+      },
+)
 
 function emptyCollection(): FeatureCollection {
   return { type: 'FeatureCollection', features: [] }
@@ -86,7 +122,7 @@ function lonLat(lat: number, lon: number): [number, number] {
 function terminalFeatures(): FeatureCollection<Polygon> {
   return {
     type: 'FeatureCollection',
-    features: airportDataset.terminals.map((terminal) => ({
+    features: props.dataset.terminals.map((terminal) => ({
       type: 'Feature',
       properties: { id: terminal.id, active: terminal.id === props.activeTerminalId },
       geometry: {
@@ -321,7 +357,7 @@ function drawUser() {
 function fitTerminal(terminalId = props.activeTerminalId) {
   const instance = map.value
   if (!instance) return
-  const terminal = airportDataset.terminals.find((item) => item.id === terminalId)
+  const terminal = props.dataset.terminals.find((item) => item.id === terminalId)
   if (!terminal) return
   const bounds = new maplibregl.LngLatBounds()
   for (const [lat, lon] of terminal.polygon) bounds.extend(lonLat(lat, lon))
@@ -371,13 +407,19 @@ function invalidateSize() {
 function addLayers() {
   const instance = map.value
   if (!instance) return
+  // A rapid theme toggle can queue two style loads; only add our sources once.
+  if (instance.getSource('terminals')) {
+    layersReady.value = true
+    return
+  }
   instance.addSource('terminals', { type: 'geojson', data: terminalFeatures() })
+  const palette = mapPalette.value
   instance.addLayer({
     id: 'terminals-fill',
     type: 'fill',
     source: 'terminals',
     paint: {
-      'fill-color': ['case', ['get', 'active'], '#14b8a6', '#94a3b8'],
+      'fill-color': ['case', ['get', 'active'], palette.activeFill, palette.inactiveFill],
       'fill-opacity': ['case', ['get', 'active'], 0.08, 0.03],
     },
   })
@@ -386,7 +428,7 @@ function addLayers() {
     type: 'line',
     source: 'terminals',
     paint: {
-      'line-color': ['case', ['get', 'active'], '#0b726c', '#7b8ca3'],
+      'line-color': ['case', ['get', 'active'], palette.activeLine, palette.inactiveLine],
       'line-width': ['case', ['get', 'active'], 3, 2],
       'line-opacity': ['case', ['get', 'active'], 0.95, 0.55],
     },
@@ -398,7 +440,7 @@ function addLayers() {
     type: 'fill',
     source: 'areas',
     paint: {
-      'fill-color': ['case', ['==', ['get', 'kind'], 'room'], '#bdd7e8', '#dbeafe'],
+      'fill-color': palette.areaFill,
       'fill-opacity': ['case', ['==', ['get', 'kind'], 'room'], 0.16, 0.12],
     },
   })
@@ -407,7 +449,7 @@ function addLayers() {
     type: 'line',
     source: 'areas',
     paint: {
-      'line-color': ['case', ['==', ['get', 'kind'], 'room'], '#7c95b1', '#8aa0b8'],
+      'line-color': palette.areaLine,
       'line-width': 1,
       'line-opacity': ['case', ['==', ['get', 'kind'], 'room'], 0.65, 0.5],
     },
@@ -418,7 +460,7 @@ function addLayers() {
     id: 'route-casing',
     type: 'line',
     source: 'route',
-    paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.85 },
+    paint: { 'line-color': palette.routeCasing, 'line-width': 9, 'line-opacity': 0.85 },
     layout: { 'line-cap': 'round', 'line-join': 'round' },
   })
   instance.addLayer({
@@ -426,7 +468,7 @@ function addLayers() {
     type: 'line',
     source: 'route',
     filter: ['all', ['!=', ['get', 'shuttle'], true], ['!=', ['get', 'inferred'], true]],
-    paint: { 'line-color': '#0b726c', 'line-width': 5, 'line-opacity': 0.9 },
+    paint: { 'line-color': palette.route, 'line-width': 5, 'line-opacity': 0.9 },
     layout: { 'line-cap': 'round', 'line-join': 'round' },
   })
   instance.addLayer({
@@ -435,7 +477,7 @@ function addLayers() {
     source: 'route',
     filter: ['all', ['!=', ['get', 'shuttle'], true], ['==', ['get', 'inferred'], true]],
     paint: {
-      'line-color': '#c2410c',
+      'line-color': palette.inferred,
       'line-width': 5,
       'line-opacity': 0.9,
       'line-dasharray': [1.5, 2],
@@ -448,7 +490,7 @@ function addLayers() {
     source: 'route',
     filter: ['==', ['get', 'shuttle'], true],
     paint: {
-      'line-color': '#2556a6',
+      'line-color': palette.shuttle,
       'line-width': 7,
       'line-opacity': 0.95,
       'line-dasharray': [3.5, 2],
@@ -461,13 +503,13 @@ function addLayers() {
     id: 'user-accuracy-fill',
     type: 'fill',
     source: 'user-accuracy',
-    paint: { 'fill-color': '#2556a6', 'fill-opacity': 0.08 },
+    paint: { 'fill-color': palette.accuracy, 'fill-opacity': 0.08 },
   })
   instance.addLayer({
     id: 'user-accuracy-line',
     type: 'line',
     source: 'user-accuracy',
-    paint: { 'line-color': '#2556a6', 'line-width': 1, 'line-opacity': 0.4 },
+    paint: { 'line-color': palette.accuracy, 'line-width': 1, 'line-opacity': 0.4 },
   })
 
   layersReady.value = true
@@ -480,11 +522,11 @@ function addLayers() {
 
 onMounted(() => {
   if (!mapEl.value) return
-  const initial = activeTerminal.value ?? airportDataset.terminals[0]
-  const center = initial?.center ?? airportDataset.airport.center
+  const initial = activeTerminal.value ?? props.dataset.terminals[0]
+  const center = initial?.center ?? props.dataset.airport.center
   const instance = new maplibregl.Map({
     container: mapEl.value,
-    style: appConfig.map.styleUrl,
+    style: mapStyleUrl.value,
     center: lonLat(center.lat, center.lon),
     zoom: appConfig.map.initialZoom,
     minZoom: 14,
@@ -504,7 +546,8 @@ onMounted(() => {
   )
   map.value = instance
 
-  instance.on('load', () => {
+  instance.on('style.load', () => {
+    layersReady.value = false
     addLayers()
     instance.resize()
     if (props.route && props.route.edges.length && props.autoFit) fitRoute()
@@ -533,6 +576,13 @@ watch(
     if (props.autoFit) fitTerminal()
   },
 )
+
+watch(mapStyleUrl, (styleUrl) => {
+  const instance = map.value
+  if (!instance) return
+  layersReady.value = false
+  instance.setStyle(styleUrl, { diff: false })
+})
 
 watch(
   () => props.floor?.id,
@@ -584,8 +634,8 @@ defineExpose({ fitRoute, fitTerminal, setViewToUser, invalidateSize })
     <p class="map-credit tiny muted">
       Base map <a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a>
       · © OpenMapTiles · Data
-      <a :href="airportDataset.airport.attributionUrl" target="_blank" rel="noreferrer">OpenStreetMap</a>
-      contributors (ODbL) · {{ airportDataset.airport.mapVersion }}
+      <a :href="props.dataset.airport.attributionUrl" target="_blank" rel="noreferrer">OpenStreetMap</a>
+      contributors (ODbL) · {{ props.dataset.airport.mapVersion }}
     </p>
   </div>
 </template>

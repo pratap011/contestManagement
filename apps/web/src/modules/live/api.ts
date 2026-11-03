@@ -1,7 +1,7 @@
 import { appConfig } from '@/config'
 import type {
   AircraftPosition,
-  BlrWeather,
+  AirportWeather,
   QueueDirection,
   QueueTerminal,
   TerminalQueues,
@@ -38,13 +38,20 @@ export function fetchQueues(
   return requestJson<TerminalQueues>(`/api/queues?${params}`)
 }
 
-export function fetchWeather(): Promise<BlrWeather> {
-  return requestJson<BlrWeather>('/api/weather')
+export function fetchWeather(airportCode = 'BLR'): Promise<AirportWeather> {
+  return requestJson<AirportWeather>(
+    `/api/weather?airport=${encodeURIComponent(airportCode.toUpperCase())}`,
+  )
 }
 
-export function fetchAircraft(flightNumber: string): Promise<AircraftPosition> {
+export function fetchAircraft(
+  flightNumber: string,
+  airportCode = 'BLR',
+): Promise<AircraftPosition> {
   return requestJson<AircraftPosition>(
-    `/api/aircraft?flightNumber=${encodeURIComponent(flightNumber)}`,
+    `/api/aircraft?flightNumber=${encodeURIComponent(flightNumber)}&airport=${encodeURIComponent(
+      airportCode.toUpperCase(),
+    )}`,
   )
 }
 

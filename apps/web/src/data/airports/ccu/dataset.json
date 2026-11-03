@@ -1,0 +1,3015 @@
+{
+  "airport": {
+    "code": "CCU",
+    "name": "Netaji Subhas Chandra Bose International Airport",
+    "city": "Kolkata",
+    "timezone": "Asia/Kolkata",
+    "mapVersion": "osm-2026-11-02",
+    "source": "osm",
+    "verificationStatus": "unverified",
+    "lastUpdated": "2026-11-02",
+    "center": {
+      "lat": 22.6547,
+      "lon": 88.4467
+    },
+    "bounds": {
+      "south": 22.6360467,
+      "west": 88.432879,
+      "north": 22.6587,
+      "east": 88.4507
+    },
+    "disclaimer": "Terminal footprints, gates, facilities and levels are derived from OpenStreetMap and are not field-verified. Hall, entrance, security and gate connectors are inferred schematic links, not surveyed corridors. Follow airport signs and staff instructions.",
+    "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "liveFlightSource": "Live provider lookup when configured; manual entry and demo flights always work. The BLR airport board is used only for BLR.",
+    "shuttle": {
+      "available": false,
+      "terminals": [
+        "t1",
+        "t2"
+      ],
+      "travelMinutes": 0,
+      "frequencyMinutes": 0,
+      "waitAllowanceMinutes": 0,
+      "stopNames": [],
+      "notes": [
+        "Terminal 2 is the integrated terminal. Confirm the terminal on airport screens."
+      ],
+      "source": "Kolkata Airport terminal information, retrieved 2026-11-02",
+      "retrievedAt": "2026-11-02T20:10:31.802Z",
+      "geometrySource": "Straight-line schematic connector between mapped terminal halls",
+      "sourceUrl": "https://www.aai.aero/en/airports/kolkata"
+    },
+    "terminals": [
+      {
+        "id": "t1",
+        "airportCode": "CCU",
+        "name": "Terminal 1 (Domestic)",
+        "center": {
+          "lat": 22.6454585,
+          "lon": 88.4401596
+        },
+        "polygon": [
+          [
+            22.6445084,
+            88.4396346
+          ],
+          [
+            22.6446913,
+            88.4400416
+          ],
+          [
+            22.6450539,
+            88.440077
+          ],
+          [
+            22.6449788,
+            88.4401938
+          ],
+          [
+            22.6448612,
+            88.4401796
+          ],
+          [
+            22.6448024,
+            88.4402752
+          ],
+          [
+            22.6444943,
+            88.4402451
+          ],
+          [
+            22.6443736,
+            88.4402305
+          ],
+          [
+            22.6442928,
+            88.4403176
+          ],
+          [
+            22.6443353,
+            88.4404486
+          ],
+          [
+            22.6444659,
+            88.4404734
+          ],
+          [
+            22.6445051,
+            88.4404167
+          ],
+          [
+            22.6450277,
+            88.4404698
+          ],
+          [
+            22.6450637,
+            88.4405583
+          ],
+          [
+            22.6452139,
+            88.4405689
+          ],
+          [
+            22.6452858,
+            88.4404698
+          ],
+          [
+            22.6453772,
+            88.4404769
+          ],
+          [
+            22.6454164,
+            88.4405902
+          ],
+          [
+            22.6455667,
+            88.4406043
+          ],
+          [
+            22.6456124,
+            88.4405441
+          ],
+          [
+            22.6458019,
+            88.440576
+          ],
+          [
+            22.6458835,
+            88.4404238
+          ],
+          [
+            22.6458345,
+            88.4402822
+          ],
+          [
+            22.6457202,
+            88.4402822
+          ],
+          [
+            22.6457006,
+            88.4402185
+          ],
+          [
+            22.6461187,
+            88.4402752
+          ],
+          [
+            22.6461252,
+            88.4402292
+          ],
+          [
+            22.6469614,
+            88.440346
+          ],
+          [
+            22.6470039,
+            88.439985
+          ],
+          [
+            22.6468732,
+            88.4399673
+          ],
+          [
+            22.6468994,
+            88.4396841
+          ],
+          [
+            22.6466609,
+            88.4396629
+          ],
+          [
+            22.6466772,
+            88.439539
+          ],
+          [
+            22.6462363,
+            88.4395213
+          ],
+          [
+            22.6461481,
+            88.4393019
+          ],
+          [
+            22.644884,
+            88.4391603
+          ],
+          [
+            22.6445084,
+            88.4396346
+          ]
+        ],
+        "supportedFloors": [
+          "t1-l0",
+          "t1-l1"
+        ]
+      },
+      {
+        "id": "t2",
+        "airportCode": "CCU",
+        "name": "Terminal 2 (Integrated)",
+        "center": {
+          "lat": 22.6417895,
+          "lon": 88.4390463
+        },
+        "polygon": [
+          [
+            22.6400467,
+            88.4369375
+          ],
+          [
+            22.6400975,
+            88.4370618
+          ],
+          [
+            22.6401217,
+            88.4371208
+          ],
+          [
+            22.6401326,
+            88.4371475
+          ],
+          [
+            22.6401552,
+            88.4372026
+          ],
+          [
+            22.6404036,
+            88.4378096
+          ],
+          [
+            22.6404265,
+            88.4378654
+          ],
+          [
+            22.6404345,
+            88.437885
+          ],
+          [
+            22.6404617,
+            88.4379514
+          ],
+          [
+            22.6406857,
+            88.4384987
+          ],
+          [
+            22.6407085,
+            88.4385543
+          ],
+          [
+            22.640721,
+            88.438585
+          ],
+          [
+            22.6407476,
+            88.43865
+          ],
+          [
+            22.6409944,
+            88.439253
+          ],
+          [
+            22.6410144,
+            88.4393019
+          ],
+          [
+            22.6410231,
+            88.4393231
+          ],
+          [
+            22.6410549,
+            88.4394008
+          ],
+          [
+            22.6411428,
+            88.4396156
+          ],
+          [
+            22.6411635,
+            88.4396662
+          ],
+          [
+            22.6411802,
+            88.4397069
+          ],
+          [
+            22.6411976,
+            88.4397493
+          ],
+          [
+            22.6412113,
+            88.4397827
+          ],
+          [
+            22.6412397,
+            88.4398523
+          ],
+          [
+            22.6414139,
+            88.4398749
+          ],
+          [
+            22.6414584,
+            88.4398807
+          ],
+          [
+            22.6415863,
+            88.4398951
+          ],
+          [
+            22.6416571,
+            88.4399031
+          ],
+          [
+            22.6421661,
+            88.4399645
+          ],
+          [
+            22.6422037,
+            88.439969
+          ],
+          [
+            22.6422242,
+            88.4399715
+          ],
+          [
+            22.6423501,
+            88.4399867
+          ],
+          [
+            22.6424176,
+            88.4399948
+          ],
+          [
+            22.6428938,
+            88.4400512
+          ],
+          [
+            22.6429601,
+            88.4400591
+          ],
+          [
+            22.6432596,
+            88.4400962
+          ],
+          [
+            22.6433209,
+            88.4401038
+          ],
+          [
+            22.6433385,
+            88.440106
+          ],
+          [
+            22.6436526,
+            88.4401419
+          ],
+          [
+            22.6437357,
+            88.4401514
+          ],
+          [
+            22.6440444,
+            88.4401884
+          ],
+          [
+            22.6441191,
+            88.4401973
+          ],
+          [
+            22.6443736,
+            88.4402305
+          ],
+          [
+            22.6444943,
+            88.4402451
+          ],
+          [
+            22.6445149,
+            88.440031
+          ],
+          [
+            22.6443777,
+            88.4400203
+          ],
+          [
+            22.6444572,
+            88.4389597
+          ],
+          [
+            22.6435664,
+            88.438892
+          ],
+          [
+            22.6418852,
+            88.438721
+          ],
+          [
+            22.6412936,
+            88.4372136
+          ],
+          [
+            22.6409873,
+            88.4375356
+          ],
+          [
+            22.6407316,
+            88.4376669
+          ],
+          [
+            22.6405382,
+            88.4377129
+          ],
+          [
+            22.6401969,
+            88.436879
+          ],
+          [
+            22.6400467,
+            88.4369375
+          ]
+        ],
+        "supportedFloors": [
+          "t2-l0",
+          "t2-l1"
+        ]
+      }
+    ]
+  },
+  "terminals": [
+    {
+      "id": "t1",
+      "airportCode": "CCU",
+      "name": "Terminal 1 (Domestic)",
+      "center": {
+        "lat": 22.6454585,
+        "lon": 88.4401596
+      },
+      "polygon": [
+        [
+          22.6445084,
+          88.4396346
+        ],
+        [
+          22.6446913,
+          88.4400416
+        ],
+        [
+          22.6450539,
+          88.440077
+        ],
+        [
+          22.6449788,
+          88.4401938
+        ],
+        [
+          22.6448612,
+          88.4401796
+        ],
+        [
+          22.6448024,
+          88.4402752
+        ],
+        [
+          22.6444943,
+          88.4402451
+        ],
+        [
+          22.6443736,
+          88.4402305
+        ],
+        [
+          22.6442928,
+          88.4403176
+        ],
+        [
+          22.6443353,
+          88.4404486
+        ],
+        [
+          22.6444659,
+          88.4404734
+        ],
+        [
+          22.6445051,
+          88.4404167
+        ],
+        [
+          22.6450277,
+          88.4404698
+        ],
+        [
+          22.6450637,
+          88.4405583
+        ],
+        [
+          22.6452139,
+          88.4405689
+        ],
+        [
+          22.6452858,
+          88.4404698
+        ],
+        [
+          22.6453772,
+          88.4404769
+        ],
+        [
+          22.6454164,
+          88.4405902
+        ],
+        [
+          22.6455667,
+          88.4406043
+        ],
+        [
+          22.6456124,
+          88.4405441
+        ],
+        [
+          22.6458019,
+          88.440576
+        ],
+        [
+          22.6458835,
+          88.4404238
+        ],
+        [
+          22.6458345,
+          88.4402822
+        ],
+        [
+          22.6457202,
+          88.4402822
+        ],
+        [
+          22.6457006,
+          88.4402185
+        ],
+        [
+          22.6461187,
+          88.4402752
+        ],
+        [
+          22.6461252,
+          88.4402292
+        ],
+        [
+          22.6469614,
+          88.440346
+        ],
+        [
+          22.6470039,
+          88.439985
+        ],
+        [
+          22.6468732,
+          88.4399673
+        ],
+        [
+          22.6468994,
+          88.4396841
+        ],
+        [
+          22.6466609,
+          88.4396629
+        ],
+        [
+          22.6466772,
+          88.439539
+        ],
+        [
+          22.6462363,
+          88.4395213
+        ],
+        [
+          22.6461481,
+          88.4393019
+        ],
+        [
+          22.644884,
+          88.4391603
+        ],
+        [
+          22.6445084,
+          88.4396346
+        ]
+      ],
+      "supportedFloors": [
+        "t1-l0",
+        "t1-l1"
+      ]
+    },
+    {
+      "id": "t2",
+      "airportCode": "CCU",
+      "name": "Terminal 2 (Integrated)",
+      "center": {
+        "lat": 22.6417895,
+        "lon": 88.4390463
+      },
+      "polygon": [
+        [
+          22.6400467,
+          88.4369375
+        ],
+        [
+          22.6400975,
+          88.4370618
+        ],
+        [
+          22.6401217,
+          88.4371208
+        ],
+        [
+          22.6401326,
+          88.4371475
+        ],
+        [
+          22.6401552,
+          88.4372026
+        ],
+        [
+          22.6404036,
+          88.4378096
+        ],
+        [
+          22.6404265,
+          88.4378654
+        ],
+        [
+          22.6404345,
+          88.437885
+        ],
+        [
+          22.6404617,
+          88.4379514
+        ],
+        [
+          22.6406857,
+          88.4384987
+        ],
+        [
+          22.6407085,
+          88.4385543
+        ],
+        [
+          22.640721,
+          88.438585
+        ],
+        [
+          22.6407476,
+          88.43865
+        ],
+        [
+          22.6409944,
+          88.439253
+        ],
+        [
+          22.6410144,
+          88.4393019
+        ],
+        [
+          22.6410231,
+          88.4393231
+        ],
+        [
+          22.6410549,
+          88.4394008
+        ],
+        [
+          22.6411428,
+          88.4396156
+        ],
+        [
+          22.6411635,
+          88.4396662
+        ],
+        [
+          22.6411802,
+          88.4397069
+        ],
+        [
+          22.6411976,
+          88.4397493
+        ],
+        [
+          22.6412113,
+          88.4397827
+        ],
+        [
+          22.6412397,
+          88.4398523
+        ],
+        [
+          22.6414139,
+          88.4398749
+        ],
+        [
+          22.6414584,
+          88.4398807
+        ],
+        [
+          22.6415863,
+          88.4398951
+        ],
+        [
+          22.6416571,
+          88.4399031
+        ],
+        [
+          22.6421661,
+          88.4399645
+        ],
+        [
+          22.6422037,
+          88.439969
+        ],
+        [
+          22.6422242,
+          88.4399715
+        ],
+        [
+          22.6423501,
+          88.4399867
+        ],
+        [
+          22.6424176,
+          88.4399948
+        ],
+        [
+          22.6428938,
+          88.4400512
+        ],
+        [
+          22.6429601,
+          88.4400591
+        ],
+        [
+          22.6432596,
+          88.4400962
+        ],
+        [
+          22.6433209,
+          88.4401038
+        ],
+        [
+          22.6433385,
+          88.440106
+        ],
+        [
+          22.6436526,
+          88.4401419
+        ],
+        [
+          22.6437357,
+          88.4401514
+        ],
+        [
+          22.6440444,
+          88.4401884
+        ],
+        [
+          22.6441191,
+          88.4401973
+        ],
+        [
+          22.6443736,
+          88.4402305
+        ],
+        [
+          22.6444943,
+          88.4402451
+        ],
+        [
+          22.6445149,
+          88.440031
+        ],
+        [
+          22.6443777,
+          88.4400203
+        ],
+        [
+          22.6444572,
+          88.4389597
+        ],
+        [
+          22.6435664,
+          88.438892
+        ],
+        [
+          22.6418852,
+          88.438721
+        ],
+        [
+          22.6412936,
+          88.4372136
+        ],
+        [
+          22.6409873,
+          88.4375356
+        ],
+        [
+          22.6407316,
+          88.4376669
+        ],
+        [
+          22.6405382,
+          88.4377129
+        ],
+        [
+          22.6401969,
+          88.436879
+        ],
+        [
+          22.6400467,
+          88.4369375
+        ]
+      ],
+      "supportedFloors": [
+        "t2-l0",
+        "t2-l1"
+      ]
+    }
+  ],
+  "floors": [
+    {
+      "id": "t1-l0",
+      "terminalId": "t1",
+      "label": "Arrivals, kerb & ground transport",
+      "shortLabel": "Terminal 1 (Domestic) · Ground",
+      "levelIndex": 0,
+      "level": 0,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t1-l1",
+      "terminalId": "t1",
+      "label": "Departures, security & gates",
+      "shortLabel": "Terminal 1 (Domestic) · Departures",
+      "levelIndex": 1,
+      "level": 1,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t2-l0",
+      "terminalId": "t2",
+      "label": "Arrivals, kerb & ground transport",
+      "shortLabel": "Terminal 2 (Integrated) · Ground",
+      "levelIndex": 0,
+      "level": 0,
+      "mapAsset": "osm",
+      "areas": []
+    },
+    {
+      "id": "t2-l1",
+      "terminalId": "t2",
+      "label": "Departures, security & gates",
+      "shortLabel": "Terminal 2 (Integrated) · Departures",
+      "levelIndex": 1,
+      "level": 1,
+      "mapAsset": "osm",
+      "areas": []
+    }
+  ],
+  "pois": [
+    {
+      "id": "gate-t2-25",
+      "name": "Gate 25",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441191,
+      "lon": 88.4401973,
+      "nodeId": "poi:gate-t2-25",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523766"
+    },
+    {
+      "id": "gate-t2-24",
+      "name": "Gate 24",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6437357,
+      "lon": 88.4401514,
+      "nodeId": "poi:gate-t2-24",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523768"
+    },
+    {
+      "id": "gate-t2-23",
+      "name": "Gate 23",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6433385,
+      "lon": 88.440106,
+      "nodeId": "poi:gate-t2-23",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523770"
+    },
+    {
+      "id": "gate-t2-22",
+      "name": "Gate 22",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6429601,
+      "lon": 88.4400591,
+      "nodeId": "poi:gate-t2-22",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523772"
+    },
+    {
+      "id": "gate-t2-21",
+      "name": "Gate 21",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424176,
+      "lon": 88.4399948,
+      "nodeId": "poi:gate-t2-21",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523774"
+    },
+    {
+      "id": "gate-t2-20",
+      "name": "Gate 20",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6422242,
+      "lon": 88.4399715,
+      "nodeId": "poi:gate-t2-20",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523776"
+    },
+    {
+      "id": "gate-t2-19",
+      "name": "Gate 19",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6416571,
+      "lon": 88.4399031,
+      "nodeId": "poi:gate-t2-19",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523778"
+    },
+    {
+      "id": "gate-t2-18",
+      "name": "Gate 18",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6414584,
+      "lon": 88.4398807,
+      "nodeId": "poi:gate-t2-18",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523780"
+    },
+    {
+      "id": "gate-t2-17",
+      "name": "Gate 17",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6411976,
+      "lon": 88.4397493,
+      "nodeId": "poi:gate-t2-17",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523782"
+    },
+    {
+      "id": "gate-t2-16",
+      "name": "Gate 16",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6411635,
+      "lon": 88.4396662,
+      "nodeId": "poi:gate-t2-16",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Gate position mapped in OpenStreetMap. The route ends at this mapped position; confirm the gate on airport screens.",
+      "osmId": "10224523784"
+    },
+    {
+      "id": "osm-node-4834788521",
+      "name": "Airport Bus Stand (lines VS1, VS2, AC37A, AC39, AC43, AC49A)",
+      "category": "transport",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6447563,
+      "lon": 88.438729,
+      "nodeId": "poi:osm-node-4834788521",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped transport stop or pick-up point.",
+      "osmId": "4834788521"
+    },
+    {
+      "id": "osm-node-9663613017",
+      "name": "Prepaid Taxi Booth",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6439931,
+      "lon": 88.4386735,
+      "nodeId": "poi:osm-node-9663613017",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "9663613017"
+    },
+    {
+      "id": "osm-node-10091527117",
+      "name": "Wow! Momo",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6417862,
+      "lon": 88.4388328,
+      "nodeId": "poi:osm-node-10091527117",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091527117"
+    },
+    {
+      "id": "osm-node-10091531117",
+      "name": "Biswa Bangla Store",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.642658,
+      "lon": 88.4389825,
+      "nodeId": "poi:osm-node-10091531117",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091531117"
+    },
+    {
+      "id": "osm-node-10091533517",
+      "name": "The Irish House",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6434051,
+      "lon": 88.4393528,
+      "nodeId": "poi:osm-node-10091533517",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091533517"
+    },
+    {
+      "id": "osm-node-10091536917",
+      "name": "7 Pack Restaurant & Bar",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431965,
+      "lon": 88.4389065,
+      "nodeId": "poi:osm-node-10091536917",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091536917"
+    },
+    {
+      "id": "osm-node-10091537417",
+      "name": "Bank of Baroda",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6418755,
+      "lon": 88.4392325,
+      "nodeId": "poi:osm-node-10091537417",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091537417"
+    },
+    {
+      "id": "osm-node-10091538417",
+      "name": "W For Woman",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6421862,
+      "lon": 88.4393411,
+      "nodeId": "poi:osm-node-10091538417",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091538417"
+    },
+    {
+      "id": "osm-node-10091540317",
+      "name": "Apollo Pharmacy",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441679,
+      "lon": 88.4395267,
+      "nodeId": "poi:osm-node-10091540317",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091540317"
+    },
+    {
+      "id": "osm-node-10091540318",
+      "name": "Cafe Coffee Day",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.643543,
+      "lon": 88.4397405,
+      "nodeId": "poi:osm-node-10091540318",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10091540318"
+    },
+    {
+      "id": "osm-node-10224475884",
+      "name": "Restroom",
+      "category": "restroom",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6409892,
+      "lon": 88.4391025,
+      "nodeId": "poi:osm-node-10224475884",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224475884"
+    },
+    {
+      "id": "osm-node-10224495039",
+      "name": "Rare Planet",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6430691,
+      "lon": 88.439866,
+      "nodeId": "poi:osm-node-10224495039",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224495039"
+    },
+    {
+      "id": "osm-node-10224497704",
+      "name": "Flurrys",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6436346,
+      "lon": 88.4399419,
+      "nodeId": "poi:osm-node-10224497704",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224497704"
+    },
+    {
+      "id": "osm-node-10224497705",
+      "name": "Gioia",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441069,
+      "lon": 88.4397995,
+      "nodeId": "poi:osm-node-10224497705",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224497705"
+    },
+    {
+      "id": "osm-node-10224509201",
+      "name": "Cookie Man",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6418245,
+      "lon": 88.4397835,
+      "nodeId": "poi:osm-node-10224509201",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224509201"
+    },
+    {
+      "id": "osm-node-10224516054",
+      "name": "Biryani Bhai",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441532,
+      "lon": 88.439657,
+      "nodeId": "poi:osm-node-10224516054",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224516054"
+    },
+    {
+      "id": "osm-node-10224523476",
+      "name": "Kidz Zone",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6437126,
+      "lon": 88.4399525,
+      "nodeId": "poi:osm-node-10224523476",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224523476"
+    },
+    {
+      "id": "osm-node-10224524585",
+      "name": "Biswat Bangla",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441873,
+      "lon": 88.4398045,
+      "nodeId": "poi:osm-node-10224524585",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224524585"
+    },
+    {
+      "id": "osm-node-10224524839",
+      "name": "Glass Sorta",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6428698,
+      "lon": 88.4398376,
+      "nodeId": "poi:osm-node-10224524839",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224524839"
+    },
+    {
+      "id": "osm-node-10224524840",
+      "name": "House of Candy",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440431,
+      "lon": 88.4397876,
+      "nodeId": "poi:osm-node-10224524840",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224524840"
+    },
+    {
+      "id": "osm-node-10224530602",
+      "name": "Cococart",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6435647,
+      "lon": 88.4399341,
+      "nodeId": "poi:osm-node-10224530602",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224530602"
+    },
+    {
+      "id": "osm-node-10224530603",
+      "name": "Subway",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440407,
+      "lon": 88.4396505,
+      "nodeId": "poi:osm-node-10224530603",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224530603"
+    },
+    {
+      "id": "osm-node-10224530837",
+      "name": "Pretty Women",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6438849,
+      "lon": 88.4397845,
+      "nodeId": "poi:osm-node-10224530837",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224530837"
+    },
+    {
+      "id": "osm-node-10224531764",
+      "name": "WHSmith",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6429436,
+      "lon": 88.4398481,
+      "nodeId": "poi:osm-node-10224531764",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224531764"
+    },
+    {
+      "id": "osm-node-10224533844",
+      "name": "Banchharam's",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6430116,
+      "lon": 88.4398578,
+      "nodeId": "poi:osm-node-10224533844",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224533844"
+    },
+    {
+      "id": "osm-node-10224533845",
+      "name": "Kompanero",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6432472,
+      "lon": 88.4398913,
+      "nodeId": "poi:osm-node-10224533845",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224533845"
+    },
+    {
+      "id": "osm-node-10224534031",
+      "name": "W",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431232,
+      "lon": 88.4398737,
+      "nodeId": "poi:osm-node-10224534031",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224534031"
+    },
+    {
+      "id": "osm-node-10224534179",
+      "name": "Caffechino",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6434871,
+      "lon": 88.4399252,
+      "nodeId": "poi:osm-node-10224534179",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224534179"
+    },
+    {
+      "id": "osm-node-10224534180",
+      "name": "KFC",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6442046,
+      "lon": 88.439663,
+      "nodeId": "poi:osm-node-10224534180",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224534180"
+    },
+    {
+      "id": "osm-node-10224535701",
+      "name": "Sunglass Hut",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431858,
+      "lon": 88.4398826,
+      "nodeId": "poi:osm-node-10224535701",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224535701"
+    },
+    {
+      "id": "osm-node-10224535941",
+      "name": "Gadget Point",
+      "category": "shop",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.643317,
+      "lon": 88.4399013,
+      "nodeId": "poi:osm-node-10224535941",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224535941"
+    },
+    {
+      "id": "osm-node-10224537564",
+      "name": "Wrapafella",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424753,
+      "lon": 88.439681,
+      "nodeId": "poi:osm-node-10224537564",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224537564"
+    },
+    {
+      "id": "osm-node-10224538668",
+      "name": "Pizza Hut",
+      "category": "food",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440916,
+      "lon": 88.4396545,
+      "nodeId": "poi:osm-node-10224538668",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "10224538668"
+    },
+    {
+      "id": "osm-node-11545591194",
+      "name": "State Bank of India",
+      "category": "service",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6422336,
+      "lon": 88.439252,
+      "nodeId": "poi:osm-node-11545591194",
+      "source": "osm",
+      "verificationStatus": "unverified",
+      "description": "Mapped from OpenStreetMap. Position and opening details are not field-verified. Connectors to this place are inferred.",
+      "osmId": "11545591194"
+    },
+    {
+      "id": "anchor-poi-t1-hall",
+      "name": "Terminal 1 (Domestic) hall (approx.)",
+      "category": "info",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 22.6454585,
+      "lon": 88.4401596,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate central hall used as the schematic connection point for this terminal. The exact indoor position is not mapped."
+    },
+    {
+      "id": "anchor-poi-t1-security",
+      "name": "Terminal 1 (Domestic) security (approx.)",
+      "category": "security",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 22.6454585,
+      "lon": 88.4401596,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "The terminal hall is used as an approximate security area because the checkpoint itself is not mapped. Follow airport signs."
+    },
+    {
+      "id": "area-t1-gates",
+      "name": "Terminal 1 (Domestic) gate area",
+      "category": "gate",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 22.6454585,
+      "lon": 88.4401596,
+      "nodeId": "anchor:t1:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "No individual gate positions are mapped for this terminal. This is an approximate gate-area destination; confirm the exact gate on airport screens."
+    },
+    {
+      "id": "anchor-poi-t1-entrance",
+      "name": "Terminal 1 (Domestic) entrance (approx.)",
+      "category": "entrance",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 22.6457006,
+      "lon": 88.4402185,
+      "nodeId": "anchor:t1:entrance",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate kerbside entrance derived from the terminal footprint. Confirm the door with airport signage."
+    },
+    {
+      "id": "anchor-poi-t2-hall",
+      "name": "Terminal 2 (Integrated) hall (approx.)",
+      "category": "info",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424272,
+      "lon": 88.4399679,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate central hall used as the schematic connection point for this terminal. The exact indoor position is not mapped."
+    },
+    {
+      "id": "anchor-poi-t2-security",
+      "name": "Terminal 2 (Integrated) security (approx.)",
+      "category": "security",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424272,
+      "lon": 88.4399679,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "The terminal hall is used as an approximate security area because the checkpoint itself is not mapped. Follow airport signs."
+    },
+    {
+      "id": "area-t2-gates",
+      "name": "Terminal 2 (Integrated) gate area",
+      "category": "gate",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424272,
+      "lon": 88.4399679,
+      "nodeId": "anchor:t2:hall",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate centroid of the mapped gates in this terminal. Use it when a live gate has no individual mapped position."
+    },
+    {
+      "id": "anchor-poi-t2-entrance",
+      "name": "Terminal 2 (Integrated) entrance (approx.)",
+      "category": "entrance",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6424239,
+      "lon": 88.4399955,
+      "nodeId": "anchor:t2:entrance",
+      "source": "derived",
+      "verificationStatus": "inferred",
+      "description": "Approximate kerbside entrance derived from the terminal footprint. Confirm the door with airport signage."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "poi:gate-t2-25",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441191,
+      "lon": 88.4401973,
+      "nodeType": "gate",
+      "osmId": "10224523766",
+      "name": "Gate 25"
+    },
+    {
+      "id": "poi:gate-t2-24",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6437357,
+      "lon": 88.4401514,
+      "nodeType": "gate",
+      "osmId": "10224523768",
+      "name": "Gate 24"
+    },
+    {
+      "id": "poi:gate-t2-23",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6433385,
+      "lon": 88.440106,
+      "nodeType": "gate",
+      "osmId": "10224523770",
+      "name": "Gate 23"
+    },
+    {
+      "id": "poi:gate-t2-22",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6429601,
+      "lon": 88.4400591,
+      "nodeType": "gate",
+      "osmId": "10224523772",
+      "name": "Gate 22"
+    },
+    {
+      "id": "poi:gate-t2-21",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424176,
+      "lon": 88.4399948,
+      "nodeType": "gate",
+      "osmId": "10224523774",
+      "name": "Gate 21"
+    },
+    {
+      "id": "poi:gate-t2-20",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6422242,
+      "lon": 88.4399715,
+      "nodeType": "gate",
+      "osmId": "10224523776",
+      "name": "Gate 20"
+    },
+    {
+      "id": "poi:gate-t2-19",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6416571,
+      "lon": 88.4399031,
+      "nodeType": "gate",
+      "osmId": "10224523778",
+      "name": "Gate 19"
+    },
+    {
+      "id": "poi:gate-t2-18",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6414584,
+      "lon": 88.4398807,
+      "nodeType": "gate",
+      "osmId": "10224523780",
+      "name": "Gate 18"
+    },
+    {
+      "id": "poi:gate-t2-17",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6411976,
+      "lon": 88.4397493,
+      "nodeType": "gate",
+      "osmId": "10224523782",
+      "name": "Gate 17"
+    },
+    {
+      "id": "poi:gate-t2-16",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6411635,
+      "lon": 88.4396662,
+      "nodeType": "gate",
+      "osmId": "10224523784",
+      "name": "Gate 16"
+    },
+    {
+      "id": "poi:osm-node-4834788521",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6447563,
+      "lon": 88.438729,
+      "nodeType": "entrance",
+      "osmId": "4834788521",
+      "name": "Airport Bus Stand (lines VS1, VS2, AC37A, AC39, AC43, AC49A)"
+    },
+    {
+      "id": "poi:osm-node-9663613017",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6439931,
+      "lon": 88.4386735,
+      "nodeType": "facility",
+      "osmId": "9663613017",
+      "name": "Prepaid Taxi Booth"
+    },
+    {
+      "id": "poi:osm-node-10091527117",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6417862,
+      "lon": 88.4388328,
+      "nodeType": "facility",
+      "osmId": "10091527117",
+      "name": "Wow! Momo"
+    },
+    {
+      "id": "poi:osm-node-10091531117",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.642658,
+      "lon": 88.4389825,
+      "nodeType": "facility",
+      "osmId": "10091531117",
+      "name": "Biswa Bangla Store"
+    },
+    {
+      "id": "poi:osm-node-10091533517",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6434051,
+      "lon": 88.4393528,
+      "nodeType": "facility",
+      "osmId": "10091533517",
+      "name": "The Irish House"
+    },
+    {
+      "id": "poi:osm-node-10091536917",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431965,
+      "lon": 88.4389065,
+      "nodeType": "facility",
+      "osmId": "10091536917",
+      "name": "7 Pack Restaurant & Bar"
+    },
+    {
+      "id": "poi:osm-node-10091537417",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6418755,
+      "lon": 88.4392325,
+      "nodeType": "facility",
+      "osmId": "10091537417",
+      "name": "Bank of Baroda"
+    },
+    {
+      "id": "poi:osm-node-10091538417",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6421862,
+      "lon": 88.4393411,
+      "nodeType": "facility",
+      "osmId": "10091538417",
+      "name": "W For Woman"
+    },
+    {
+      "id": "poi:osm-node-10091540317",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441679,
+      "lon": 88.4395267,
+      "nodeType": "facility",
+      "osmId": "10091540317",
+      "name": "Apollo Pharmacy"
+    },
+    {
+      "id": "poi:osm-node-10091540318",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.643543,
+      "lon": 88.4397405,
+      "nodeType": "facility",
+      "osmId": "10091540318",
+      "name": "Cafe Coffee Day"
+    },
+    {
+      "id": "poi:osm-node-10224475884",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6409892,
+      "lon": 88.4391025,
+      "nodeType": "facility",
+      "osmId": "10224475884",
+      "name": "Restroom"
+    },
+    {
+      "id": "poi:osm-node-10224495039",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6430691,
+      "lon": 88.439866,
+      "nodeType": "facility",
+      "osmId": "10224495039",
+      "name": "Rare Planet"
+    },
+    {
+      "id": "poi:osm-node-10224497704",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6436346,
+      "lon": 88.4399419,
+      "nodeType": "facility",
+      "osmId": "10224497704",
+      "name": "Flurrys"
+    },
+    {
+      "id": "poi:osm-node-10224497705",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441069,
+      "lon": 88.4397995,
+      "nodeType": "facility",
+      "osmId": "10224497705",
+      "name": "Gioia"
+    },
+    {
+      "id": "poi:osm-node-10224509201",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6418245,
+      "lon": 88.4397835,
+      "nodeType": "facility",
+      "osmId": "10224509201",
+      "name": "Cookie Man"
+    },
+    {
+      "id": "poi:osm-node-10224516054",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441532,
+      "lon": 88.439657,
+      "nodeType": "facility",
+      "osmId": "10224516054",
+      "name": "Biryani Bhai"
+    },
+    {
+      "id": "poi:osm-node-10224523476",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6437126,
+      "lon": 88.4399525,
+      "nodeType": "facility",
+      "osmId": "10224523476",
+      "name": "Kidz Zone"
+    },
+    {
+      "id": "poi:osm-node-10224524585",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6441873,
+      "lon": 88.4398045,
+      "nodeType": "facility",
+      "osmId": "10224524585",
+      "name": "Biswat Bangla"
+    },
+    {
+      "id": "poi:osm-node-10224524839",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6428698,
+      "lon": 88.4398376,
+      "nodeType": "facility",
+      "osmId": "10224524839",
+      "name": "Glass Sorta"
+    },
+    {
+      "id": "poi:osm-node-10224524840",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440431,
+      "lon": 88.4397876,
+      "nodeType": "facility",
+      "osmId": "10224524840",
+      "name": "House of Candy"
+    },
+    {
+      "id": "poi:osm-node-10224530602",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6435647,
+      "lon": 88.4399341,
+      "nodeType": "facility",
+      "osmId": "10224530602",
+      "name": "Cococart"
+    },
+    {
+      "id": "poi:osm-node-10224530603",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440407,
+      "lon": 88.4396505,
+      "nodeType": "facility",
+      "osmId": "10224530603",
+      "name": "Subway"
+    },
+    {
+      "id": "poi:osm-node-10224530837",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6438849,
+      "lon": 88.4397845,
+      "nodeType": "facility",
+      "osmId": "10224530837",
+      "name": "Pretty Women"
+    },
+    {
+      "id": "poi:osm-node-10224531764",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6429436,
+      "lon": 88.4398481,
+      "nodeType": "facility",
+      "osmId": "10224531764",
+      "name": "WHSmith"
+    },
+    {
+      "id": "poi:osm-node-10224533844",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6430116,
+      "lon": 88.4398578,
+      "nodeType": "facility",
+      "osmId": "10224533844",
+      "name": "Banchharam's"
+    },
+    {
+      "id": "poi:osm-node-10224533845",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6432472,
+      "lon": 88.4398913,
+      "nodeType": "facility",
+      "osmId": "10224533845",
+      "name": "Kompanero"
+    },
+    {
+      "id": "poi:osm-node-10224534031",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431232,
+      "lon": 88.4398737,
+      "nodeType": "facility",
+      "osmId": "10224534031",
+      "name": "W"
+    },
+    {
+      "id": "poi:osm-node-10224534179",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6434871,
+      "lon": 88.4399252,
+      "nodeType": "facility",
+      "osmId": "10224534179",
+      "name": "Caffechino"
+    },
+    {
+      "id": "poi:osm-node-10224534180",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6442046,
+      "lon": 88.439663,
+      "nodeType": "facility",
+      "osmId": "10224534180",
+      "name": "KFC"
+    },
+    {
+      "id": "poi:osm-node-10224535701",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6431858,
+      "lon": 88.4398826,
+      "nodeType": "facility",
+      "osmId": "10224535701",
+      "name": "Sunglass Hut"
+    },
+    {
+      "id": "poi:osm-node-10224535941",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.643317,
+      "lon": 88.4399013,
+      "nodeType": "facility",
+      "osmId": "10224535941",
+      "name": "Gadget Point"
+    },
+    {
+      "id": "poi:osm-node-10224537564",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424753,
+      "lon": 88.439681,
+      "nodeType": "facility",
+      "osmId": "10224537564",
+      "name": "Wrapafella"
+    },
+    {
+      "id": "poi:osm-node-10224538668",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6440916,
+      "lon": 88.4396545,
+      "nodeType": "facility",
+      "osmId": "10224538668",
+      "name": "Pizza Hut"
+    },
+    {
+      "id": "poi:osm-node-11545591194",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6422336,
+      "lon": 88.439252,
+      "nodeType": "facility",
+      "osmId": "11545591194",
+      "name": "State Bank of India"
+    },
+    {
+      "id": "anchor:t1:hall",
+      "terminalId": "t1",
+      "floorId": "t1-l1",
+      "lat": 22.6454585,
+      "lon": 88.4401596,
+      "nodeType": "junction",
+      "name": "Terminal 1 (Domestic) hall (approx.)"
+    },
+    {
+      "id": "anchor:t1:entrance",
+      "terminalId": "t1",
+      "floorId": "t1-l0",
+      "lat": 22.6457006,
+      "lon": 88.4402185,
+      "nodeType": "entrance",
+      "name": "Terminal 1 (Domestic) entrance (approx.)"
+    },
+    {
+      "id": "anchor:t2:hall",
+      "terminalId": "t2",
+      "floorId": "t2-l1",
+      "lat": 22.6424272,
+      "lon": 88.4399679,
+      "nodeType": "junction",
+      "name": "Terminal 2 (Integrated) hall (approx.)"
+    },
+    {
+      "id": "anchor:t2:entrance",
+      "terminalId": "t2",
+      "floorId": "t2-l0",
+      "lat": 22.6424239,
+      "lon": 88.4399955,
+      "nodeType": "entrance",
+      "name": "Terminal 2 (Integrated) entrance (approx.)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "anchor:t1:entrance",
+      "to": "anchor:t1:hall",
+      "distanceMeters": 27.6,
+      "estimatedWalkingSeconds": 52,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift or escalator between the kerbside and the Terminal 1 (Domestic) departures hall (inferred connector)"
+    },
+    {
+      "id": "edge-2",
+      "from": "poi:gate-t2-16",
+      "to": "poi:gate-t2-17",
+      "distanceMeters": 9.3,
+      "estimatedWalkingSeconds": 7,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-3",
+      "from": "poi:gate-t2-17",
+      "to": "poi:gate-t2-18",
+      "distanceMeters": 32,
+      "estimatedWalkingSeconds": 26,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-4",
+      "from": "poi:gate-t2-18",
+      "to": "poi:gate-t2-19",
+      "distanceMeters": 22.2,
+      "estimatedWalkingSeconds": 18,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-5",
+      "from": "poi:gate-t2-19",
+      "to": "poi:gate-t2-20",
+      "distanceMeters": 63.4,
+      "estimatedWalkingSeconds": 51,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-6",
+      "from": "poi:gate-t2-20",
+      "to": "poi:gate-t2-21",
+      "distanceMeters": 21.6,
+      "estimatedWalkingSeconds": 17,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-7",
+      "from": "poi:gate-t2-21",
+      "to": "poi:gate-t2-22",
+      "distanceMeters": 60.7,
+      "estimatedWalkingSeconds": 49,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-8",
+      "from": "poi:gate-t2-22",
+      "to": "poi:gate-t2-23",
+      "distanceMeters": 42.4,
+      "estimatedWalkingSeconds": 34,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-9",
+      "from": "poi:gate-t2-23",
+      "to": "poi:gate-t2-24",
+      "distanceMeters": 44.4,
+      "estimatedWalkingSeconds": 36,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-10",
+      "from": "poi:gate-t2-24",
+      "to": "poi:gate-t2-25",
+      "distanceMeters": 42.9,
+      "estimatedWalkingSeconds": 34,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the Terminal 2 (Integrated) gate connector (inferred)"
+    },
+    {
+      "id": "edge-11",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-16",
+      "distanceMeters": 143.9,
+      "estimatedWalkingSeconds": 115,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 16"
+    },
+    {
+      "id": "edge-12",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-17",
+      "distanceMeters": 138.6,
+      "estimatedWalkingSeconds": 111,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 17"
+    },
+    {
+      "id": "edge-13",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-18",
+      "distanceMeters": 108.1,
+      "estimatedWalkingSeconds": 86,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 18"
+    },
+    {
+      "id": "edge-14",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-19",
+      "distanceMeters": 85.9,
+      "estimatedWalkingSeconds": 69,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 19"
+    },
+    {
+      "id": "edge-15",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-20",
+      "distanceMeters": 22.6,
+      "estimatedWalkingSeconds": 18,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 20"
+    },
+    {
+      "id": "edge-16",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-21",
+      "distanceMeters": 3,
+      "estimatedWalkingSeconds": 2,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 21"
+    },
+    {
+      "id": "edge-17",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-22",
+      "distanceMeters": 60,
+      "estimatedWalkingSeconds": 48,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 22"
+    },
+    {
+      "id": "edge-18",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-23",
+      "distanceMeters": 102.3,
+      "estimatedWalkingSeconds": 82,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 23"
+    },
+    {
+      "id": "edge-19",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-24",
+      "distanceMeters": 146.7,
+      "estimatedWalkingSeconds": 117,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 24"
+    },
+    {
+      "id": "edge-20",
+      "from": "anchor:t2:hall",
+      "to": "poi:gate-t2-25",
+      "distanceMeters": 189.6,
+      "estimatedWalkingSeconds": 152,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Follow the inferred Terminal 2 (Integrated) hall connector to Gate 25"
+    },
+    {
+      "id": "edge-21",
+      "from": "anchor:t2:entrance",
+      "to": "anchor:t2:hall",
+      "distanceMeters": 2.9,
+      "estimatedWalkingSeconds": 32,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift or escalator between the kerbside and the Terminal 2 (Integrated) departures hall (inferred connector)"
+    },
+    {
+      "id": "edge-22",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-4834788521",
+      "distanceMeters": 288.5,
+      "estimatedWalkingSeconds": 261,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Airport Bus Stand (lines VS1, VS2, AC37A, AC39, AC43, AC49A) (inferred connector)"
+    },
+    {
+      "id": "edge-23",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-9663613017",
+      "distanceMeters": 219,
+      "estimatedWalkingSeconds": 205,
+      "transitionType": "elevator",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Take the lift to Prepaid Taxi Booth (inferred connector)"
+    },
+    {
+      "id": "edge-24",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091527117",
+      "distanceMeters": 136.6,
+      "estimatedWalkingSeconds": 109,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Wow! Momo"
+    },
+    {
+      "id": "edge-25",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091531117",
+      "distanceMeters": 104.3,
+      "estimatedWalkingSeconds": 83,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Biswa Bangla Store"
+    },
+    {
+      "id": "edge-26",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091533517",
+      "distanceMeters": 125.7,
+      "estimatedWalkingSeconds": 101,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to The Irish House"
+    },
+    {
+      "id": "edge-27",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091536917",
+      "distanceMeters": 138.5,
+      "estimatedWalkingSeconds": 111,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to 7 Pack Restaurant & Bar"
+    },
+    {
+      "id": "edge-28",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091537417",
+      "distanceMeters": 97.3,
+      "estimatedWalkingSeconds": 78,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Bank of Baroda"
+    },
+    {
+      "id": "edge-29",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091538417",
+      "distanceMeters": 69.7,
+      "estimatedWalkingSeconds": 56,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to W For Woman"
+    },
+    {
+      "id": "edge-30",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091540317",
+      "distanceMeters": 198.8,
+      "estimatedWalkingSeconds": 159,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Apollo Pharmacy"
+    },
+    {
+      "id": "edge-31",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10091540318",
+      "distanceMeters": 126.2,
+      "estimatedWalkingSeconds": 101,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Cafe Coffee Day"
+    },
+    {
+      "id": "edge-32",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224475884",
+      "distanceMeters": 182.9,
+      "estimatedWalkingSeconds": 146,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Restroom"
+    },
+    {
+      "id": "edge-33",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224495039",
+      "distanceMeters": 72.1,
+      "estimatedWalkingSeconds": 58,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Rare Planet"
+    },
+    {
+      "id": "edge-34",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224497704",
+      "distanceMeters": 134.3,
+      "estimatedWalkingSeconds": 107,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Flurrys"
+    },
+    {
+      "id": "edge-35",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224497705",
+      "distanceMeters": 187.6,
+      "estimatedWalkingSeconds": 150,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Gioia"
+    },
+    {
+      "id": "edge-36",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224509201",
+      "distanceMeters": 69.6,
+      "estimatedWalkingSeconds": 56,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Cookie Man"
+    },
+    {
+      "id": "edge-37",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224516054",
+      "distanceMeters": 194.6,
+      "estimatedWalkingSeconds": 156,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Biryani Bhai"
+    },
+    {
+      "id": "edge-38",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224523476",
+      "distanceMeters": 142.9,
+      "estimatedWalkingSeconds": 114,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Kidz Zone"
+    },
+    {
+      "id": "edge-39",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224524585",
+      "distanceMeters": 196.4,
+      "estimatedWalkingSeconds": 157,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Biswat Bangla"
+    },
+    {
+      "id": "edge-40",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224524839",
+      "distanceMeters": 51,
+      "estimatedWalkingSeconds": 41,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Glass Sorta"
+    },
+    {
+      "id": "edge-41",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224524840",
+      "distanceMeters": 180.6,
+      "estimatedWalkingSeconds": 145,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to House of Candy"
+    },
+    {
+      "id": "edge-42",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224530602",
+      "distanceMeters": 126.5,
+      "estimatedWalkingSeconds": 101,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Cococart"
+    },
+    {
+      "id": "edge-43",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224530603",
+      "distanceMeters": 182.3,
+      "estimatedWalkingSeconds": 146,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Subway"
+    },
+    {
+      "id": "edge-44",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224530837",
+      "distanceMeters": 163.2,
+      "estimatedWalkingSeconds": 131,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Pretty Women"
+    },
+    {
+      "id": "edge-45",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224531764",
+      "distanceMeters": 58.7,
+      "estimatedWalkingSeconds": 47,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to WHSmith"
+    },
+    {
+      "id": "edge-46",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224533844",
+      "distanceMeters": 66,
+      "estimatedWalkingSeconds": 53,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Banchharam's"
+    },
+    {
+      "id": "edge-47",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224533845",
+      "distanceMeters": 91.5,
+      "estimatedWalkingSeconds": 73,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Kompanero"
+    },
+    {
+      "id": "edge-48",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224534031",
+      "distanceMeters": 78,
+      "estimatedWalkingSeconds": 62,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to W"
+    },
+    {
+      "id": "edge-49",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224534179",
+      "distanceMeters": 117.9,
+      "estimatedWalkingSeconds": 94,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Caffechino"
+    },
+    {
+      "id": "edge-50",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224534180",
+      "distanceMeters": 200.1,
+      "estimatedWalkingSeconds": 160,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to KFC"
+    },
+    {
+      "id": "edge-51",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224535701",
+      "distanceMeters": 84.8,
+      "estimatedWalkingSeconds": 68,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Sunglass Hut"
+    },
+    {
+      "id": "edge-52",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224535941",
+      "distanceMeters": 99.2,
+      "estimatedWalkingSeconds": 79,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Gadget Point"
+    },
+    {
+      "id": "edge-53",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224537564",
+      "distanceMeters": 29.9,
+      "estimatedWalkingSeconds": 24,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Wrapafella"
+    },
+    {
+      "id": "edge-54",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-10224538668",
+      "distanceMeters": 187.8,
+      "estimatedWalkingSeconds": 150,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to Pizza Hut"
+    },
+    {
+      "id": "edge-55",
+      "from": "anchor:t2:hall",
+      "to": "poi:osm-node-11545591194",
+      "distanceMeters": 76.6,
+      "estimatedWalkingSeconds": 61,
+      "transitionType": "walk",
+      "allowedPassengerTypes": [
+        "departing",
+        "connecting",
+        "staff"
+      ],
+      "accessible": true,
+      "verificationStatus": "inferred",
+      "source": "derived",
+      "instruction": "Estimated access path to State Bank of India"
+    }
+  ]
+}

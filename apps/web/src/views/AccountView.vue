@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { BLR_TIMEZONE, formatDateTime } from '@/lib/time'
+import { formatDateTime } from '@/lib/time'
+import { useAirportStore } from '@/stores/airport'
 import { isSavedJourney, useJourneyStore } from '@/stores/journey'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const auth = useAuthStore()
 const journeyStore = useJourneyStore()
+const airportStore = useAirportStore()
+const timeZone = computed(() => airportStore.airport?.timezone ?? 'Asia/Kolkata')
 
 const mode = ref<'login' | 'register'>('login')
 const email = ref('')
@@ -24,7 +27,7 @@ const savedJourneySummary = computed(() => {
   if (!saved) return null
   if (saved.kind === 'departing') {
     return `${saved.departure?.flightNumber ?? 'Departure'} · ${
-      saved.departure?.origin ?? 'BLR'
+      saved.departure?.origin ?? saved.airportCode
     } → ${saved.departure?.destination ?? 'destination'}`
   }
   return `${saved.arrival?.flightNumber ?? 'Arrival'} → ${
@@ -33,7 +36,7 @@ const savedJourneySummary = computed(() => {
 })
 const savedAt = computed(() =>
   auth.savedJourney?.updatedAt
-    ? formatDateTime(auth.savedJourney.updatedAt, BLR_TIMEZONE)
+    ? formatDateTime(auth.savedJourney.updatedAt, timeZone.value)
     : 'never',
 )
 

@@ -12,10 +12,14 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund && npm cache clean --force
 COPY server ./server
+COPY docker/entrypoint.sh /usr/local/bin/blr-entrypoint
 COPY --from=web-build /app/apps/web/dist ./apps/web/dist
-RUN mkdir -p /app/.data && chown -R node:node /app
+RUN chmod 755 /usr/local/bin/blr-entrypoint \
+  && mkdir -p /app/.data \
+  && chown -R node:node /app
 USER node
 EXPOSE 8787
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:8787/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+ENTRYPOINT ["/usr/local/bin/blr-entrypoint"]
 CMD ["node", "server/index.ts"]

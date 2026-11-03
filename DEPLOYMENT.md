@@ -4,16 +4,31 @@ The app is a single Node service that serves the built Vue app and the API. Live
 optional accounts need the service; the map and manual/demo journeys work without an external
 provider.
 
-## Docker Compose (app + PostgreSQL)
+## Docker Compose (app + frontend + PostgreSQL)
+
+Requires Docker with Compose v2. No `.env` or manual setup is required:
 
 ```bash
-cp .env.example .env
-# Edit .env: set a long random JWT_SECRET and POSTGRES_PASSWORD.
 docker compose up --build
 ```
 
-Open <http://localhost:8787>. The compose file runs PostgreSQL 16 and passes `DATABASE_URL` to the
-app. Do not use the example passwords or the development JWT secret in public deployments.
+Open <http://localhost:8787>. Compose starts PostgreSQL 16 and one app container that builds the Vue
+app and serves it alongside the API. On boot the server creates the tables in PostgreSQL.
+
+- `docker compose down` stops the stack and keeps data.
+- `docker compose down -v` also deletes the database, accounts and generated keys.
+- The image entrypoint creates a random `JWT_SECRET` on first run and stores it in the `appdata`
+  volume, so sessions survive container restarts. Web Push keys are stored in the same volume.
+- Optional overrides go in a local `.env`: `POSTGRES_PASSWORD`, `JWT_SECRET`,
+  `AERODATABOX_API_KEY`, stable `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY`, or OpenSky credentials.
+- The database is not published on the host. If you change `POSTGRES_PASSWORD` after the volume was
+  created, run `docker compose down -v` before starting again.
+- Compose passes the password separately from `DATABASE_URL`, so it can contain URL-reserved
+  characters.
+
+For a shared host, use a managed PostgreSQL database, set `JWT_SECRET`, `POSTGRES_PASSWORD` and the
+Push keys explicitly as environment variables, and do not rely on the local defaults. See
+`render.yaml` for a production example.
 
 ## Render blueprint
 
@@ -21,8 +36,8 @@ app. Do not use the example passwords or the development JWT secret in public de
 2. In Render, create a new **Blueprint** and select this repository and that branch.
 3. Render reads `render.yaml`, creates a free PostgreSQL database, builds the Docker image and runs
    the health check at `/api/health`.
-4. Optional: set `AERODATABOX_API_KEY` for schedule coverage beyond the BLR board's current day.
-   The BLR board, queue displays and weather need no key.
+4. Optional: set `AERODATABOX_API_KEY` for schedule coverage beyond the BLR board's current day and
+   for DEL/BOM/HYD/MAA/CCU. The BLR board, queue displays and weather need no key.
 5. Set a stable `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` pair if you want Web Push subscriptions to
    survive redeploys. Generate one with
    `node -e "console.log(require('web-push').generateVAPIDKeys())"`.
@@ -41,12 +56,14 @@ docker run -p 8787:8787 \
   -e JWT_SECRET="$(openssl rand -hex 32)" \
   -e DATABASE_URL="postgres://user:password@host:5432/blr_navigator" \
   -e DATABASE_SSL=true \
+  -v blr-data:/app/.data \
   blr-navigator
 ```
 
 Provide a managed PostgreSQL database for durable accounts. Without `DATABASE_URL`, the container
 uses embedded PGlite under `/app/.data`; that works for a single-instance demo but is not a shared
-database.
+database. Mount `/app/.data` as a volume if you want PGlite data, the generated session secret and
+Web Push keys to survive container replacement.
 
 ## Environment
 
@@ -54,7 +71,8 @@ database.
 | --- | --- | --- |
 | `NODE_ENV` | production | Enables secure cookies, trusted proxy and production secret checks |
 | `PORT` | no | API/HTTP port, default `8787` |
-| `JWT_SECRET` | production | Long random value for session tokens |
+| `JWT_SECRET` | production | Long random value for session tokens; the Docker entrypoint generates and persists one if omitted |
+| `JWT_SECRET_FILE` | no | Where the Docker entrypoint stores an auto-generated secret, default `.data/jwt-secret` |
 | `DATABASE_URL` | recommended | PostgreSQL connection string |
 | `DATABASE_SSL` | no | Set `true` for providers that require TLS |
 | `APP_ORIGIN` | no | Extra comma-separated allowed origins |

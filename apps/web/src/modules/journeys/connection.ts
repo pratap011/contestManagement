@@ -105,15 +105,15 @@ export function assessConnection(
 
   if (context.needsFormalities === 'unknown') {
     warnings.push(
-      'Confirm whether you must clear immigration, customs, or security at BLR; this MVP cannot infer it.',
+      'Confirm whether you must clear immigration, customs, or security at this airport; this MVP cannot infer it.',
     )
   } else if (context.needsFormalities === 'yes') {
-    warnings.push('You must clear the required immigration, customs, or security checks at BLR.')
+    warnings.push('You must clear the required immigration, customs, or security checks at this airport.')
   }
 
   if (options.terminalsDiffer) {
     warnings.push(
-      'The arrival and departure terminals differ. The map includes the complimentary T1↔T2 shuttle, but confirm transfer eligibility, security and baggage steps with airline or airport staff.',
+      'The arrival and departure terminals differ. The map includes the airport-published inter-terminal transfer where available, but confirm transfer eligibility, security and baggage steps with airline or airport staff.',
     )
   }
 

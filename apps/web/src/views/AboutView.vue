@@ -2,21 +2,25 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { appConfig } from '@/config'
-import { airportDataset } from '@/modules/airport-directory/dataset'
-import osmMeta from '@/data/blr/osm-meta.json'
+import blrOsmMeta from '@/data/airports/blr/osm-meta.json'
+import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore } from '@/stores/journey'
 
 const router = useRouter()
 const store = useJourneyStore()
-const airport = airportDataset.airport
+const airportStore = useAirportStore()
+const dataset = computed(() => airportStore.dataset!)
+const airport = computed(() => dataset.value.airport)
+const isBlr = computed(() => airport.value.code === 'BLR')
+const osmMeta = computed(() => (isBlr.value ? blrOsmMeta : null))
 const unverifiedEdges = computed(
-  () => airportDataset.edges.filter((edge) => edge.verificationStatus === 'unverified').length,
+  () => dataset.value.edges.filter((edge) => edge.verificationStatus === 'unverified').length,
 )
 const inferredEdges = computed(
-  () => airportDataset.edges.filter((edge) => edge.verificationStatus === 'inferred').length,
+  () => dataset.value.edges.filter((edge) => edge.verificationStatus === 'inferred').length,
 )
 const shuttleEdge = computed(() =>
-  airportDataset.edges.find((edge) => edge.transitionType === 'shuttle'),
+  dataset.value.edges.find((edge) => edge.transitionType === 'shuttle'),
 )
 
 function clearJourney() {
@@ -33,9 +37,9 @@ function clearJourney() {
       <span class="eyebrow">Transparency</span>
       <h1>Data, privacy, and limits</h1>
       <p class="muted">
-        BLR Navigator combines the airport's public live flight board with OpenStreetMap-derived
-        airport geometry, optional accounts, and device location. This page shows where each value
-        comes from and what is still unverified.
+        Airport Navigator combines live flight lookup with OpenStreetMap-derived airport geometry,
+        optional accounts, and device location. This page shows where each value comes from and
+        what is still unverified.
       </p>
     </header>
 
@@ -50,11 +54,12 @@ function clearJourney() {
     <p>
       Live lookup is
       <strong>{{ appConfig.providerLookupEnabled ? 'enabled' : 'disabled' }}</strong>
-      and runs through this app's server-side proxy. The primary source is the public BLR Airport
-      flight board, which supplies today's scheduled and estimated times, terminal and gate. If an
-      <code>AERODATABOX_API_KEY</code> is configured, AeroDataBox can widen coverage to other dates;
-      its free plan is non-commercial and requires attribution. Manual entry and deterministic demo
-      flights always remain available.
+      and runs through this app's server-side proxy. For BLR the primary source is the public airport
+      flight board, which supplies today's scheduled and estimated times, terminal and gate. Other
+      airports use the configured provider when it covers them. If an
+      <code>AERODATABOX_API_KEY</code> is configured, AeroDataBox can widen coverage; its free plan is
+      non-commercial and requires attribution. Manual entry and deterministic demo flights always
+      remain available.
     </p>
     <ul>
       <li>Flight results are labelled as live board, provider, user-entered, or demo.</li>
@@ -84,18 +89,23 @@ function clearJourney() {
     <p>
       If you choose “Watch this flight”, the browser creates a Web Push subscription and the server
       stores it with the flight number, date, role and your leave-by lead time. No account is needed.
-      The server polls the public BLR board and sends gate, terminal, boarding/status, time-change and
-      leave-by notifications. You can turn the watch off in the journey assistant; that removes the
+      The server polls the public board for BLR and sends gate, terminal, boarding/status,
+      time-change and leave-by notifications. Other airports currently use manual/provider data and
+      do not offer background watches. You can turn the watch off in the journey assistant; that removes the
       stored subscription mapping. Delivery is best-effort and depends on the airport board, your
       browser and push service; it never replaces airport screens.
     </p>
 
     <h2>OpenStreetMap and ODbL</h2>
     <p>
-      Airport geometry and facilities are derived from OpenStreetMap, extracted
-      <strong>{{ new Date(osmMeta.extractedAt).toUTCString() }}</strong>
-      from the bounding box <code>{{ osmMeta.bbox }}</code>. The dataset version is
-      <strong>{{ airport.mapVersion }}</strong>. OpenStreetMap data is © OpenStreetMap contributors
+      Airport geometry and facilities are derived from OpenStreetMap. The dataset for
+      {{ airport.code }} was generated from the published OSM extract and is versioned
+      <strong>{{ airport.mapVersion }}</strong>.
+      <template v-if="osmMeta">
+        The BLR extract was retrieved
+        <strong>{{ new Date(osmMeta.extractedAt).toUTCString() }}</strong>
+        from the bounding box <code>{{ osmMeta.bbox }}</code>.
+      </template> OpenStreetMap data is © OpenStreetMap contributors
       and is available under the
       <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noreferrer">
         Open Database License (ODbL) 1.0
@@ -109,9 +119,9 @@ function clearJourney() {
       records the extraction URL, date, source IDs and inferred segments.
     </p>
     <p>
-      Dataset totals: {{ airportDataset.terminals.length }} terminals,
-      {{ airportDataset.floors.length }} levels, {{ airportDataset.pois.length }} mapped places,
-      {{ airportDataset.nodes.length }} graph nodes, {{ unverifiedEdges }} OSM-mapped edges and
+      Dataset totals: {{ dataset.terminals.length }} terminals,
+      {{ dataset.floors.length }} levels, {{ dataset.pois.length }} mapped places,
+      {{ dataset.nodes.length }} graph nodes, {{ unverifiedEdges }} OSM-mapped edges and
       {{ inferredEdges }} inferred connectors.
     </p>
 
@@ -129,7 +139,7 @@ function clearJourney() {
           <tr>
             <td><span class="badge verified">Verified</span></td>
             <td>Checked against a reliable, permitted source or on-site validation.</td>
-            <td>Eligible for a route presented as reliable. Only the airport-confirmed inter-terminal shuttle and its two kerbside stops currently use this status; walking edges are not field-verified.</td>
+            <td>Eligible for a route presented as reliable. Used only where a permitted source confirms the feature. Most walking edges are not field-verified and stay unverified.</td>
           </tr>
           <tr>
             <td><span class="badge unverified">Unverified</span></td>
@@ -150,21 +160,21 @@ function clearJourney() {
       </table>
     </div>
 
-    <h2>T1↔T2 transfer</h2>
-    <p>
-      The map contains the complimentary inter-terminal shuttle. The airport's “Connections by BLR”
-      guidance confirms the T1 departure-kerb stop next to Relay and the T2 arrival-kerb stops at
-      P16/P17; the OSM nodes provide mapped positions and OSRM/OSM roads provide the drawn geometry.
-      This build allows about {{ airport.shuttle.travelMinutes }} minutes for the ride and
-      {{ airport.shuttle.waitAllowanceMinutes }} minutes for the wait.
+    <h2>Inter-terminal transfer</h2>
+    <p v-if="airport.shuttle.available">
+      The map contains the published inter-terminal shuttle for {{ airport.code }}. Routes use the
+      published ride and wait allowance for the selected terminal pair.
       {{ shuttleEdge ? 'The shuttle edge is present in the routing graph.' : 'The shuttle edge is missing from this dataset.' }}
+      {{ isBlr ? 'The airport’s Connections by BLR guidance confirms the T1 departure-kerb stop next to Relay and the T2 arrival-kerb stops at P16/P17.' : 'The stop directions come from the airport; the drawn connector is schematic.' }}
+    </p>
+    <p v-else>
+      {{ airport.code }} does not publish an inter-terminal shuttle for this dataset, so no
+      cross-terminal route is drawn. Follow airport signage and staff instructions.
     </p>
     <p class="small muted">
-      The layover assistant shows the airport's international→domestic, domestic→international and
-      international→international transfer scenarios, plus warnings based on your booking, baggage
-      and formalities answers. Transfer eligibility, visa rules, security/immigration, baggage
-      recheck and boarding cut-offs are not determined by this app. Approximate transfer-desk
-      markers are labelled inferred. Ask a Connections by BLR desk or airline staff.
+      The layover assistant shows transfer warnings based on your booking, baggage and formalities
+      answers. Transfer eligibility, visa rules, security/immigration, baggage recheck and boarding
+      cut-offs are not determined by this app. Ask airport or airline staff.
     </p>
 
     <h2>Connection guidance</h2>
@@ -201,7 +211,7 @@ function clearJourney() {
     </p>
     <p>
       Without an account, the confirmed journey is stored in <code>localStorage</code> under
-      <code>blr-navigator:journey:v2</code>. You can clear it below. With an account, you can delete
+      <code>airport-navigator:journey:v3</code>. You can clear it below. With an account, you can delete
       the saved journey from the account page; deleting the account data is also possible from the
       same page. Flight numbers and dates are still personal travel information; avoid sharing
       screenshots that reveal them.
@@ -216,8 +226,7 @@ function clearJourney() {
 
     <h2>Safety and independence</h2>
     <p>
-      This is an independent project and is not affiliated with Bangalore International Airport
-      Limited or any airline. Provider pricing, terms, free-tier limits, OSM coverage, and airport
+      This is an independent project and is not affiliated with any airport operator or airline. Provider pricing, terms, free-tier limits, OSM coverage, and airport
       transfer rules can change; re-check them before any public launch. Airport signs, airline
       instructions, and staff take precedence over this app.
     </p>
@@ -235,9 +244,11 @@ function clearJourney() {
       <dt>Dataset updated</dt>
       <dd>{{ airport.lastUpdated }}</dd>
       <dt>OSM extraction</dt>
-      <dd>{{ osmMeta.extractedAt }} · {{ osmMeta.extractionMethod }}</dd>
+      <dd v-if="osmMeta">{{ osmMeta.extractedAt }} · {{ osmMeta.extractionMethod }}</dd>
+      <dd v-else>{{ airport.lastUpdated }} · OpenStreetMap API extract</dd>
       <dt>OSM bounding box</dt>
-      <dd>{{ osmMeta.bbox }}</dd>
+      <dd v-if="osmMeta">{{ osmMeta.bbox }}</dd>
+      <dd v-else>Recorded in the dataset metadata</dd>
       <dt>Attribution</dt>
       <dd>
         <a :href="airport.attributionUrl" target="_blank" rel="noreferrer">{{ airport.attribution }}</a>

@@ -15,7 +15,11 @@ shown on terminal displays.
 - Sentinel or negative values (`99999`, `-1`) are treated as “not reported”, not as real waits.
 - Walk rows are removed; terminal entrance, check-in, security and immigration/customs rows remain.
 - Cached for 60 seconds, then shown in the journey assistant with a retrieval time.
-- Excludes walking, lift waits and airline cut-offs. It is never used to label a connection safe.
+- The departing assistant uses the longest reported security/immigration wait plus the mapped walk to
+  the gate for a labelled leave-by estimate. Missing waits or walking times are stated as gaps, not
+  treated as zero.
+- Excludes walking on the ground, lift waits, bag drop and airline cut-offs. It is never used to label
+  a connection safe.
 
 ## Weather
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { airportDataset } from '@/modules/airport-directory/dataset'
+import airportDataset from '@/data/airports/blr'
 import type { MapEdge, MapNode } from '@/modules/airport-directory/types'
 import { findRoute } from './astar'
 import { formatWalkingTime, heuristicSeconds } from './route-cost'

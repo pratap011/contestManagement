@@ -1,3 +1,4 @@
+import { resolveAirport } from './airports.ts'
 import { config } from './config.ts'
 import { fetchJson, isRecord, UpstreamError } from './upstream.ts'
 
@@ -31,9 +32,6 @@ interface TokenCache {
 
 const cache = new Map<string, CacheEntry>()
 let tokenCache: TokenCache | null = null
-
-const BLR_CENTER = { lat: 13.1989, lon: 77.7068 }
-const BLR_BBOX = { lamin: 13.15, lomin: 77.65, lamax: 13.25, lomax: 77.77 }
 
 /** Common BLR airline IATA codes mapped to their ATC/ICAO callsign prefix. */
 const CALLSIGN_PREFIX: Record<string, string> = {
@@ -146,6 +144,8 @@ function parsePosition(
   flightNumber: string,
   callsign: string,
   fetchedAt: string,
+  center: { lat: number; lon: number },
+  airportCode: string,
 ): AircraftPosition {
   if (!isRecord(body)) {
     throw new UpstreamError('malformed', 'OpenSky returned an unexpected shape.')
@@ -174,7 +174,7 @@ function parsePosition(
     const lon = typeof row[5] === 'number' ? row[5] : null
     const lat = typeof row[6] === 'number' ? row[6] : null
     if (lat === null || lon === null) continue
-    const distance = haversineKm({ lat, lon }, BLR_CENTER)
+    const distance = haversineKm({ lat, lon }, center)
     if (!best || distance < best.distance) {
       const lastContact = typeof row[4] === 'number' ? new Date(row[4] * 1000).toISOString() : null
       best = {
@@ -206,7 +206,7 @@ function parsePosition(
       source: 'opensky',
       sourceLabel: 'OpenSky Network ADS-B',
       fetchedAt,
-      note: `No aircraft with callsign ${wanted} is currently broadcasting inside the BLR approach box. It may be outside the box, below coverage or not yet transmitting. This is not a schedule or gate source.`,
+      note: `No aircraft with callsign ${wanted} is currently broadcasting inside the ${airportCode} approach box. It may be outside the box, below coverage or not yet transmitting. This is not a schedule or gate source.`,
     }
   }
 
@@ -232,21 +232,25 @@ function parsePosition(
 
 export async function fetchAircraftPosition(
   flightNumber: string,
+  airportCode = 'BLR',
   fetchImpl: typeof fetch = fetch,
 ): Promise<AircraftPosition> {
   const callsign = callsignForFlight(flightNumber)
   if (!isValidCallsign(callsign)) {
     throw new UpstreamError('malformed', 'That flight number cannot be mapped to an ATC callsign.')
   }
-  const cached = cache.get(callsign)
+  const airport = resolveAirport(airportCode)
+  if (!airport) throw new UpstreamError('unavailable', 'Unknown airport for aircraft position.')
+  const cacheKey = `${airport.code}:${callsign}`
+  const cached = cache.get(cacheKey)
   if (cached && cached.expiresAt > Date.now()) return cached.value
 
   const token = await getAccessToken(fetchImpl)
   const url = new URL(`${config.openskyBaseUrl.replace(/\/$/, '')}/states/all`)
-  url.searchParams.set('lamin', String(BLR_BBOX.lamin))
-  url.searchParams.set('lomin', String(BLR_BBOX.lomin))
-  url.searchParams.set('lamax', String(BLR_BBOX.lamax))
-  url.searchParams.set('lomax', String(BLR_BBOX.lomax))
+  url.searchParams.set('lamin', String(airport.bbox.lamin))
+  url.searchParams.set('lomin', String(airport.bbox.lomin))
+  url.searchParams.set('lamax', String(airport.bbox.lamax))
+  url.searchParams.set('lomax', String(airport.bbox.lomax))
   const body = await fetchJson(
     url.toString(),
     {
@@ -256,8 +260,15 @@ export async function fetchAircraftPosition(
     },
     fetchImpl,
   )
-  const value = parsePosition(body, flightNumber, callsign, new Date().toISOString())
-  cache.set(callsign, { expiresAt: Date.now() + config.aircraftCacheTtlMs, value })
+  const value = parsePosition(
+    body,
+    flightNumber,
+    callsign,
+    new Date().toISOString(),
+    airport.center,
+    airport.code,
+  )
+  cache.set(cacheKey, { expiresAt: Date.now() + config.aircraftCacheTtlMs, value })
   return value
 }
 

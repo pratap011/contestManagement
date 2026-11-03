@@ -81,6 +81,23 @@ describe('demo flight provider', () => {
     expect(results[0].scheduledArrival).toBe('2026-11-02T16:55:00.000Z')
   })
 
+  it('provides deterministic demo flights for every bundled airport', () => {
+    const expected: Record<string, string> = {
+      BLR: '6E 2134',
+      DEL: '6E 2001',
+      BOM: '6E 5001',
+      HYD: '6E 7001',
+      MAA: '6E 8001',
+      CCU: '6E 9001',
+    }
+    for (const [airport, flightNumber] of Object.entries(expected)) {
+      const results = findDemoFlights(flightNumber, '2026-11-02', 'departure', airport)
+      expect(results, airport).toHaveLength(1)
+      expect(results[0].origin).toBe(airport)
+    }
+    expect(findDemoFlights('6E 2134', '2026-11-02', 'departure', 'DEL')).toEqual([])
+  })
+
   it('returns no result for an unknown flight instead of inventing one', async () => {
     const provider = new DemoFlightProvider()
     await expect(provider.searchFlight('ZZ 9999', '2026-11-02')).resolves.toEqual([])

@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+import { DEFAULT_AIRPORT_CODE, isKnownAirportCode } from '@/modules/airport-directory/catalog'
 import { normaliseTerminalCode } from '@/modules/airport-directory/terminal-code'
+import { useAirportStore } from '@/stores/airport'
 import type { FlightResult } from '@/modules/flights/types'
 import {
   DEFAULT_CONNECTION_CONTEXT,
@@ -13,6 +15,7 @@ export type SearchMode = 'lookup' | 'demo'
 export interface JourneySearch {
   kind: JourneyKind
   mode: SearchMode
+  airportCode: string
   departureFlightNumber: string
   departureDate: string
   arrivalFlightNumber: string
@@ -23,6 +26,8 @@ export interface JourneySearch {
 
 export interface Journey {
   kind: JourneyKind
+  /** The airport dataset this journey belongs to. */
+  airportCode: string
   departure: FlightResult | null
   arrival: FlightResult | null
   connection: FlightResult | null
@@ -37,8 +42,8 @@ export interface MapIntent {
   toPoiId?: string
 }
 
-export const JOURNEY_STORAGE_KEY = 'blr-navigator:journey:v2'
-const LEGACY_STORAGE_KEY = 'blr-navigator:journey:v1'
+export const JOURNEY_STORAGE_KEY = 'airport-navigator:journey:v3'
+const LEGACY_STORAGE_KEYS = ['blr-navigator:journey:v1', 'blr-navigator:journey:v2']
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -56,6 +61,7 @@ function isFlight(value: unknown): value is FlightResult {
 export function isSavedJourney(value: unknown): value is Journey {
   if (!isRecord(value)) return false
   if (value.kind !== 'departing' && value.kind !== 'layover') return false
+  if (value.airportCode !== undefined && typeof value.airportCode !== 'string') return false
   if (!isRecord(value.context)) return false
   const context = value.context
   if (
@@ -72,16 +78,38 @@ export function isSavedJourney(value: unknown): value is Journey {
   return isFlight(value.arrival) && isFlight(value.connection)
 }
 
+/** Adds the airport code to journeys saved before multi-airport support. */
+export function normaliseSavedJourney(value: unknown): Journey | null {
+  if (!isSavedJourney(value)) return null
+  const airportCode =
+    typeof value.airportCode === 'string' && isKnownAirportCode(value.airportCode)
+      ? value.airportCode.toUpperCase()
+      : DEFAULT_AIRPORT_CODE
+  return { ...value, airportCode }
+}
+
 function readStorage(): { journey: Journey | null; available: boolean } {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
       return { journey: null, available: false }
     }
-    window.localStorage.removeItem(LEGACY_STORAGE_KEY)
+    // Migrate the pre-multi-airport keys once, then keep the current key.
+    for (const legacyKey of LEGACY_STORAGE_KEYS) {
+      const legacyRaw = window.localStorage.getItem(legacyKey)
+      if (legacyRaw && !window.localStorage.getItem(JOURNEY_STORAGE_KEY)) {
+        try {
+          const migrated = normaliseSavedJourney(JSON.parse(legacyRaw))
+          if (migrated) window.localStorage.setItem(JOURNEY_STORAGE_KEY, JSON.stringify(migrated))
+        } catch {
+          // Ignore unreadable legacy data.
+        }
+      }
+      window.localStorage.removeItem(legacyKey)
+    }
     const raw = window.localStorage.getItem(JOURNEY_STORAGE_KEY)
     if (!raw) return { journey: null, available: true }
     const parsed: unknown = JSON.parse(raw)
-    return { journey: isSavedJourney(parsed) ? parsed : null, available: true }
+    return { journey: normaliseSavedJourney(parsed), available: true }
   } catch {
     return { journey: null, available: false }
   }
@@ -167,11 +195,16 @@ export const useJourneyStore = defineStore('journey', () => {
     mapIntent.value = null
   }
 
-  function confirmDeparture(flight: FlightResult) {
+  function currentAirportCode(): string {
+    return useAirportStore().code.toUpperCase()
+  }
+
+  function confirmDeparture(flight: FlightResult, airportCode = currentAirportCode()) {
     const existingOverride = journey.value?.terminalId ?? null
     const flightTerminal = normaliseTerminalCode(flight.terminal)
     journey.value = {
       kind: 'departing',
+      airportCode,
       departure: flight,
       arrival: null,
       connection: null,
@@ -187,12 +220,14 @@ export const useJourneyStore = defineStore('journey', () => {
     arrival: FlightResult,
     connection: FlightResult,
     context: ConnectionContext,
+    airportCode = currentAirportCode(),
   ) {
     const existingOverride = journey.value?.terminalId ?? null
     const flightTerminal =
       normaliseTerminalCode(connection.terminal) ?? normaliseTerminalCode(arrival.terminal)
     journey.value = {
       kind: 'layover',
+      airportCode,
       departure: null,
       arrival,
       connection,
@@ -215,8 +250,9 @@ export const useJourneyStore = defineStore('journey', () => {
 
   /** Loads a journey fetched from the optional account service. */
   function loadJourney(value: unknown): boolean {
-    if (!isSavedJourney(value)) return false
-    journey.value = value
+    const normalised = normaliseSavedJourney(value)
+    if (!normalised) return false
+    journey.value = normalised
     search.value = null
     mapIntent.value = null
     return true

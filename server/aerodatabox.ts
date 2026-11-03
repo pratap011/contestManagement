@@ -50,7 +50,7 @@ function readMovementTime(movement: Record<string, unknown>, key: string): strin
 
 function normaliseTerminal(value: string | undefined): string | undefined {
   if (!value) return undefined
-  const match = value.trim().toUpperCase().match(/^T?([12])$/)
+  const match = value.trim().toUpperCase().match(/^(?:TERMINAL\s*)?T?([1-9])$/)
   return match ? `T${match[1]}` : undefined
 }
 
@@ -64,6 +64,7 @@ function toProviderFlight(
   row: unknown,
   direction: FlightDirection | undefined,
   fetchedAt: string,
+  airportCode: string,
 ): ProviderFlight | null {
   if (!isRecord(row)) return null
   const number = readString(row, 'number')
@@ -71,11 +72,12 @@ function toProviderFlight(
   const departure = isRecord(row.departure) ? row.departure : null
   const arrival = isRecord(row.arrival) ? row.arrival : null
   if (!departure || !arrival) return null
-  const departureIsBlr = readAirportIata(departure) === 'BLR'
-  const arrivalIsBlr = readAirportIata(arrival) === 'BLR'
-  const rowDirection: FlightDirection | null = departureIsBlr
+  const target = airportCode.toUpperCase()
+  const departureIsTarget = readAirportIata(departure) === target
+  const arrivalIsTarget = readAirportIata(arrival) === target
+  const rowDirection: FlightDirection | null = departureIsTarget
     ? 'departure'
-    : arrivalIsBlr
+    : arrivalIsTarget
       ? 'arrival'
       : null
   if (!rowDirection) return null
@@ -111,8 +113,8 @@ function toProviderFlight(
 }
 
 /**
- * Optional schedule/status fallback for dates the current-day BLR board does
- * not cover. AeroDataBox's free plan is non-commercial and requires
+ * Optional schedule/status fallback for dates or airports the current-day BLR
+ * board does not cover. AeroDataBox's free plan is non-commercial and requires
  * attribution, so the UI labels it as the source.
  */
 export async function searchAeroDataBox(
@@ -120,10 +122,11 @@ export async function searchAeroDataBox(
   date: string,
   direction: FlightDirection | undefined,
   fetchedAt: string,
+  airportCode = 'BLR',
   fetchImpl: typeof fetch = fetch,
 ): Promise<ProviderFlight[]> {
   if (!config.aerodataboxKey) return []
-  const key = `${compactFlightNumber(flightNumber)}|${date}|${direction ?? 'both'}`
+  const key = `${airportCode.toUpperCase()}|${compactFlightNumber(flightNumber)}|${date}|${direction ?? 'both'}`
   const cached = cache.get(key)
   if (cached && cached.expiresAt > Date.now()) return cached.value
 
@@ -167,7 +170,7 @@ export async function searchAeroDataBox(
     throw new FlightProviderError('malformed', 'AeroDataBox returned an unexpected shape.')
   }
   const results = body
-    .map((row) => toProviderFlight(row, direction, fetchedAt))
+    .map((row) => toProviderFlight(row, direction, fetchedAt, airportCode))
     .filter((flight): flight is ProviderFlight => flight !== null)
   cache.set(key, {
     expiresAt: Date.now() + config.flightCacheTtlMs * 5,

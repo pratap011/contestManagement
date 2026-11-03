@@ -1,7 +1,5 @@
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 
-export const BLR_TIMEZONE = 'Asia/Kolkata'
-
 export function isValidIso(value: string | undefined): value is string {
   if (!value) return false
   const date = new Date(value)

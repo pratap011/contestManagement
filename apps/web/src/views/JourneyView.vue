@@ -12,16 +12,7 @@ import {
   formatMinutes,
   formatTime,
 } from '@/lib/time'
-import { airportDataset } from '@/modules/airport-directory/dataset'
-import {
-  findGateAreaPoi,
-  getFloor,
-  getFloorByLevel,
-  getPoisForTerminal,
-  getTerminal,
-  recommendedStartingPoi,
-  resolveGatePoi,
-} from '@/modules/airport-directory/search'
+import { createAirportDirectory } from '@/modules/airport-directory/search'
 import { POI_CATEGORY_LABELS, type Poi, type PoiCategory } from '@/modules/airport-directory/types'
 import { findRoute } from '@/modules/navigation/astar'
 import { formatWalkingTime } from '@/modules/navigation/route-cost'
@@ -30,6 +21,7 @@ import {
   contextLabel,
   isConnectionContextComplete,
 } from '@/modules/journeys/connection'
+import { longestReportedWaitMinutes, planLeaveBy } from '@/modules/journeys/leave-by'
 import {
   facilitiesForGateFloor,
   recommendFacilities,
@@ -38,16 +30,21 @@ import {
 import { fetchAircraft, fetchQueues, fetchWeather } from '@/modules/live/api'
 import type {
   AircraftPosition,
-  BlrWeather,
+  AirportWeather,
   QueueDirection,
   QueueTerminal,
   TerminalQueues,
 } from '@/modules/live/types'
+import { useAirportStore } from '@/stores/airport'
 import { useJourneyStore } from '@/stores/journey'
 
 const router = useRouter()
 const store = useJourneyStore()
-const timeZone = airportDataset.airport.timezone
+const airportStore = useAirportStore()
+const dataset = computed(() => airportStore.dataset!)
+const directory = computed(() => createAirportDirectory(dataset.value))
+const timeZone = dataset.value.airport.timezone
+const isBlr = computed(() => dataset.value.airport.code === 'BLR')
 
 const journey = computed(() => store.journey)
 const departure = computed(() => journey.value?.departure ?? null)
@@ -61,17 +58,17 @@ const terminalId = computed(() =>
     : departureTerminalId.value,
 )
 const arrivalTerminal = computed(() =>
-  arrivalTerminalId.value ? getTerminal(arrivalTerminalId.value) : null,
+  arrivalTerminalId.value ? directory.value.getTerminal(arrivalTerminalId.value) : null,
 )
 const departureTerminal = computed(() =>
-  departureTerminalId.value ? getTerminal(departureTerminalId.value) : null,
+  departureTerminalId.value ? directory.value.getTerminal(departureTerminalId.value) : null,
 )
-const terminal = computed(() => (terminalId.value ? getTerminal(terminalId.value) : null))
+const terminal = computed(() => (terminalId.value ? directory.value.getTerminal(terminalId.value) : null))
 const now = ref(Date.now())
 const paceId = ref('normal')
 const stepFree = ref(false)
 const liveQueues = ref<TerminalQueues[]>([])
-const liveWeather = ref<BlrWeather | null>(null)
+const liveWeather = ref<AirportWeather | null>(null)
 const queuesError = ref('')
 const weatherError = ref('')
 const liveLoading = ref(false)
@@ -81,6 +78,7 @@ const aircraftError = ref('')
 
 const queueRequests = computed<Array<{ terminal: QueueTerminal; direction: QueueDirection }>>(() => {
   const requests: Array<{ terminal: QueueTerminal; direction: QueueDirection }> = []
+  if (!isBlr.value) return requests
   const add = (terminalId: string | null, direction: QueueDirection) => {
     if (!terminalId) return
     const terminal: QueueTerminal = terminalId.toLowerCase() === 't2' ? 'T2' : 'T1'
@@ -130,21 +128,66 @@ const connectionCountdown = computed(() =>
 
 const departureGateResolution = computed(() => {
   if (!departureTerminalId.value || !departure.value) return null
-  return resolveGatePoi(
+  return directory.value.resolveGatePoi(
     departureTerminalId.value,
     departure.value.gate,
     departure.value.gateFloor,
   )
 })
 const departureGatePoi = computed(() => departureGateResolution.value?.poi)
+
+const departureStartPoi = computed(() =>
+  departureTerminalId.value
+    ? directory.value.recommendedStartingPoi(departureTerminalId.value)
+    : undefined,
+)
+
+const departureWalk = computed(() => {
+  const from = departureStartPoi.value
+  const to = departureGatePoi.value
+  if (!from || !to || from.id === to.id) return null
+  const outcome = findRoute(dataset.value.nodes, dataset.value.edges, {
+    fromNodeId: from.nodeId,
+    toNodeId: to.nodeId,
+    passengerType: 'departing',
+    accessibleOnly: stepFree.value,
+    allowUnverified: true,
+    paceFactor: paceFactor.value,
+  })
+  return outcome.ok ? outcome.route : null
+})
+
+const departureQueue = computed(() =>
+  liveQueues.value.find((item) => item.direction === 'departure'),
+)
+
+const leaveByPlan = computed(() =>
+  planLeaveBy({
+    scheduledDeparture: departure.value?.scheduledDeparture,
+    boardingBufferMinutes: appConfig.connection.boardingBufferMinutes,
+    securityWaitMinutes: longestReportedWaitMinutes(departureQueue.value),
+    walkMinutes: departureWalk.value
+      ? departureWalk.value.estimatedWalkingSeconds / 60
+      : null,
+  }),
+)
+
+const leaveByPassed = computed(() =>
+  leaveByPlan.value ? new Date(leaveByPlan.value.leaveBy).getTime() <= now.value : false,
+)
+
 const arrivalGateResolution = computed(() => {
   if (!arrivalTerminalId.value || !arrival.value) return null
-  return resolveGatePoi(arrivalTerminalId.value, arrival.value.gate, arrival.value.gateFloor)
+  return directory.value.resolveGatePoi(
+    arrivalTerminalId.value,
+    arrival.value.gate,
+    arrival.value.gateFloor,
+  )
 })
 const arrivalGatePoi = computed(() => arrivalGateResolution.value?.poi)
 const connectionGateResolution = computed(() => {
   if (!departureTerminalId.value || !connection.value) return null
-  return resolveGatePoi(
+  return directory.value.resolveGatePoi(
     departureTerminalId.value,
     connection.value.gate,
     connection.value.gateFloor,
@@ -153,7 +196,7 @@ const connectionGateResolution = computed(() => {
 const connectionGatePoi = computed(() => connectionGateResolution.value?.poi)
 
 const layoverWatch = computed(() => {
-  if (journey.value?.kind !== 'layover') return null
+  if (!isBlr.value || journey.value?.kind !== 'layover') return null
   if (connection.value?.source === 'provider') {
     return { flight: connection.value, role: 'connection' as const }
   }
@@ -218,7 +261,7 @@ const requiredChecks = computed(() => {
 const recommendedPois = computed(() => {
   if (!departureTerminalId.value) return []
   return facilitiesForGateFloor(
-    getPoisForTerminal(departureTerminalId.value),
+    directory.value.getPoisForTerminal(departureTerminalId.value),
     connectionGatePoi.value?.floorId,
   )
 })
@@ -228,7 +271,7 @@ const facilityCandidates = computed<FacilityCandidate[]>(() => {
   const to = connectionGatePoi.value
   if (!from || !to || store.terminalsDiffer) return []
   return recommendedPois.value.flatMap((poi) => {
-    const outbound = findRoute(airportDataset.nodes, airportDataset.edges, {
+    const outbound = findRoute(dataset.value.nodes, dataset.value.edges, {
       fromNodeId: from.nodeId,
       toNodeId: poi.nodeId,
       passengerType: 'connecting',
@@ -236,7 +279,7 @@ const facilityCandidates = computed<FacilityCandidate[]>(() => {
       allowUnverified: true,
       paceFactor: paceFactor.value,
     })
-    const back = findRoute(airportDataset.nodes, airportDataset.edges, {
+    const back = findRoute(dataset.value.nodes, dataset.value.edges, {
       fromNodeId: poi.nodeId,
       toNodeId: to.nodeId,
       passengerType: 'connecting',
@@ -277,10 +320,11 @@ const facilityUnavailableReason = computed(() => {
     departureTerminalId.value &&
     connectionGatePoi.value
   ) {
-    const liveFloor = getFloorByLevel(departureTerminalId.value, connection.value.gateFloor)
+    const liveFloor = directory.value.getFloorByLevel(departureTerminalId.value, connection.value.gateFloor)
     if (liveFloor && liveFloor.id !== connectionGatePoi.value.floorId) {
       return `The live gate is on ${liveFloor.shortLabel}, but the mapped route ends at ${connectionGatePoi.value.name} on ${
-        getFloor(connectionGatePoi.value.floorId)?.shortLabel ?? connectionGatePoi.value.floorId
+        directory.value.getFloor(connectionGatePoi.value.floorId)?.shortLabel ??
+      connectionGatePoi.value.floorId
       }. Facility suggestions are unavailable until the exact gate level is mapped.`
     }
   }
@@ -316,13 +360,16 @@ const categoryShort: Record<PoiCategory, string> = {
 function openMap() {
   const intent: { fromPoiId?: string; toPoiId?: string } = {}
   if (journey.value?.kind === 'departing') {
-    const terminal = departureTerminalId.value ?? 't1'
-    const start = recommendedStartingPoi(terminal)
+    const terminal = departureTerminalId.value ?? dataset.value.terminals[0]?.id ?? ''
+    const start = directory.value.recommendedStartingPoi(terminal)
     const target =
       departureGatePoi.value ??
-      findGateAreaPoi(terminal, departure.value?.gateFloor !== undefined
-        ? `${terminal}-l${departure.value.gateFloor}`
-        : undefined)
+      directory.value.findGateAreaPoi(
+        terminal,
+        departure.value?.gateFloor !== undefined
+          ? `${terminal}-l${departure.value.gateFloor}`
+          : undefined,
+      )
     if (start) intent.fromPoiId = start.id
     if (target) intent.toPoiId = target.id
   } else {
@@ -341,7 +388,7 @@ function clearJourney() {
 }
 
 function poiFloor(poi: Poi) {
-  return getFloor(poi.floorId)?.shortLabel ?? poi.floorId
+  return directory.value.getFloor(poi.floorId)?.shortLabel ?? poi.floorId
 }
 
 function gateStatusText() {
@@ -357,7 +404,7 @@ async function loadLiveData() {
   weatherError.value = ''
   const requests = queueRequests.value
   const [weatherResult, ...queueResults] = await Promise.allSettled([
-    fetchWeather(),
+    fetchWeather(airportStore.code),
     ...requests.map((request) => fetchQueues(request.terminal, request.direction)),
   ])
   if (weatherResult.status === 'fulfilled') liveWeather.value = weatherResult.value
@@ -372,11 +419,15 @@ async function loadLiveData() {
     failed?.reason instanceof Error ? failed.reason.message : failed ? 'Queue data is unavailable.' : ''
   liveLoading.value = false
 
-  if (journey.value?.kind === 'layover' && arrival.value?.source === 'provider') {
+  if (
+    isBlr.value &&
+    journey.value?.kind === 'layover' &&
+    arrival.value?.source === 'provider'
+  ) {
     aircraftLoading.value = true
     aircraftError.value = ''
     try {
-      aircraft.value = await fetchAircraft(arrival.value.flightNumber)
+      aircraft.value = await fetchAircraft(arrival.value.flightNumber, airportStore.code)
     } catch (error) {
       aircraft.value = null
       aircraftError.value = error instanceof Error ? error.message : 'Aircraft position is unavailable.'
@@ -412,7 +463,7 @@ onBeforeUnmount(() => {
         Departure to {{ departure?.destination ?? 'your destination' }}
       </h1>
       <h1 v-else>
-        Your layover in {{ terminal?.name ?? 'Bengaluru' }}
+        Your layover at {{ dataset.airport.code }} · {{ terminal?.name ?? dataset.airport.city }}
       </h1>
       <p class="muted">
         {{
@@ -481,6 +532,8 @@ onBeforeUnmount(() => {
             :weather-error="weatherError"
             :queues-error="queuesError"
             :loading="liveLoading"
+            :show-queues="isBlr"
+            :airport-code="dataset.airport.code"
             :time-zone="timeZone"
           />
 
@@ -489,7 +542,10 @@ onBeforeUnmount(() => {
             <ul class="checks">
               <li>Keep your boarding pass and travel documents ready.</li>
               <li>Check the departure gate and boarding time on airport screens.</li>
-              <li>Allow extra time for security queues and walking; this estimate does not include them.</li>
+              <li>
+                The countdown is the scheduled departure time, not the boarding or gate-closing time.
+                Use the leave-by estimate for the waiting and walking parts it can account for.
+              </li>
               <li>The live board can change gate or time; re-check it before you leave for the airport.</li>
               <li>If your flight details change, edit them in the flight review instead of assuming the countdown is right.</li>
             </ul>
@@ -513,11 +569,60 @@ onBeforeUnmount(() => {
           </div>
           <FlightSummary v-if="departure" :flight="departure" role="departure" :time-zone="timeZone" />
           <WatchFlightCard
-            v-if="departure"
+            v-if="departure && isBlr"
             :flight="departure"
             role="departure"
             :time-zone="timeZone"
           />
+          <section v-if="leaveByPlan" class="card" aria-labelledby="leave-by-heading">
+            <div class="card-header">
+              <div>
+                <h2 id="leave-by-heading">Leave-by estimate</h2>
+                <p class="small muted no-gap">
+                  Informational planning aid, not a boarding rule or a guarantee.
+                </p>
+              </div>
+              <span class="badge unverified">Estimate</span>
+            </div>
+            <p class="duration-figure">
+              Start walking by {{ formatTime(leaveByPlan.leaveBy, timeZone) }}
+            </p>
+            <p class="small muted">
+              From {{ departureStartPoi?.name ?? 'your mapped start point' }} towards
+              {{ departureGatePoi?.name ?? 'your departure gate' }}, so you reach the gate around
+              {{ formatTime(leaveByPlan.boarding, timeZone) }}.
+            </p>
+            <dl class="meta-list">
+              <dt>Boarding allowance</dt>
+              <dd>{{ leaveByPlan.boardingBufferMinutes }} min kept free before departure</dd>
+              <dt>Mapped walk to gate</dt>
+              <dd>
+                {{ leaveByPlan.walkMinutes === null
+                  ? 'Not available'
+                  : `${leaveByPlan.walkMinutes} min, OpenStreetMap estimate` }}
+              </dd>
+              <dt>Reported checkpoint wait</dt>
+              <dd>
+                {{ leaveByPlan.securityWaitMinutes === null
+                  ? 'Not published'
+                  : `${leaveByPlan.securityWaitMinutes} min, airport-reported longest wait` }}
+              </dd>
+            </dl>
+            <p v-if="leaveByPlan.gaps.includes('security-wait')" class="tiny muted">
+              Security and immigration waits are not published right now, so add your own queue time.
+            </p>
+            <p v-if="leaveByPlan.gaps.includes('walk')" class="tiny muted">
+              No mapped walk between a start point and the gate was found, so walking time is not
+              included.
+            </p>
+            <p class="tiny muted no-gap">
+              Excludes travel to the airport, lift waits, bag drop and airline cut-off times.
+            </p>
+            <p v-if="leaveByPassed" class="notice warn small">
+              This estimate has passed. Head towards your gate and ask airline or airport staff for
+              help.
+            </p>
+          </section>
           <section class="card">
             <h2>Terminal status</h2>
             <dl class="meta-list">
@@ -562,7 +667,7 @@ onBeforeUnmount(() => {
             <div class="route-metrics">
               <div class="metric">
                 <strong>{{ formatFullDateTime(arrival?.scheduledArrival, timeZone) }}</strong>
-                <span>Arrival at BLR</span>
+                <span>Arrival at {{ dataset.airport.code }}</span>
               </div>
               <div class="metric">
                 <strong>{{ formatFullDateTime(connection?.scheduledDeparture, timeZone) }}</strong>
@@ -594,6 +699,8 @@ onBeforeUnmount(() => {
             :weather-error="weatherError"
             :queues-error="queuesError"
             :loading="liveLoading"
+            :show-queues="isBlr"
+            :airport-code="dataset.airport.code"
             :time-zone="timeZone"
           />
 
@@ -602,7 +709,7 @@ onBeforeUnmount(() => {
             <ol class="timeline">
               <li class="done">
                 <span class="timeline-dot" aria-hidden="true">1</span>
-                <h3>Arrive at BLR · {{ formatTime(arrival?.scheduledArrival, timeZone) }}</h3>
+                <h3>Arrive at {{ dataset.airport.code }} · {{ formatTime(arrival?.scheduledArrival, timeZone) }}</h3>
                 <p>
                   {{ arrival?.flightNumber }} from {{ arrival?.origin ?? 'origin not supplied' }},
                   terminal {{ arrival?.terminal ?? 'not available' }}, gate
@@ -614,8 +721,12 @@ onBeforeUnmount(() => {
                 <h3>Confirm transfer requirements</h3>
                 <p>
                   {{ contextComplete ? 'Your context answers are recorded below.' : 'Some context is still unknown; stay conservative and confirm with staff.' }}
-                  The mapped route includes the complimentary T1↔T2 shuttle where needed. Confirm
-                  transfer eligibility, security and baggage steps with your airline or airport staff.
+                  {{
+                    dataset.airport.shuttle.available
+                      ? 'The mapped route includes the airport-published inter-terminal shuttle where needed.'
+                      : 'No inter-terminal shuttle is modelled for this airport.'
+                  }}
+                  Confirm transfer eligibility, security and baggage steps with your airline or airport staff.
                 </p>
               </li>
               <li>
@@ -631,8 +742,11 @@ onBeforeUnmount(() => {
           </section>
 
           <TransferGuidance
+            v-if="isBlr || store.terminalsDiffer || dataset.airport.shuttle.available"
             :context="journey.context"
             :terminals-differ="store.terminalsDiffer"
+            :airport-code="dataset.airport.code"
+            :shuttle="dataset.airport.shuttle"
           />
 
           <section class="card" aria-labelledby="checks-heading">
@@ -725,17 +839,21 @@ onBeforeUnmount(() => {
 
           <FlightSummary v-if="arrival" :flight="arrival" role="arrival" :time-zone="timeZone" />
 
-          <section v-if="arrival?.source === 'provider'" class="card" aria-labelledby="aircraft-heading">
+          <section
+            v-if="isBlr && arrival?.source === 'provider'"
+            class="card"
+            aria-labelledby="aircraft-heading"
+          >
             <div class="between">
               <h2 id="aircraft-heading">Inbound aircraft</h2>
               <span class="badge soft">ADS-B</span>
             </div>
-            <p v-if="aircraftLoading" class="small muted">Checking OpenSky for the aircraft near BLR…</p>
+            <p v-if="aircraftLoading" class="small muted">Checking OpenSky for the aircraft near {{ dataset.airport.code }}…</p>
             <template v-else-if="aircraft?.found">
               <dl class="meta-list">
                 <dt>Callsign</dt>
                 <dd>{{ aircraft.callsign }}</dd>
-                <dt>Distance from BLR</dt>
+                <dt>Distance from {{ dataset.airport.code }}</dt>
                 <dd>{{ aircraft.distanceKm }} km</dd>
                 <dt>Altitude</dt>
                 <dd>
@@ -753,7 +871,7 @@ onBeforeUnmount(() => {
               <p class="tiny muted no-gap">{{ aircraft.note }}</p>
             </template>
             <p v-else class="small muted no-gap">
-              {{ aircraftError || 'The aircraft is not broadcasting inside the BLR approach box right now.' }}
+              {{ aircraftError || `The aircraft is not broadcasting inside the ${dataset.airport.code} approach box right now.` }}
               This is not a schedule, gate or connection source.
             </p>
           </section>
@@ -825,9 +943,13 @@ onBeforeUnmount(() => {
               <dd>{{ connectionGatePoi?.name ?? 'Not mapped' }}</dd>
             </dl>
             <p v-if="store.terminalsDiffer" class="notice warn small" style="margin-top: 0.8rem">
-              This connection changes terminals. The map includes the complimentary shuttle route
-              (about {{ airportDataset.airport.shuttle.travelMinutes }} min plus wait). Confirm
-              transfer eligibility, security and baggage steps with airline or airport staff.
+              This connection changes terminals.
+              <template v-if="dataset.airport.shuttle.available">
+                The map includes the airport-published shuttle; allow for the published ride and
+                wait.
+              </template>
+              <template v-else>No inter-terminal shuttle is modelled for this airport.</template>
+              Confirm transfer eligibility, security and baggage steps with airline or airport staff.
             </p>
           </section>
         </aside>

@@ -5,17 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="BLR Navigator combines the live BLR flight board with OpenStreetMap-based terminal maps, walking routes and optional account sync for Kempegowda International Airport."
+      content="Airport Navigator combines live flight lookup with OpenStreetMap-based terminal maps, walking routes and optional account sync for major Indian airports."
     />
-    <meta name="theme-color" content="#10233f" />
+    <meta name="theme-color" content="#0b726c" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icon.svg" />
-    <title>BLR Navigator · Airport journey planner</title>
+    <title>Airport Navigator · Indian airport journey planner</title>
+    <script>
+      ;(() => {
+        try {
+          const stored = localStorage.getItem('airport-navigator:theme:v1')
+          const theme =
+            stored === 'dark' || stored === 'light'
+              ? stored
+              : matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+          document.documentElement.dataset.theme = theme
+          document.documentElement.style.colorScheme = theme
+        } catch {
+          /* The app applies the default theme after mount. */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>
-    <noscript>BLR Navigator needs JavaScript enabled to show live flight details and the airport map.</noscript>
+    <noscript>Airport Navigator needs JavaScript enabled to show flight details and the airport map.</noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -45,6 +45,7 @@ export interface ShuttleInfo {
   stopNames: string[]
   notes: string[]
   source: string
+  sourceUrl?: string
   retrievedAt: string
   geometrySource: string
 }

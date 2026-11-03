@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { appConfig } from '@/config'
 import { todayInTimeZone } from '@/lib/time'
 import { demoJourneysFor } from '@/modules/flights/providers/demo'
 import { isValidFlightNumber, isValidTravelDate } from '@/modules/flights/validation'
@@ -147,249 +146,239 @@ function clearSaved() {
 </script>
 
 <template>
-  <div>
-    <section class="hero hero-compact" aria-labelledby="home-heading">
-      <div>
-        <span class="eyebrow">India airport wayfinding · OpenStreetMap</span>
-        <h1 id="home-heading">Know where to go next.</h1>
-        <p class="lede">
-          Plan a departure or layover, confirm your flight, and follow a walking route to the
-          right gate, counter or facility.
-        </p>
-        <div class="hero-points">
-          <span>No account needed</span>
-          <span>{{ airport.city }}</span>
-          <span>{{ coverageLabel }}</span>
-        </div>
+  <div class="home-view">
+    <section class="home-hero" aria-labelledby="home-heading">
+      <div class="container">
+        <p class="hero-kicker">Six Indian airports · Terminal maps</p>
+        <h1 id="home-heading">Know your way around the airport.</h1>
+        <p class="hero-sub">Check your flight, confirm the terminal and follow a walking route to the gate.</p>
       </div>
     </section>
 
-    <section class="card journey-start" aria-labelledby="start-heading">
-      <div class="card-header">
+    <div class="container home-body">
+      <section class="search-card" aria-labelledby="start-heading">
+        <div class="search-card-head">
+          <div class="trip-tabs" role="group" aria-label="Journey type">
+            <button
+              type="button"
+              class="trip-tab"
+              :aria-pressed="kind === 'departing'"
+              @click="kind = 'departing'"
+            >
+              Departing
+            </button>
+            <button
+              type="button"
+              class="trip-tab"
+              :aria-pressed="kind === 'layover'"
+              @click="kind = 'layover'"
+            >
+              Layover
+            </button>
+          </div>
+
+          <label class="search-airport" for="airport-select">
+            <span>Airport</span>
+            <select
+              id="airport-select"
+              class="select"
+              :value="airportStore.code"
+              @change="onAirportChange"
+            >
+              <option v-for="item in airportStore.catalog" :key="item.code" :value="item.code">
+                {{ item.city }} · {{ item.code }}
+              </option>
+            </select>
+          </label>
+        </div>
+
+        <h2 id="start-heading" class="sr-only">Plan your journey</h2>
+
+        <form class="search-form" novalidate @submit.prevent="submit">
+          <div v-if="kind === 'departing'" class="search-fields">
+            <div class="field search-field">
+              <label for="departure-flight-number">Flight number</label>
+              <input
+                id="departure-flight-number"
+                v-model="departureFlightNumber"
+                class="input"
+                placeholder="6E 2134"
+                autocomplete="off"
+                autocapitalize="characters"
+                :aria-invalid="Boolean(errors.departureFlightNumber)"
+                :aria-describedby="errors.departureFlightNumber ? 'departure-flight-error' : undefined"
+              />
+              <span v-if="errors.departureFlightNumber" id="departure-flight-error" class="field-error">
+                {{ errors.departureFlightNumber }}
+              </span>
+            </div>
+            <div class="field search-field">
+              <label for="departure-date">Travel date</label>
+              <input
+                id="departure-date"
+                v-model="departureDate"
+                class="input"
+                type="date"
+                :aria-invalid="Boolean(errors.departureDate)"
+                :aria-describedby="errors.departureDate ? 'departure-date-error' : undefined"
+              />
+              <span v-if="errors.departureDate" id="departure-date-error" class="field-error">
+                {{ errors.departureDate }}
+              </span>
+            </div>
+            <button type="submit" class="btn primary search-submit">Search flights</button>
+          </div>
+
+          <div v-else class="search-fields layover-fields">
+            <div class="field search-field">
+              <label for="arrival-flight-number">Arrival flight</label>
+              <input
+                id="arrival-flight-number"
+                v-model="arrivalFlightNumber"
+                class="input"
+                placeholder="AI 508"
+                autocomplete="off"
+                autocapitalize="characters"
+                :aria-invalid="Boolean(errors.arrivalFlightNumber)"
+                :aria-describedby="errors.arrivalFlightNumber ? 'arrival-flight-error' : undefined"
+              />
+              <span v-if="errors.arrivalFlightNumber" id="arrival-flight-error" class="field-error">
+                {{ errors.arrivalFlightNumber }}
+              </span>
+            </div>
+            <div class="field search-field">
+              <label for="arrival-date">Arrival date</label>
+              <input
+                id="arrival-date"
+                v-model="arrivalDate"
+                class="input"
+                type="date"
+                :aria-invalid="Boolean(errors.arrivalDate)"
+                :aria-describedby="errors.arrivalDate ? 'arrival-date-error' : undefined"
+              />
+              <span v-if="errors.arrivalDate" id="arrival-date-error" class="field-error">
+                {{ errors.arrivalDate }}
+              </span>
+            </div>
+            <div class="field search-field">
+              <label for="connecting-flight-number">Connecting flight</label>
+              <input
+                id="connecting-flight-number"
+                v-model="connectingFlightNumber"
+                class="input"
+                placeholder="6E 6162"
+                autocomplete="off"
+                autocapitalize="characters"
+                :aria-invalid="Boolean(errors.connectingFlightNumber)"
+                :aria-describedby="errors.connectingFlightNumber ? 'connecting-flight-error' : undefined"
+              />
+              <span v-if="errors.connectingFlightNumber" id="connecting-flight-error" class="field-error">
+                {{ errors.connectingFlightNumber }}
+              </span>
+            </div>
+            <div class="field search-field">
+              <label for="connecting-date">Connecting date</label>
+              <input
+                id="connecting-date"
+                v-model="connectingDate"
+                class="input"
+                type="date"
+                :aria-invalid="Boolean(errors.connectingDate)"
+                :aria-describedby="errors.connectingDate ? 'connecting-date-error' : undefined"
+              />
+              <span v-if="errors.connectingDate" id="connecting-date-error" class="field-error">
+                {{ errors.connectingDate }}
+              </span>
+            </div>
+            <button type="submit" class="btn primary search-submit">Search flights</button>
+          </div>
+
+          <p v-if="airportMessage" class="notice warn small" role="alert" style="margin-top: 0.8rem">
+            {{ airportMessage }}
+          </p>
+
+          <div class="search-hints">
+            <span>{{ airport.city }} · {{ coverageLabel }}</span>
+            <span class="hint-sep" aria-hidden="true">|</span>
+            <span>{{ airport.live.airportBoard ? 'Live airport board for today' : 'Live lookup + manual entry' }}</span>
+            <span class="hint-sep" aria-hidden="true">|</span>
+            <span>No account needed</span>
+            <details class="demo-strip">
+              <summary>Try a demo</summary>
+              <div class="demo-buttons">
+                <button type="button" class="demo-button" @click="loadDemo('departing')">
+                  Departing · {{ demos.departing.label }}
+                </button>
+                <button type="button" class="demo-button" @click="loadDemo('layover')">
+                  Layover · {{ demos.layover.label }}
+                </button>
+                <button
+                  v-if="demos.secondary.flightNumber !== demos.departing.flightNumber"
+                  type="button"
+                  class="demo-button"
+                  @click="loadDemo('secondary')"
+                >
+                  Departing · {{ demos.secondary.label }}
+                </button>
+              </div>
+            </details>
+          </div>
+        </form>
+      </section>
+
+      <section v-if="store.hasConfirmedJourney && savedSummary" class="saved-journey" aria-label="Saved journey">
         <div>
-          <h2 id="start-heading">Plan your journey</h2>
-          <p class="muted small no-gap">Four fields, then confirm the flight.</p>
+          <strong>Saved journey · {{ store.journey?.airportCode }}</strong>
+          <p class="small muted no-gap">{{ savedSummary }}</p>
         </div>
-        <span class="badge soft">{{ airport.code }}</span>
-      </div>
-
-      <div class="airport-picker">
-        <label for="airport-select">Airport</label>
-        <select
-          id="airport-select"
-          class="select"
-          :value="airportStore.code"
-          @change="onAirportChange"
-        >
-          <option v-for="item in airportStore.catalog" :key="item.code" :value="item.code">
-            {{ item.city }} · {{ item.code }} — {{ item.name }}
-          </option>
-        </select>
-        <p class="tiny muted no-gap">{{ airport.note }}</p>
-        <p v-if="airportMessage" class="notice warn small no-gap" role="alert">{{ airportMessage }}</p>
-      </div>
-
-      <div class="journey-type-grid" role="group" aria-label="Journey type">
-        <button
-          type="button"
-          class="journey-type"
-          :aria-pressed="kind === 'departing'"
-          @click="kind = 'departing'"
-        >
-          <span class="icon-bubble" aria-hidden="true">DEP</span>
-          <span>
-            <strong>Departing</strong>
-            <span>I start my journey at {{ airport.code }}.</span>
-          </span>
-        </button>
-        <button
-          type="button"
-          class="journey-type"
-          :aria-pressed="kind === 'layover'"
-          @click="kind = 'layover'"
-        >
-          <span class="icon-bubble" aria-hidden="true">LAY</span>
-          <span>
-            <strong>Layover</strong>
-            <span>I arrive and connect to another flight.</span>
-          </span>
-        </button>
-      </div>
-
-      <form class="stack" novalidate @submit.prevent="submit">
-        <div v-if="kind === 'departing'" class="form-grid">
-          <div class="field">
-            <label for="departure-flight-number">Flight number</label>
-            <input
-              id="departure-flight-number"
-              v-model="departureFlightNumber"
-              class="input"
-              placeholder="6E 2134"
-              autocomplete="off"
-              autocapitalize="characters"
-              :aria-invalid="Boolean(errors.departureFlightNumber)"
-              :aria-describedby="errors.departureFlightNumber ? 'departure-flight-error' : undefined"
-            />
-            <span v-if="errors.departureFlightNumber" id="departure-flight-error" class="field-error">
-              {{ errors.departureFlightNumber }}
-            </span>
-          </div>
-          <div class="field">
-            <label for="departure-date">Travel date</label>
-            <input
-              id="departure-date"
-              v-model="departureDate"
-              class="input"
-              type="date"
-              :aria-invalid="Boolean(errors.departureDate)"
-              :aria-describedby="errors.departureDate ? 'departure-date-error' : undefined"
-            />
-            <span v-if="errors.departureDate" id="departure-date-error" class="field-error">
-              {{ errors.departureDate }}
-            </span>
-          </div>
-        </div>
-
-        <div v-else class="form-grid">
-          <div class="field">
-            <label for="arrival-flight-number">Arrival flight</label>
-            <input
-              id="arrival-flight-number"
-              v-model="arrivalFlightNumber"
-              class="input"
-              placeholder="AI 508"
-              autocomplete="off"
-              autocapitalize="characters"
-              :aria-invalid="Boolean(errors.arrivalFlightNumber)"
-              :aria-describedby="errors.arrivalFlightNumber ? 'arrival-flight-error' : undefined"
-            />
-            <span v-if="errors.arrivalFlightNumber" id="arrival-flight-error" class="field-error">
-              {{ errors.arrivalFlightNumber }}
-            </span>
-          </div>
-          <div class="field">
-            <label for="arrival-date">Arrival date</label>
-            <input
-              id="arrival-date"
-              v-model="arrivalDate"
-              class="input"
-              type="date"
-              :aria-invalid="Boolean(errors.arrivalDate)"
-              :aria-describedby="errors.arrivalDate ? 'arrival-date-error' : undefined"
-            />
-            <span v-if="errors.arrivalDate" id="arrival-date-error" class="field-error">
-              {{ errors.arrivalDate }}
-            </span>
-          </div>
-          <div class="field">
-            <label for="connecting-flight-number">Connecting flight</label>
-            <input
-              id="connecting-flight-number"
-              v-model="connectingFlightNumber"
-              class="input"
-              placeholder="6E 6162"
-              autocomplete="off"
-              autocapitalize="characters"
-              :aria-invalid="Boolean(errors.connectingFlightNumber)"
-              :aria-describedby="errors.connectingFlightNumber ? 'connecting-flight-error' : undefined"
-            />
-            <span v-if="errors.connectingFlightNumber" id="connecting-flight-error" class="field-error">
-              {{ errors.connectingFlightNumber }}
-            </span>
-          </div>
-          <div class="field">
-            <label for="connecting-date">Connecting date</label>
-            <input
-              id="connecting-date"
-              v-model="connectingDate"
-              class="input"
-              type="date"
-              :aria-invalid="Boolean(errors.connectingDate)"
-              :aria-describedby="errors.connectingDate ? 'connecting-date-error' : undefined"
-            />
-            <span v-if="errors.connectingDate" id="connecting-date-error" class="field-error">
-              {{ errors.connectingDate }}
-            </span>
-          </div>
-        </div>
-
-        <p class="small muted">
-          {{
-            airport.live.airportBoard
-              ? 'Live airport board for today. Other dates still work with manual entry.'
-              : 'Live lookup uses the configured provider; manual entry always works.'
-          }}
-          The confirmed journey is stored in this browser only.
-        </p>
-
         <div class="btn-row">
-          <button type="submit" class="btn">Continue</button>
-          <span class="small muted">No login. No booking or check-in.</span>
+          <RouterLink class="btn small secondary" to="/journey">Open assistant</RouterLink>
+          <RouterLink class="btn small secondary" to="/map">Open map</RouterLink>
+          <button type="button" class="btn ghost small-btn" @click="clearSaved">Clear</button>
         </div>
-      </form>
+      </section>
 
-      <details class="demo-strip">
-        <summary>Try a demo journey</summary>
-        <p class="small muted no-gap">
-          Demo schedules and gates are illustrative and labelled throughout the app.
-        </p>
-        <div class="demo-buttons">
-          <button type="button" class="demo-button" @click="loadDemo('departing')">
-            Departing · {{ demos.departing.label }}
-          </button>
-          <button type="button" class="demo-button" @click="loadDemo('layover')">
-            Layover · {{ demos.layover.label }}
-          </button>
-          <button
-            v-if="demos.secondary.flightNumber !== demos.departing.flightNumber"
-            type="button"
-            class="demo-button"
-            @click="loadDemo('secondary')"
-          >
-            Departing · {{ demos.secondary.label }}
-          </button>
-        </div>
-      </details>
-    </section>
+      <section class="home-features" aria-label="What Airport Navigator does">
+        <article class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 11.5 21 4l-4.2 16-4.1-6.1L3 11.5Z" stroke-linejoin="round" />
+              <path d="m12.7 13.9 3.1-3.1" stroke-linecap="round" />
+            </svg>
+          </span>
+          <h2>Live flight details</h2>
+          <p>Terminal, gate and schedule from the airport board or provider, with manual entry as a fallback.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" stroke-linejoin="round" />
+              <path d="M9 4v13M15 6.5v13" />
+            </svg>
+          </span>
+          <h2>Terminal maps</h2>
+          <p>Gates, counters, restrooms and transport stops on OpenStreetMap-derived floor plans.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="6" cy="18" r="2.4" />
+              <circle cx="18" cy="6" r="2.4" />
+              <path d="M8 17c4.5-1.2 2.8-7.2 7.7-9.7" stroke-linecap="round" stroke-dasharray="3 3" />
+            </svg>
+          </span>
+          <h2>Walking directions</h2>
+          <p>Step-by-step routes, floor changes and a step-free option where the data supports it.</p>
+        </article>
+      </section>
 
-    <section v-if="store.hasConfirmedJourney && savedSummary" class="saved-journey" aria-label="Saved journey">
-      <div>
-        <strong>Saved journey · {{ store.journey?.airportCode }}</strong>
-        <p class="small muted no-gap">{{ savedSummary }}</p>
-      </div>
-      <div class="btn-row">
-        <RouterLink class="btn secondary small-btn" to="/journey">Open assistant</RouterLink>
-        <RouterLink class="btn secondary small-btn" to="/map">Open map</RouterLink>
-        <button type="button" class="btn ghost small-btn" @click="clearSaved">Clear</button>
-      </div>
-    </section>
-
-    <details class="section card simple-details">
-      <summary>What the map covers, and what it does not</summary>
-      <div class="grid-3" style="margin-top: 1rem">
-        <article>
-          <h3>Live flight details</h3>
-          <p class="small muted">
-            {{ airport.code }} uses
-            {{ airport.live.airportBoard ? 'the airport board' : 'the configured provider' }} when
-            available. Missing gates stay “Not available”.
-          </p>
-        </article>
-        <article>
-          <h3>OpenStreetMap routes</h3>
-          <p class="small muted">
-            Terminal footprints, gates and facilities come from OSM. Inferred connectors are dashed.
-          </p>
-        </article>
-        <article>
-          <h3>Honest limits</h3>
-          <p class="small muted">
-            Times are estimates. Airport signs and staff instructions take precedence.
-            {{ appConfig.providerLookupEnabled ? 'Live lookup is on.' : 'Live lookup is off.' }}
-          </p>
-        </article>
-      </div>
-      <RouterLink to="/about">Read data sources and privacy</RouterLink>
-    </details>
+      <section class="home-note">
+        <span>
+          <strong>OpenStreetMap-derived maps.</strong>
+          Some connectors are inferred. Airport signs and staff instructions take precedence.
+        </span>
+        <RouterLink to="/about">Data, privacy and limits</RouterLink>
+      </section>
+    </div>
   </div>
 </template>

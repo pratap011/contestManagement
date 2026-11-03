@@ -353,26 +353,26 @@ function backToFlights() {
 <template>
   <div>
     <header class="page-head">
-      <span class="eyebrow">{{ kind === 'layover' ? 'Layover journey' : 'Departing journey' }}</span>
-      <h1>{{ stage === 'context' ? 'Connection context' : 'Review your flight details' }}</h1>
+      <p class="page-kicker">{{ kind === 'layover' ? 'Layover journey' : 'Departing journey' }}</p>
+      <h1>{{ stage === 'context' ? 'Connection details' : 'Review your flight' }}</h1>
       <p class="muted">
         {{
           stage === 'context'
-            ? 'These answers cannot be inferred safely from a flight number. Confirm them before seeing the layover estimate.'
-            : 'Confirm the correct flight instance. Live results come from the airport board; manual entry always remains available.'
+            ? 'A flight number cannot tell us about tickets, baggage or formalities. Confirm these before we estimate your connection.'
+            : 'Confirm the correct flight. Live results come from the airport board; manual entry is always available.'
         }}
       </p>
     </header>
 
     <div class="steps" aria-label="Journey steps">
       <span class="step" :class="{ active: stage === 'flights', done: stage === 'context' }">
-        1 · Flights
+        1. Flight
       </span>
       <span v-if="kind === 'layover'" class="step" :class="{ active: stage === 'context' }">
-        2 · Connection context
+        2. Connection
       </span>
-      <span v-if="kind === 'layover'" class="step">3 · Assistant</span>
-      <span v-else class="step">2 · Assistant</span>
+      <span v-if="kind === 'layover'" class="step">3. Assistant</span>
+      <span v-else class="step">2. Assistant</span>
     </div>
 
     <div v-if="globalError" class="notice danger" role="alert" style="margin-bottom: 1rem">
@@ -541,7 +541,7 @@ function backToFlights() {
       </section>
 
       <div class="btn-row" style="margin-top: 1.4rem">
-        <button type="button" class="btn" @click="continueJourney">
+        <button type="button" class="btn primary" @click="continueJourney">
           {{
             kind === 'layover'
               ? 'Continue to connection details'
@@ -551,11 +551,10 @@ function backToFlights() {
         <RouterLink class="btn secondary" to="/">Back to journey entry</RouterLink>
       </div>
 
-      <div class="notice warn" style="margin-top: 1.2rem">
-        <strong>Data honesty:</strong> missing terminal or gate values are shown as “Not available”.
-        No gate, terminal, or scheduled time is invented. Live board values are labelled with their
-        retrieval time; demo values are only examples.
-      </div>
+      <p class="small muted" style="margin-top: 1rem">
+        Missing terminal or gate values are shown as “Not available” and are never invented. Live
+        values carry a retrieval time; demo values are examples only.
+      </p>
     </template>
 
     <template v-else>
@@ -575,10 +574,10 @@ function backToFlights() {
       </div>
 
       <section class="card context-card" style="margin-top: 1.2rem" aria-labelledby="context-heading">
-        <h2 id="context-heading">What we cannot infer</h2>
+        <h2 id="context-heading">A few details we cannot infer</h2>
         <p class="muted small">
-          These answers affect time allowances and warnings. “Not sure” is allowed; the assistant
-          will stay conservative and tell you what to confirm.
+          These affect time allowances and warnings. “Not sure” is allowed; the assistant stays
+          conservative and tells you what to confirm.
         </p>
 
         <fieldset class="fieldset context-question">
@@ -643,7 +642,7 @@ function backToFlights() {
 
         <div class="context-actions">
           <button type="button" class="btn secondary" @click="backToFlights">Back to flights</button>
-          <button type="button" class="btn" @click="confirmLayover">Confirm layover journey</button>
+          <button type="button" class="btn primary" @click="confirmLayover">Confirm layover journey</button>
         </div>
       </section>
 

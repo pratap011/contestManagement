@@ -1,3 +1,5 @@
+import { mkdirSync } from 'node:fs'
+import { dirname } from 'node:path'
 import { PGlite } from '@electric-sql/pglite'
 import pg from 'pg'
 import { config } from './config.ts'
@@ -42,6 +44,9 @@ async function createPostgres(databaseUrl: string, ssl: boolean): Promise<Databa
 }
 
 async function createPglite(dataDir: string | undefined, memory: boolean): Promise<Database> {
+  // PGlite creates its data directory but not missing parents. A fresh clone has
+  // no .data directory, so `npm run dev:server` would otherwise fail on boot.
+  if (!memory && dataDir) mkdirSync(dirname(dataDir), { recursive: true })
   const client = memory ? new PGlite() : new PGlite(dataDir)
   await client.waitReady
   return {

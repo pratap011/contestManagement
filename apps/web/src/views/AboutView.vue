@@ -34,8 +34,8 @@ function clearJourney() {
 <template>
   <div class="prose">
     <header class="page-head">
-      <span class="eyebrow">Transparency</span>
-      <h1>Data, privacy, and limits</h1>
+      <p class="page-kicker">About the data</p>
+      <h1>Data, privacy and limits</h1>
       <p class="muted">
         Airport Navigator combines live flight lookup with OpenStreetMap-derived airport geometry,
         optional accounts, and device location. This page shows where each value comes from and

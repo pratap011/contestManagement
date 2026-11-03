@@ -354,6 +354,16 @@ function chooseFloor(id: string) {
   floorId.value = id
 }
 
+function onTerminalSelect(event: Event) {
+  const value = (event.target as HTMLSelectElement).value
+  if (value) chooseTerminal(value)
+}
+
+function onFloorSelect(event: Event) {
+  const value = (event.target as HTMLSelectElement).value
+  if (value) chooseFloor(value)
+}
+
 function setOrigin(poi: Poi) {
   originMode.value = 'poi'
   originPoiId.value = poi.id
@@ -589,11 +599,11 @@ watch(
   <div>
     <header class="map-page-head">
       <div>
-        <span class="eyebrow">OpenFreeMap + OpenStreetMap navigation · not field-verified</span>
-        <h1>Airport map</h1>
+        <p class="page-kicker">Airport map</p>
+        <h1 id="map-heading">{{ terminal?.name ?? 'Terminal map' }}</h1>
         <p class="muted no-gap">
-          {{ terminal?.name ?? 'Terminal' }} · {{ activeFloor?.label ?? 'Mapped level' }}. Search
-          mapped facilities, route between them, and share your location for live guidance.
+          {{ activeFloor?.label ?? 'Mapped level' }}. Search facilities, choose a destination and
+          follow the route.
         </p>
       </div>
       <div class="btn-row">
@@ -601,43 +611,38 @@ watch(
       </div>
     </header>
 
-    <details class="notice warn map-disclaimer">
-      <summary><strong>OSM-derived guidance, not surveyed indoor positioning</strong></summary>
-      <p class="small no-gap">
-        Floors, gates, facilities and walkways come from OpenStreetMap and are not field-verified.
-        Inferred connectors are dashed. Device location is most reliable outdoors; follow airport
-        signs and staff at all times.
+    <details class="map-disclaimer">
+      <summary>OpenStreetMap-derived map, not surveyed indoors</summary>
+      <p class="small muted no-gap">
+        Floors, gates, facilities and walkways come from OpenStreetMap. Inferred connectors are
+        dashed. Device location is most reliable outdoors; follow airport signs and staff.
       </p>
     </details>
 
     <div class="map-workspace">
       <section class="card map-panel" aria-labelledby="map-heading">
         <div class="map-toolbar">
-          <div class="toolbar-group" role="group" aria-label="Terminal">
-            <span class="toolbar-label">Terminal</span>
-            <button
-              v-for="item in dataset.terminals"
-              :key="item.id"
-              type="button"
-              class="chip"
-              :aria-pressed="terminalId === item.id"
-              @click="chooseTerminal(item.id)"
+          <div class="toolbar-group">
+            <select
+              class="select"
+              aria-label="Terminal"
+              :value="terminalId"
+              @change="onTerminalSelect"
             >
-              {{ item.name }}
-            </button>
-          </div>
-          <div class="toolbar-group" role="group" aria-label="Floor">
-            <span class="toolbar-label">Level</span>
-            <button
-              v-for="floor in floors"
-              :key="floor.id"
-              type="button"
-              class="chip"
-              :aria-pressed="floorId === floor.id"
-              @click="chooseFloor(floor.id)"
+              <option v-for="item in dataset.terminals" :key="item.id" :value="item.id">
+                {{ item.name }}
+              </option>
+            </select>
+            <select
+              class="select"
+              aria-label="Level"
+              :value="floorId"
+              @change="onFloorSelect"
             >
-              {{ floor.shortLabel }}
-            </button>
+              <option v-for="floor in floors" :key="floor.id" :value="floor.id">
+                {{ floor.shortLabel }}
+              </option>
+            </select>
           </div>
           <div class="toolbar-actions">
             <button type="button" class="btn small secondary" @click="useMyLocation">
@@ -798,7 +803,7 @@ watch(
               Start live navigation
             </button>
 
-            <ol class="route-steps" aria-label="Route steps">
+            <ol class="route-steps" aria-label="Route steps" tabindex="0">
               <li
                 v-for="step in routeSteps"
                 :key="step.id"
